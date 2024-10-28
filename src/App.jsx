@@ -4,6 +4,7 @@ import Home from "./Routes/Home";
 import Detail from "./Routes/Detail";
 import { Layout } from './Layouts/Layout';
 import Favs from './Routes/Favs';
+import ListaEventos from "./Routes/ListaEventos";
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/favs" element={<Favs />} />
           <Route path="/detail/:id" element={<Detail />} />
+          <Route path='/eventos' element={<ListaEventos />} />
         </Route>
       </Routes>
     </Router>
