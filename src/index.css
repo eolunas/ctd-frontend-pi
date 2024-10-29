@@ -27,6 +27,7 @@ a:hover {
 }
 body {
   overflow-y: scroll;
+  background-color: #0d0d0d;
 }
 h1 {
   font-size: 3.2em;
