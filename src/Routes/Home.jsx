@@ -17,6 +17,12 @@ const Home = () => {
         <button className="mt-6 bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600">
           Ver Lista de Eventos
         </button>
+
+      </Link>
+       <Link to="/admin/products">
+        <button className="mt-6 bg-green-500 text-white py-2 px-4 rounded-lg hover:bg-green-600 ml-4">
+          View Product List (Admin)
+        </button>
       </Link>
 
     </main>
