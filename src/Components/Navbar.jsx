@@ -1,29 +1,30 @@
-import { Link } from 'react-router-dom'
-import ThemeButton from './ThemeButton'
-import { useCharStates } from '../Context'
+import { Link } from "react-router-dom";
+import { useCharStates } from "../Context";
+import logo from "../assets/0-Logo/isologo.svg";
+import slogan from "../assets/0-Logo/Slogan.svg";
+import Button from "./Button";
 
 const Navbar = () => {
   const { state } = useCharStates();
-  return (
-    // dark-nav es una clase que no existe, se debe estilar para el tema
-    <nav className={`flex justify-evenly   
-        ${!state.theme && "dark-nav"}`}>
-    <div className='text-3xl font-bold underline'>
-      <span>Logo</span>
-    </div>
-    <div className='flex'>
-      <ul className='flex'>
-        <li>
-          <Link to="/">Inicio</Link> 
-        </li>
-        <li>
-          <Link to="/favs">Favoritos</Link> 
-        </li>
-      </ul>
-      <ThemeButton />
-    </div>
-  </nav>
-  )
-}
 
-export default Navbar
+  return (
+    <nav
+      className={`sticky top-0 z-10 flex justify-between items-center w-full py-3 md:px-10 px-2 bg-black  
+        ${!state.theme && "dark-nav"}`}
+    >
+      <Link className='' to='/'>
+        <div className='md:flex md:gap-4 w-32 sm:w-full  items-end'>
+          <img className='' src={logo} alt='Logo' />
+          <img className='md:mb-[4px]' src={slogan} alt='Logo' />
+        </div>
+      </Link>
+      <div className='flex md:gap-5 gap-2'>
+        <Button type='secondary'>Iniciar sesión</Button>
+        <Button to='/favs'>Crear cuenta</Button>
+        {/* <ThemeButton /> */}
+      </div>
+    </nav>
+  );
+};
+
+export default Navbar;
