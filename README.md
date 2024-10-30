@@ -1,8 +1,17 @@
-# React + Vite
+# TicketGO
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Para ejecutar el proyecto hay que descargarlo e instalar las dependencias con el comando:
 
-Currently, two official plugins are available:
+``` javascript
+npm install
+```
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+Una vez instalado localmente, se puede ejecutar en modo desarrollador para visualizarlo en el puerto 8080
+
+``` javascript
+npm run preview
+```
+
+Ingresar al localhost con puerto 8080 para visualizar el proyecto:
+
+[http://localhost:8080/ticketgo/]( http://localhost:8080/ticketgo/)
