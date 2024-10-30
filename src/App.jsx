@@ -9,7 +9,7 @@ import ListaEventos from "./Routes/EventList";
 function App() {
   return (
     <Context>
-    <Router basename='/ticketgo/'>
+    <Router basename='/ctd-frontend-pi/'>
       <Routes>
         <Route path='/' element={ <Layout /> }>
           <Route path="/" element={<Home />} />
