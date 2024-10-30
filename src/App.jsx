@@ -5,6 +5,7 @@ import EventDetail from "./Routes/EventDetail";
 import { Layout } from './Layouts/Layout';
 import Favs from './Routes/Favs';
 import ListaEventos from "./Routes/EventList";
+import ListProductsAdmin from "./Routes/ListProductsAdmin";
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
           <Route path="/favs" element={<Favs />} />
           <Route path="/detail/:id" element={<EventDetail />} />
           <Route path='/eventos' element={<ListaEventos />} />
+          <Route path="/admin/products" element={<ListProductsAdmin />} />
         </Route>
       </Routes>
     </Router>
