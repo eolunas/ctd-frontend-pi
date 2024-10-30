@@ -1,9 +1,10 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { Context } from "./Context";
 import Home from "./Routes/Home";
-import Detail from "./Routes/Detail";
+import EventDetail from "./Routes/EventDetail";
 import { Layout } from './Layouts/Layout';
 import Favs from './Routes/Favs';
+import ListaEventos from "./Routes/EventList";
 
 function App() {
   return (
@@ -13,7 +14,8 @@ function App() {
         <Route path='/' element={ <Layout /> }>
           <Route path="/" element={<Home />} />
           <Route path="/favs" element={<Favs />} />
-          <Route path="/detail/:id" element={<Detail />} />
+          <Route path="/detail/:id" element={<EventDetail />} />
+          <Route path='/eventos' element={<ListaEventos />} />
         </Route>
       </Routes>
     </Router>
