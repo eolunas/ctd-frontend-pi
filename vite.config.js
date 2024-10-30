@@ -5,5 +5,5 @@ import react from '@vitejs/plugin-react'
 export default defineConfig({
   plugins: [react()],
   site: "https://eolunas.github.io",
-  base: "/ctd-frontend-pi/"
+  base: "/ctd-frontend-pi"
 })
