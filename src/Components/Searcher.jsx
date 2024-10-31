@@ -20,7 +20,7 @@ const Searcher = () => {
           lg:w-1/3`}>
           No dejes pasar la oportunidad de disfrutar de tus artistas favoritos en el escenario.
         </p>
-        <form className="flex bg-white m-auto p-2 w-5/6 rounded-lg">
+        <form className="flex bg-white m-auto mb-5 p-2 w-5/6 rounded-lg">
           <input placeholder="Busca tu evento" />
         </form>
     </div>
