@@ -42,21 +42,6 @@ const EventDetail = () => {
           />
         </div>
       </div>
-
-      {/* Footer (estilo para tablet y móvil) */}
-      <footer className="mt-10 border-t border-gray-700 pt-4 text-center md:text-left">
-        <div className="flex flex-col md:flex-row justify-between items-center text-gray-400">
-          <div className="flex items-center space-x-2 mb-4 md:mb-0">
-            <img src="/path/to/logo.svg" alt="TicketGo" className="w-10 h-10" />
-            <p>©2024 TicketGo, todos los derechos reservados.</p>
-          </div>
-          <div className="flex space-x-4">
-            <a href="#" className="hover:text-cyan-500">Facebook</a>
-            <a href="#" className="hover:text-cyan-500">Instagram</a>
-            <a href="#" className="hover:text-cyan-500">LinkedIn</a>
-          </div>
-        </div>
-      </footer>
     </div>
   );
 };
