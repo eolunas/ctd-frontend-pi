@@ -35,7 +35,7 @@ DISEÑO UX/UI:
 
 - Kimberley Zacarias [![LinkedIn](https://img.shields.io/badge/-0077B5?style=social&logo=linkedin&logoColor=blue&label)](https://www.linkedin.com/in/kimzac/) [![GitHub](https://img.shields.io/badge/-181717?style=social&logo=github&logoColor=black&label=)](https://github.com/KimZac)
 
-- Andrea Monsalve [![LinkedIn](https://img.shields.io/badge/-0077B5.svg?style=social&logo=linkedin&logoColor=blue&label)](https://www.linkedin.com/in/andrea-mondev/) [![GitHub](https://img.shields.io/badge/-181717.svg?style=social&logo=github)](https://github.com/sofia-isabella-millan-sd)
+- Andrea Monsalve [![LinkedIn](https://img.shields.io/badge/-0077B5.svg?style=social&logo=linkedin&logoColor=blue&label)](https://www.linkedin.com/in/andrea-mondev/) [![GitHub](https://img.shields.io/badge/-181717.svg?style=social&logo=github)](https://github.com/AndreaBluM)
 
 
 FRONTEND:
@@ -66,7 +66,7 @@ INFRA:
 
 QA:
 
-- Andrea Monsalve [![LinkedIn](https://img.shields.io/badge/-0077B5.svg?style=social&logo=linkedin&logoColor=blue&label)](https://www.linkedin.com/in/andrea-mondev/) [![GitHub](https://img.shields.io/badge/-181717.svg?style=social&logo=github)](https://github.com/sofia-isabella-millan-sd)
+- Andrea Monsalve [![LinkedIn](https://img.shields.io/badge/-0077B5.svg?style=social&logo=linkedin&logoColor=blue&label)](https://www.linkedin.com/in/andrea-mondev/) [![GitHub](https://img.shields.io/badge/-181717.svg?style=social&logo=github)](https://github.com/AndreaBluM)
 
 
 
