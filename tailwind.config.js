@@ -14,9 +14,9 @@ export default {
         secondaryWhite: '#EEF6F7',
       },
       backgroundImage: {
-        'searcher-pc': "url('/src/assets/Desktop/hero.webp')",
-        'searcher-tb': "url('/src/assets/Tablet/hero-tablet.webp')",
-        'searcher-mb': "url('/src/assets/Movil/hero-movil.webp')",
+        'searcher-pc': "url('./src/assets/Desktop/hero.webp')",
+        'searcher-tb': "url('./src/assets/Tablet/hero-tablet.webp')",
+        'searcher-mb': "url('./src/assets/Movil/hero-movil.webp')",
       },
     },
   },

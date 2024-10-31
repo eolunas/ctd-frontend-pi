@@ -1,5 +1,3 @@
-import Card from "./Card";
-
 import coachellaImage from "../assets/0-Logo/detalles.svg";
 import tomorrowlandImage from "../assets/0-Logo/detalles.svg";
 import glastonburyImage from "../assets/0-Logo/detalles.svg";
