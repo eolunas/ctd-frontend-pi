@@ -33,31 +33,43 @@ Ingresar al localhost con puerto 8080 para visualizar el proyecto:
 
 DISEÑO UX/UI:
 
-- Kimberley Zacarias [![LinkedIn](https://img.shields.io/badge/LinkedIn-%230077B5.svg?logo=linkedin&logoColor=white)](https://www.linkedin.com/in/kimzac/)], [![GitHub](https://img.shields.io/badge/github-%23F0503C.svg?style=for-the-badge&logo=github)]([https://github.com/Z4nchez](https://github.com/KimZac))
-- Andrea Monsalve [![LinkedIn](https://img.shields.io/badge/LinkedIn-%230077B5.svg?logo=linkedin&logoColor=white)](https://www.linkedin.com/in/nicotheumer27/)
+- Kimberley Zacarias [![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5.svg?style=social&logo=linkedin&logoColor=blue)](https://www.linkedin.com/in/kimzac/) [![GitHub](https://img.shields.io/badge/GitHub-181717.svg?style=social&logo=github)](https://github.com/KimZac)
+
+- Andrea Monsalve [![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5.svg?style=social&logo=linkedin&logoColor=blue)](https://www.linkedin.com/in/nicoheumer27/) [![GitHub](https://img.shields.io/badge/GitHub-181717.svg?style=social&logo=github)](https://github.com/4nchez)
+
 
 FRONTEND:
 
-- Camilo Martinez [![LinkedIn](https://img.shields.io/badge/LinkedIn-%230077B5.svg?logo=linkedin&logoColor=white)](https://www.linkedin.com/in/camilomartinez01/)], [![GitHub](https://img.shields.io/badge/github-%23F0503C.svg?style=for-the-badge&logo=github)]([https://github.com/Z4nchez](https://github.com/CamiloProg/CamiloProg))
-- Eduardo Luna [![LinkedIn](https://img.shields.io/badge/LinkedIn-%230077B5.svg?logo=linkedin&logoColor=white)]([https://www.linkedin.com/in/edivaldo-gomes/](https://www.linkedin.com/in/eolunas/)), [![GitHub](https://img.shields.io/badge/github-%23F0503C.svg?style=for-the-badge&logo=github)](https://github.com/eolunas/eolunas)
-- Daniel Sanabria [![LinkedIn](https://img.shields.io/badge/LinkedIn-%230077B5.svg?logo=linkedin&logoColor=white)](https://www.linkedin.com/in/danielsanabriarivera/), [![GitHub](https://img.shields.io/badge/github-%23F0503C.svg?style=for-the-badge&logo=github)](https://github.com/dqniel12396)
-- Michelle Faure [![LinkedIn](https://img.shields.io/badge/LinkedIn-%230077B5.svg?logo=linkedin&logoColor=white)](https://www.linkedin.com/in/michellefaure/),  [![GitHub](https://img.shields.io/badge/github-%23F0503C.svg?style=for-the-badge&logo=github)](https://github.com/MichelleFaure)
+- Camilo Martinez [![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5.svg?style=social&logo=linkedin&logoColor=blue)](https://www.linkedin.com/in/camilomartinez01/) [![GitHub](https://img.shields.io/badge/GitHub-181717.svg?style=social&logo=github)](https://github.com/CamiloProg)
+
+- Eduardo Luna [![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5.svg?style=social&logo=linkedin&logoColor=blue)](https://www.linkedin.com/in/eolunas/) [![GitHub](https://img.shields.io/badge/GitHub-181717.svg?style=social&logo=github)](https://github.com/eolunas)
+
+- Daniel Sanabria [![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5.svg?style=social&logo=linkedin&logoColor=blue)](https://www.linkedin.com/in/danielsanabriarivera/) [![GitHub](https://img.shields.io/badge/GitHub-181717.svg?style=social&logo=github)](https://github.com/dqniel12396)
+
+- Michelle Faure [![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5.svg?style=social&logo=linkedin&logoColor=blue)](https://www.linkedin.com/in/michellefaure/) [![GitHub](https://img.shields.io/badge/GitHub-181717.svg?style=social&logo=github)](https://github.com/MichelleFaure)
 
 BACKEND:
 
-- Rafael Porras  [![LinkedIn](https://img.shields.io/badge/LinkedIn-%230077B5.svg?logo=linkedin&logoColor=white)](https://www.linkedin.com/in/rafael-porras-722517216/)], [![GitHub](https://img.shields.io/badge/github-%23F0503C.svg?style=for-the-badge&logo=github)]([https://github.com/Z4nchez](https://github.com/RafaMenendez2021))
-- Andrea Monsalve  [![LinkedIn](https://img.shields.io/badge/LinkedIn-%230077B5.svg?logo=linkedin&logoColor=white)](https://www.linkedin.com/in/andrea-mondev/)], [![GitHub](https://img.shields.io/badge/github-%23F0503C.svg?style=for-the-badge&logo=github)]([https://www.linkedin.com/in/sofia-isabella-millan-sd/))
-- Sofía Millán  [![LinkedIn](https://img.shields.io/badge/LinkedIn-%230077B5.svg?logo=linkedin&logoColor=white)](https://www.linkedin.com/in/camilomartinez01/)], [![GitHub](https://img.shields.io/badge/github-%23F0503C.svg?style=for-the-badge&logo=github)]([https://github.com/Z4nchez](https://github.com/sofmillan))
-- Armando Lopez  [![LinkedIn](https://img.shields.io/badge/LinkedIn-%230077B5.svg?logo=linkedin&logoColor=white)](https://www.linkedin.com/in/armando-jorge-lopez-espinoza-454376184)], [![GitHub](https://img.shields.io/badge/github-%23F0503C.svg?style=for-the-badge&logo=github)]([https://github.com/Z4nchez]([https://github.com/CamiloProg/CamiloProg](https://www.linkedin.com/in/armando-jorge-lopez-espinoza-454376184))
+- Rafael Porras [![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5.svg?style=social&logo=linkedin&logoColor=blue)](https://www.linkedin.com/in/rafael-porras-722517216/) [![GitHub](https://img.shields.io/badge/GitHub-181717.svg?style=social&logo=github)](https://github.com/RafaMenendez2021)
+
+- Andrea Monsalve [![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5.svg?style=social&logo=linkedin&logoColor=blue)](https://www.linkedin.com/in/andrea-mondev/) [![GitHub](https://img.shields.io/badge/GitHub-181717.svg?style=social&logo=github)](https://github.com/sofia-isabella-millan-sd)
+
+- Sofía Millán [![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5.svg?style=social&logo=linkedin&logoColor=blue)](https://www.linkedin.com/in/camilomartinez01/) [![GitHub](https://img.shields.io/badge/GitHub-181717.svg?style=social&logo=github)](https://github.com/sofmillan)
+
+- Armando Lopez [![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5.svg?style=social&logo=linkedin&logoColor=blue)](https://www.linkedin.com/in/armando-jorge-lopez-espinoza-454376184) [![GitHub](https://img.shields.io/badge/GitHub-181717.svg?style=social&logo=github)](https://github.com/CamiloProg)
+
 
 INFRA:
 
-- Juan Leon  [![LinkedIn](https://img.shields.io/badge/LinkedIn-%230077B5.svg?logo=linkedin&logoColor=white)](https://www.linkedin.com/in/juan-jose-leon-2768761a4/)], [![GitHub](https://img.shields.io/badge/github-%23F0503C.svg?style=for-the-badge&logo=github)]([https://github.com/juanleongo))
-- Michelle Faure [![LinkedIn](https://img.shields.io/badge/LinkedIn-%230077B5.svg?logo=linkedin&logoColor=white)](https://www.linkedin.com/in/michellefaure/),  [![GitHub](https://img.shields.io/badge/github-%23F0503C.svg?style=for-the-badge&logo=github)](https://github.com/MichelleFaure)
+- Juan Leon [![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5.svg?style=social&logo=linkedin&logoColor=blue)](https://www.linkedin.com/in/juan-jose-leon-2768761a4/) [![GitHub](https://img.shields.io/badge/GitHub-181717.svg?style=social&logo=github)](https://github.com/juanleongo)
+
+- Michelle Faure [![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5.svg?style=social&logo=linkedin&logoColor=blue)](https://www.linkedin.com/in/michellefaure/) [![GitHub](https://img.shields.io/badge/GitHub-181717.svg?style=social&logo=github)](https://github.com/MichelleFaure)
+
 
 QA:
 
--  Andrea Monsalve [![LinkedIn](https://img.shields.io/badge/LinkedIn-%230077B5.svg?logo=linkedin&logoColor=white)](https://www.linkedin.com/in/nicotheumer27/)
+- Andrea Monsalve [![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5.svg?style=social&logo=linkedin&logoColor=blue)](https://www.linkedin.com/in/andrea-mondev/) [![GitHub](https://img.shields.io/badge/GitHub-181717.svg?style=social&logo=github)](https://github.com/sofia-isabella-millan-sd)
+
 
 
 
@@ -82,12 +94,7 @@ Frontend:
 - ![React](https://img.shields.io/badge/react-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB)
 - ![TailwindCSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC.svg?style=for-the-badge&logo=tailwind-css&logoColor=white)
 
-BACKEND:
-- ![Java](https://img.shields.io/badge/java-%23ED8B00.svg?style=for-the-badge&logo=openjdk&logoColor=white)
-- ![Spring Boot](https://img.shields.io/badge/spring%20boot-%23ED8B00.svg?style=for-the-badge&logo=Spring&logoColor=fff)
-- ![Postman](https://img.shields.io/badge/Postman-FF6C37?style=for-the-badge&logo=postman&logoColor=white)
-- ![Swagger](https://img.shields.io/badge/-Swagger-%23Clojure?style=for-the-badge&logo=swagger&logoColor=white)
-
+  
 ```bash
 Dependencias:
                 react
@@ -96,62 +103,37 @@ Dependencias:
                 
 ```
 
+BACKEND:
+- ![Java](https://img.shields.io/badge/java-%23ED8B00.svg?style=for-the-badge&logo=openjdk&logoColor=white)
+- ![Spring Boot](https://img.shields.io/badge/spring%20boot-%23ED8B00.svg?style=for-the-badge&logo=Spring&logoColor=fff)
+- ![Postman](https://img.shields.io/badge/Postman-FF6C37?style=for-the-badge&logo=postman&logoColor=white)
+- ![Swagger](https://img.shields.io/badge/-Swagger-%23Clojure?style=for-the-badge&logo=swagger&logoColor=white)
+
+
 
 
 ## Organización del equipo por cada Sprint
 
 Utilizamos la metodología agile y scrum.
-Intentamos coordinar con UX/UI para contar con la información en Figma y con el grupo de BackEnd para tener los servicios a utilizar en las tareas de cada Sprint.
-Creamos un MVP y dividimos las tareas en sprints (con duración de una semana):
+Intentamos coordinar con UX/UI para contar con la información en Figma y con el grupo de BackEnd para tener los servicios a utilizar en las tareas de cada Sprint, dividimos las tareas en sprints.
 
-## Funcionalidades para el MVP:
-
-- Registro
-- Logueo
-- Pedir prestamo
-- Realizar una inversión
+## Funcionalidades principales?
 
 ```bash
 SPRINT 1 - Funcionalidades:
 ```
 
-1- Crear el Footer, Header y Navbar
+1- Colocar encabezado
 
-2- Criar un prototipo no funcional para las pantallas de Login y Registro
+2- Definir cuerpo del sitio
 
-3- Criar pantallas de préstamo
+3- Visualizar productos en el home 
 
-4- Crear una base de datos bien estructurada, para login y registro de usuario
+4- Visualizar detalle de producto
 
-```bash
-SPRINT 2 - Desarrollo y pruebas parciales:
-```
+5- Listar productos
 
-1- Ajustar tanto el login como el registro para poder conectar back y front
+6-Panel de administracion
 
-2- Refinar los diseños basados en las retroalimentaciones del equipo.
 
-```bash
-SPRINT 3 - Integración y optimización:
-```
-
-1- Completar la tarea para pedir préstamo
-
-2- Continuar con las páginas de Home y landing page
-
-3- Se aplica la paleta de color en todas las pantallas
-
-4- Controlar y ajustar las grillas que todos los elementos esten separados por 8 px.
-
-```bash
-SPRINT 4 - Pulido y preparación Demo Day:
-```
-
-1- Vericar la funcionalidad de registro
-
-2- Verificar la funcionalidad de prestamo
-
-3- Modificar la validación de registro
-
-4- Verificar la validación de inversiones
 
