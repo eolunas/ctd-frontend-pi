@@ -21,15 +21,9 @@ const EventDetail = () => {
         </button>
       </header>
 
-      <div className="flex flex-col md:flex-row items-start md:items-center gap-8">
-        <div className="md:w-1/2">
-          <img
-            src={event.imageUrl}
-            alt={event.name}
-            className="w-full object-cover rounded-lg"
-          />
-        </div>
-
+      {/* Ajuste para vistas móviles */}
+      <div className="flex flex-col-reverse md:flex-row items-start md:items-center gap-8">
+        {/* Texto en móviles aparece debajo debido a flex-col-reverse */}
         <div className="md:w-1/2">
           <h3 className="text-2xl font-bold mb-2">{event.name}</h3>
           <p className="text-gray-400">{event.date}</p>
@@ -38,7 +32,31 @@ const EventDetail = () => {
           <h4 className="text-lg font-bold mt-6 mb-2">Acerca de</h4>
           <p className="text-gray-400">{event.description || "No description available."}</p>
         </div>
+
+        {/* Imagen */}
+        <div className="md:w-1/2">
+          <img
+            src={event.imageUrl}
+            alt={event.name}
+            className="w-full object-cover rounded-lg"
+          />
+        </div>
       </div>
+
+      {/* Footer (estilo para tablet y móvil) */}
+      <footer className="mt-10 border-t border-gray-700 pt-4 text-center md:text-left">
+        <div className="flex flex-col md:flex-row justify-between items-center text-gray-400">
+          <div className="flex items-center space-x-2 mb-4 md:mb-0">
+            <img src="/path/to/logo.svg" alt="TicketGo" className="w-10 h-10" />
+            <p>©2024 TicketGo, todos los derechos reservados.</p>
+          </div>
+          <div className="flex space-x-4">
+            <a href="#" className="hover:text-cyan-500">Facebook</a>
+            <a href="#" className="hover:text-cyan-500">Instagram</a>
+            <a href="#" className="hover:text-cyan-500">LinkedIn</a>
+          </div>
+        </div>
+      </footer>
     </div>
   );
 };
