@@ -24,6 +24,8 @@ function App() {
           {/* Rutas de administrador */}
           <Route path='/admin' element={<AdminLayout />}>
             <Route path='products' element={<ListProductsAdmin />} />
+            <Route path='clients' element={<ListProductsAdmin />} />
+            <Route path='income' element={<ListProductsAdmin />} />
             {/* Agrega más rutas de administrador aquí */}
           </Route>
         </Routes>

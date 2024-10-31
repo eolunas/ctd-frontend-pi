@@ -23,24 +23,27 @@ const EventDetail = () => {
         </button>
       </header>
 
-      <div className='flex flex-col md:flex-row items-start md:items-center gap-8'>
-        <div className='md:w-1/2'>
-          <img
-            src={event.imageUrl}
-            alt={event.name}
-            className='w-full object-cover rounded-lg'
-          />
-        </div>
-
-        <div className='md:w-1/2'>
-          <h3 className='text-2xl font-bold mb-2'>{event.name}</h3>
-          <p className='text-gray-400'>{event.date}</p>
-          <p className='text-gray-400'>{event.location}</p>
+      {/* Ajuste para vistas móviles */}
+      <div className="flex flex-col-reverse md:flex-row items-start md:items-center gap-8">
+        {/* Texto en móviles aparece debajo debido a flex-col-reverse */}
+        <div className="md:w-1/2">
+          <h3 className="text-2xl font-bold mb-2">{event.name}</h3>
+          <p className="text-gray-400">{event.date}</p>
+          <p className="text-gray-400">{event.location}</p>
 
           <h4 className='text-lg font-bold mt-6 mb-2'>Acerca de</h4>
           <p className='text-gray-400'>
             {event.description || "No description available."}
           </p>
+        </div>
+
+        {/* Imagen */}
+        <div className="md:w-1/2">
+          <img
+            src={event.imageUrl}
+            alt={event.name}
+            className="w-full object-cover rounded-lg"
+          />
         </div>
       </div>
     </div>

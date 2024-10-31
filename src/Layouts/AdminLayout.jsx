@@ -6,7 +6,7 @@ import AdminSidebar from "../Components/SideBar";
 
 const AdminLayout = () => {
   return (
-    <div className='flex flex-col min-h-screen'>
+    <div className='flex flex-col  min-h-screen'>
       <Navbar />
 
       <div className=' flex-grow mt-4   sm:hidden  max-w-xs mx-auto'>

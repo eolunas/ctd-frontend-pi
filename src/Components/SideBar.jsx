@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 
 const AdminSidebar = () => {
   return (
-    <div className='bg-[#424242] sm:px-10 text-white flex flex-col justify-between p-4'>
+    <div className='bg-[#424242] w-62 sm:px-10 text-white flex flex-col justify-between p-4'>
       {/* Título */}
       <div>
         <h1 className='text-2xl text-center font-bold text-primaryBlue'>
