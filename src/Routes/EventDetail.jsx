@@ -23,9 +23,7 @@ const EventDetail = () => {
         </button>
       </header>
 
-      {/* Ajuste para vistas móviles */}
       <div className="flex flex-col-reverse md:flex-row items-start md:items-center gap-8">
-        {/* Texto en móviles aparece debajo debido a flex-col-reverse */}
         <div className="md:w-1/2">
           <h3 className="text-2xl font-bold mb-2">{event.name}</h3>
           <p className="text-gray-400">{event.date}</p>
@@ -37,15 +35,17 @@ const EventDetail = () => {
           </p>
         </div>
 
-        {/* Imagen */}
-        <div className="md:w-1/2">
+        {/* Imagen con tamaño adaptable */}
+        <div className="w-full md:w-1/2 max-w-lg mx-auto md:mx-0">
           <img
             src={event.imageUrl}
             alt={event.name}
-            className="w-full object-cover rounded-lg"
+            className="w-full h-auto max-h-96 object-cover rounded-lg"
           />
         </div>
       </div>
+
+      
     </div>
   );
 };

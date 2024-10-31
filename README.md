@@ -35,7 +35,7 @@ DISEÑO UX/UI:
 
 - Kimberley Zacarias [![LinkedIn](https://img.shields.io/badge/-LinkedIn-0077B5?style=social&logo=linkedin&logoColor=blue&label=)](https://www.linkedin.com/in/kimzac/) [![GitHub](https://img.shields.io/badge/-GitHub-181717?style=social&logo=github&logoColor=black&label=)](https://github.com/KimZac)
 
-- Andrea Monsalve [![LinkedIn](https://img.shields.io/badge/-LinkedIn-0077B5?style=social&logo=linkedin&logoColor=blue&label=)](https://www.linkedin.com/in/nicotheumer27/) [![GitHub](https://img.shields.io/badge/-GitHub-181717?style=social&logo=github&logoColor=black&label=)](https://github.com/4nchez)
+- Andrea Monsalve [![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5.svg?style=social&logo=linkedin&logoColor=blue&label)](https://www.linkedin.com/in/andrea-mondev/) [![GitHub](https://img.shields.io/badge/GitHub-181717.svg?style=social&logo=github)](https://github.com/sofia-isabella-millan-sd)
 
 
 FRONTEND:
@@ -46,24 +46,22 @@ FRONTEND:
 
 - Daniel Sanabria [![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5.svg?style=social&logo=linkedin&logoColor=blue&label)](https://www.linkedin.com/in/danielsanabriarivera/) [![GitHub](https://img.shields.io/badge/GitHub-181717.svg?style=social&logo=github)](https://github.com/dqniel12396)
 
-- Michelle Faure [![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5.svg?style=social&logo=linkedin&logoColor=blue&label)](https://www.linkedin.com/in/michellefaure/) [![GitHub](https://img.shields.io/badge/GitHub-181717.svg?style=social&logo=github)](https://github.com/MichelleFaure)
+
 
 BACKEND:
 
 - Rafael Porras [![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5.svg?style=social&logo=linkedin&logoColor=blue&label)](https://www.linkedin.com/in/rafael-porras-722517216/) [![GitHub](https://img.shields.io/badge/GitHub-181717.svg?style=social&logo=github)](https://github.com/RafaMenendez2021)
 
-- Andrea Monsalve [![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5.svg?style=social&logo=linkedin&logoColor=blue)](https://www.linkedin.com/in/andrea-mondev/) [![GitHub](https://img.shields.io/badge/GitHub-181717.svg?style=social&logo=github)](https://github.com/sofia-isabella-millan-sd)
+- Sofía Millán [![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5.svg?style=social&logo=linkedin&logoColor=blue&label)](https://www.linkedin.com/in/sofia-isabella-millan-sd/) [![GitHub](https://img.shields.io/badge/GitHub-181717.svg?style=social&logo=github)](https://github.com/sofmillan)
 
-- Sofía Millán [![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5.svg?style=social&logo=linkedin&logoColor=blue&label)](https://www.linkedin.com/in/camilomartinez01/) [![GitHub](https://img.shields.io/badge/GitHub-181717.svg?style=social&logo=github)](https://github.com/sofmillan)
+- Armando Lopez [![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5.svg?style=social&logo=linkedin&logoColor=blue&label)](https://www.linkedin.com/in/armando-jorge-lopez-espinoza-454376184) [![GitHub](https://img.shields.io/badge/GitHub-181717.svg?style=social&logo=github)](https://github.com/devarm)
 
-- Armando Lopez [![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5.svg?style=social&logo=linkedin&logoColor=blue&label)](https://www.linkedin.com/in/armando-jorge-lopez-espinoza-454376184) [![GitHub](https://img.shields.io/badge/GitHub-181717.svg?style=social&logo=github)](https://github.com/CamiloProg)
+- Michelle Faure [![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5.svg?style=social&logo=linkedin&logoColor=blue&label)](https://www.linkedin.com/in/michellefaure/) [![GitHub](https://img.shields.io/badge/GitHub-181717.svg?style=social&logo=github)](https://github.com/MichelleFaure)
 
 
 INFRA:
 
 - Juan Leon [![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5.svg?style=social&logo=linkedin&logoColor=blue&label)](https://www.linkedin.com/in/juan-jose-leon-2768761a4/) [![GitHub](https://img.shields.io/badge/GitHub-181717.svg?style=social&logo=github)](https://github.com/juanleongo)
-
-- Michelle Faure [![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5.svg?style=social&logo=linkedin&logoColor=blue&label)](https://www.linkedin.com/in/michellefaure/) [![GitHub](https://img.shields.io/badge/GitHub-181717.svg?style=social&logo=github)](https://github.com/MichelleFaure)
 
 
 QA:
