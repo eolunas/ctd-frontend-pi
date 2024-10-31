@@ -1,7 +1,8 @@
-![TicketGO]([https://drive.google.com/file/d/1AkNB_yX1I0WPyeSgNHoRSK1VGtyaOYBE/view?usp=sharing))
+
+
+![ticketgo](https://github.com/user-attachments/assets/794b2242-2aa2-48eb-8db6-0f64c22d7f0c)
 
 # TicketGO
-
 Somos la plataforma líder en reservas de boletos para eventos musicales, desde conciertos y festivales hasta espectáculos inolvidables. Nuestro objetivo es brindarte la mejor experiencia mediante una interfaz multiplataforma fácil e intuitiva. 
 
 Para ejecutar el proyecto hay que descargarlo e instalar las dependencias con el comando:
