@@ -16,15 +16,15 @@ const Suggested = () => {
             <h2 className="text-lg font-bold text-cyan-500 mb-4">Recomendaciones</h2>
             <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
             {eventList.map((event) => (
-              <div key={event.id} className="bg-black rounded-lg overflow-hidden shadow-lg">
+              <div key={event.id} className="bg-black overflow-hidden shadow-lg">
                 <Link to={`/detail/${event.id}`} state={{ event }}>
                   <img
                     src={event.imageUrl}
                     alt={event.name}
-                    className="w-full h-48 object-cover cursor-pointer"
+                    className="w-full h-48 object-cover cursor-pointer rounded-lg"
                   />
                 </Link>
-                <div className="p-4">
+                <div className="">
                   <h3 className="text-white font-semibold text-xl">{event.name}</h3>
                   <p className="text-gray-400">{event.location}</p>
                   <p className="text-gray-400">{event.date}</p>
