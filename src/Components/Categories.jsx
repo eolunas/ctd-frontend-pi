@@ -1,37 +1,37 @@
 import Card from '../Components/Card'
 
 const cardData = [
-    {
-      title: "Card Title 1",
-      description: "Card description or content goes here."
-    },
-    {
-      title: "Card Title 2",
-      description: "Card description or content goes here."
-    },
-    {
-      title: "Card Title 3",
-      description: "Card description or content goes here."
-    },
-    {
-      title: "Card Title 4",
-      description: "Card description or content goes here."
-    },
-    {
-      title: "Card Title 5",
-      description: "Card description or content goes here."
-    },
-    {
-      title: "Card Title 6",
-      description: "Card description or content goes here."
-    }
-  ];
+  {
+    title: "Rock",
+    description: "Energía pura, guitarras potentes y una actitud rebelde."
+  },
+  {
+    title: "Jazz",
+    description: "Improvisación y elegancia en cada nota."
+  },
+  {
+    title: "Pop",
+    description: "Melodías pegajosas y ritmos que te harán bailar."
+  },
+  {
+    title: "Hip-Hop",
+    description: "Rimas intensas y beats que laten al ritmo de la calle."
+  },
+  {
+    title: "Electronic",
+    description: "Sonidos futuristas y ritmos que encienden la pista."
+  },
+  {
+    title: "Reggae",
+    description: "Vibras relajadas, ritmos caribeños y buena onda."
+  }
+];
 
 const Categories = () => {
     return (
-        <div className="m-5">
-            <h2 className="text-lg font-bold text-cyan-500 mb-4">Categorías</h2>
-            <div className="grid grid-cols-2 gap-4 lg:grid-cols-3">
+        <div className="m-10">
+            <h2 className="text-xl font-bold text-cyan-500 mb-4">Categorías</h2>
+            <div className="grid grid-cols-2 gap-6 lg:grid-cols-3">
                 {cardData.map((card, index) => (<Card key={index} card={card} />))}
             </div>
         </div>

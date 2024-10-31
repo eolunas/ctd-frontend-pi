@@ -11,9 +11,9 @@ const Card = ({ card }) => {
   // });
   
   return (
-    <div className="bg-white p-4 shadow-lg rounded-lg">
-      <h3 className="text-md font-semibold text-gray-700">{card.title}</h3>
-      <p className="text-sm text-gray-500">{card.description}</p>
+    <div className="bg-secondaryBlue p-4 shadow-lg rounded-lg aspect-[3/2]">
+      <h3 className="text-md font-semibold text-secondaryWhite text-xl mb-5">{card.title}</h3>
+      <p className="text-sm text-secondaryWhite">{card.description}</p>
     </div>
   );
 };
