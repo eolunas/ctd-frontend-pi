@@ -19,8 +19,10 @@ const Navbar = () => {
         </div>
       </Link>
       <div className='flex md:gap-5 gap-2'>
-        <Button type='secondary'>Iniciar sesión</Button>
-        <Button to='/favs'>Crear cuenta</Button>
+        <Button type='secondary' to='/admin/products'>
+          Iniciar sesión
+        </Button>
+        <Button to='/'>Crear cuenta</Button>
         {/* <ThemeButton /> */}
       </div>
     </nav>
