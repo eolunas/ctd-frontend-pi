@@ -6,7 +6,7 @@ import Categories from "../Components/Categories";
 import Suggested from "../Components/Suggested";
 
 //TODO: Implementar llamado a backend para solicitar información, por ahora se simula
-const cardData = [
+const genres = [
   {
     title: "Rock",
     description: "Energía pura, guitarras potentes y una actitud rebelde.",
@@ -103,7 +103,7 @@ const Home = () => {
     //   .catch((error) => {
     //     console.error("Error fetching data:", error);
     //   });
-    dispatch({ type: "GET_TOPCAT", payload: cardData });
+    dispatch({ type: "GET_TOPCAT", payload: genres });
     dispatch({ type: "GET_CHARS", payload: eventList });
   }, []);
 

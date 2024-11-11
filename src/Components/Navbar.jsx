@@ -29,7 +29,7 @@ const Navbar = () => {
 
   return (
     <nav
-      className={`sticky top-0 z-10 flex justify-between items-center w-full py-3 md:px-10 px-2 bg-black  
+      className={`sticky top-0 z-50 flex justify-between items-center w-full py-3 md:px-10 px-2 bg-black  
         ${!state.theme && "dark-nav"}`}
     >
       <Link to='/'>
