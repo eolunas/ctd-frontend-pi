@@ -2,6 +2,8 @@ export const reducer = (state, action) => {
     switch(action.type) {
         case 'GET_CHARS':
             return {...state, list: action.payload };
+        case 'GET_TOPCAT':
+            return {...state, topCategories: action.payload };
         case 'ADD_FAVS':
             return {...state, favs: [...state.favs, action.payload] };
         case 'REMOVE_FAVS':

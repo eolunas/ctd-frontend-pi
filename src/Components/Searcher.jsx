@@ -4,20 +4,20 @@ const Searcher = () => {
 
   return (
     <div className={`
-      flex flex-col w-vw h-auto mb-3 p-10 gap-5
+      flex flex-col w-vw h-auto mb-3 p-6 gap-5
       bg-searcher-mb bg-cover bg-center
-      md:bg-searcher-tb 
+      md:bg-searcher-tb md:p-10 
       lg:bg-searcher-pc`}
       style={{ boxShadow: 'inset 0 0 50px rgba(0, 0, 0, 0.7)' }}> 
         <h1 className={`
-          text-[30px] font-bold text-white w-3/4
+          text-[35px] font-bold text-white w-full
           md:text-[60px] md:w-2/3
           lg:w-1/3`}>
           Descubre, reserva y disfruta
         </h1>
         <p className={`
-          mt-4 text-white w-1/2 text-[10px] mb-5
-          md:text-[15px] md:w-2/3
+          mt-4 text-white text-[15px] mb-5 w-full
+          md:w-2/3
           lg:w-1/3`}>
           No dejes pasar la oportunidad de disfrutar de tus artistas favoritos en el escenario.
         </p>

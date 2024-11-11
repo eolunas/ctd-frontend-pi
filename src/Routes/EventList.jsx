@@ -1,5 +1,5 @@
 // src/Routes/EventList.jsx
-import React, { useState } from "react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import coachellaImage from "../assets/0-Logo/detalles.svg";
 import tomorrowlandImage from "../assets/0-Logo/detalles.svg";

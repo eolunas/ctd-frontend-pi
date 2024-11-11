@@ -7,6 +7,7 @@ const CharStates = createContext(null);
 const favs = JSON.parse(localStorage.getItem('favs')) || [];
 const theme = localStorage.getItem('theme') == 'true';
 const initialState = {
+  topCategories: [],
   list: [],
   favs: favs,
   theme: theme,
@@ -14,15 +15,15 @@ const initialState = {
 
 export const Context = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
-  useEffect(() => {
-    axios.get('https://jsonplaceholder.typicode.com/users')
-      .then(res => {
-        dispatch({ type: 'GET_CHARS', payload: res.data })
-      })
-      .catch(error => {
-        console.error('Error fetching data:', error); 
-      });
-  }, []);
+  // useEffect(() => {
+  //   axios.get('https://jsonplaceholder.typicode.com/users')
+  //     .then(res => {
+  //       dispatch({ type: 'GET_CHARS', payload: res.data })
+  //     })
+  //     .catch(error => {
+  //       console.error('Error fetching data:', error); 
+  //     });
+  // }, []);
 
   useEffect(() => {
     localStorage.setItem('favs', JSON.stringify(state.favs));
