@@ -1,4 +1,8 @@
 import { useState } from "react";
+import close from "../assets/1-Iconos/close.png";
+import advert from "../assets/1-Iconos/advert.png";
+import eyeIcon from "../assets/1-Iconos/eye.png"; // Import the eye icon
+import eyeSlashIcon from "../assets/1-Iconos/eyeSlashIcon.png"; // Import the eye-slash icon
 
 const LoginModal = ({ isOpen, onClose }) => {
   if (!isOpen) return null;
@@ -9,6 +13,12 @@ const LoginModal = ({ isOpen, onClose }) => {
   });
 
   const [errors, setErrors] = useState({});
+  const [showPassword, setShowPassword] = useState(false);
+
+  // Toggle password visibility
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
 
   // Maneja los cambios de los inputs
   const handleChange = (e) => {
@@ -49,14 +59,18 @@ const LoginModal = ({ isOpen, onClose }) => {
       onClick={onClose}
     >
       <div
-        className='relative bg-black p-6 rounded-2xl max-w-md w-full'
+        className='relative bg-black border-[#424242] border p-6 rounded-2xl max-w-md w-full'
         onClick={(e) => e.stopPropagation()}
       >
-        <button className='absolute top-2 right-2 text-white' onClick={onClose}>
-          &times;
-        </button>
-        <h2 className='text-center text-lg font-bold text-white mb-4'>
-          Iniciar sesión
+        <div
+          className='absolute top-4 right-4 text-white rounded-full cursor-pointer'
+          onClick={onClose}
+        >
+          <img src={close} alt='' />
+        </div>
+
+        <h2 className='text-center text-lg font-bold text-primaryBlue mb-4'>
+          Inicia sesión
         </h2>
         <form onSubmit={handleSubmit} className='space-y-4'>
           {/* Correo Electrónico */}
@@ -74,29 +88,61 @@ const LoginModal = ({ isOpen, onClose }) => {
               className='w-full px-4 py-2 bg-[#1E1E1E] text-white rounded-xl'
             />
             {errors.email && (
-              <p className='text-[#AD0606] text-sm mt-1'>{errors.email}</p>
+              <div
+                className='flex items-center p-1 px-2 gap-2 rounded-lg mt-2'
+                style={{
+                  backgroundColor: "rgba(242, 161, 161, 0.14)",
+                  border: "2px solid rgba(223, 22, 22, 0.39)", // Added "solid" for border style
+                }}
+              >
+                <img src={close} className='w-5 h-5' alt='' />
+
+                <p className='text-[#DABEBE] text-sm '>{errors.email}</p>
+              </div>
             )}
           </div>
 
           {/* Contraseña */}
-          <div>
+          <div className='relative'>
             <label htmlFor='password' className='block text-sm text-white mb-1'>
               Contraseña
             </label>
-            <input
-              type='password'
-              id='password'
-              name='password'
-              value={formData.password}
-              onChange={handleChange}
-              placeholder='Contraseña'
-              className='w-full px-4 py-2 bg-[#1E1E1E] text-white rounded-xl'
-            />
+            <div className='flex relative items-center'>
+              <input
+                type={showPassword ? "text" : "password"}
+                id='password'
+                name='password'
+                value={formData.password}
+                onChange={handleChange}
+                placeholder='Contraseña'
+                className='w-full px-4 py-2 bg-[#1E1E1E] text-white rounded-xl'
+              />
+              <div
+                className=' absolute  right-3 cursor-pointer'
+                onClick={togglePasswordVisibility}
+              >
+                <img
+                  src={showPassword ? eyeSlashIcon : eyeIcon}
+                  alt='Toggle password visibility'
+                  className='w-5'
+                />
+              </div>
+            </div>
             {errors.password && (
-              <p className='text-[#AD0606] text-sm mt-1'>{errors.password}</p>
+              <div
+                className='flex items-center p-1 px-2 gap-2 rounded-lg mt-2'
+                style={{
+                  backgroundColor: "rgba(242, 161, 161, 0.14)",
+                  border: "2px solid rgba(223, 22, 22, 0.39)", // Added "solid" for border style
+                }}
+              >
+                <img src={close} className='w-5 h-5' alt='' />
+
+                <p className='text-[#DABEBE] text-sm '>{errors.password}</p>
+              </div>
             )}
             <p className='text-end text-sm mt-2'>
-              <a href='/' className='text-blue-400'>
+              <a href='/' className='text-primaryBlue font-normal'>
                 ¿Olvidaste tu contraseña?
               </a>
             </p>
