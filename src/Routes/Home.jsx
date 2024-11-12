@@ -30,7 +30,7 @@ const eventList = [
     name: "Shakira | Las mujeres ya no lloran World Tour",
     genre: "pop",
     capacity: 100,
-    date: "20-02-2024",
+    date: "02-20-2024",
     time: "20:00",
     site: "Estadio Metropolitano Roberto Meléndez",
     city: "Barranquilla",
@@ -46,7 +46,7 @@ const eventList = [
     name: "Aventura: Cerrando clicos",
     genre: "Ritmos latinos",
     capacity: 100,
-    date: "21-12-2024",
+    date: "12-21-2024",
     time: "22:00",
     site: "Estadio Olimpico Pascual Guerrero",
     city: "Cali",
@@ -62,7 +62,7 @@ const eventList = [
     name: "Apolo7 & Friends",
     genre: "Rock",
     capacity: 100,
-    date: "29-11-2024",
+    date: "11-29-2024",
     time: "21:00",
     site: "Estudio de la Piña",
     city: "Bogotá",
@@ -78,7 +78,7 @@ const eventList = [
     name: "Festival Estéreo Picnic",
     genre: "Alternativo",
     capacity: 100,
-    date: "27-04-2024",
+    date: "04-27-2024",
     time: "14:00",
     site: "Parque Metropolitano Simón Bolívar",
     city: "Bogotá",
@@ -92,7 +92,7 @@ const eventList = [
 ];
 
 const Home = () => {
-  const { dispatch } = useCharStates();
+  const { state, dispatch } = useCharStates();
 
   useEffect(() => {
     // axios
@@ -110,7 +110,8 @@ const Home = () => {
   return (
     <>
       <Searcher />
-      <Categories />
+      {/* Renderizado condicional según filtrado */}
+      {Object.keys(state.homeFilters).length == 0 && <Categories />}
       <Suggested />
     </>
   );

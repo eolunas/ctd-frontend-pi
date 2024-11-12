@@ -10,6 +10,8 @@ export const reducer = (state, action) => {
             // eslint-disable-next-line no-case-declarations
             const filteredFavs = state.favs.filter(item => item.id != action.payload.id);
             return {...state, favs: [...filteredFavs] };
+        case 'SET_FILTERS':
+            return {...state, homeFilters: action.payload};
         case 'TOGGLE_THEME':
             localStorage.setItem('theme', `${action.payload}`);
             return {...state, theme: action.payload };

@@ -10,6 +10,7 @@ const initialState = {
   topCategories: [],
   list: [],
   favs: favs,
+  homeFilters: {},
   theme: theme,
 }
 
