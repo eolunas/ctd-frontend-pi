@@ -5,8 +5,9 @@ import EventDetail from "./Routes/EventDetail";
 import { Layout } from "./Layouts/Layout";
 import AdminLayout from "./Layouts/AdminLayout";
 import Favs from "./Routes/Favs";
-import ListaEventos from "./Routes/EventList";
-import ListProductsAdmin from "./Routes/ListProductsAdmin";
+// import ListaEventos from "./Routes/EventList";
+import ListProductsAdmin from "./Components/ListProductsAdmin";
+
 
 function App() {
   return (
@@ -18,7 +19,7 @@ function App() {
             <Route index element={<Home />} />
             <Route path='favs' element={<Favs />} />
             <Route path='detail/:id' element={<EventDetail />} />
-            <Route path='eventos' element={<ListaEventos />} />
+            {/* <Route path='eventos' element={<ListaEventos />} /> */}
           </Route>
 
           {/* Rutas de administrador */}
@@ -26,6 +27,7 @@ function App() {
             <Route path='products' element={<ListProductsAdmin />} />
             <Route path='clients' element={<ListProductsAdmin />} />
             <Route path='income' element={<ListProductsAdmin />} />
+            
             {/* Agrega más rutas de administrador aquí */}
           </Route>
         </Routes>

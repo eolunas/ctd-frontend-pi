@@ -1,48 +1,27 @@
-// Components/AdminSidebar.js
+// src/Routes/Sidebar.jsx
+import React from "react";
 import { Link } from "react-router-dom";
 
-const AdminSidebar = () => {
+const Sidebar = () => {
   return (
-    <div className='bg-[#424242] w-62 sm:px-10 text-white flex flex-col justify-between p-4'>
-      {/* Título */}
-      <div>
-        <h1 className='text-2xl text-center font-bold text-primaryBlue'>
-          Admin TicketGo
-        </h1>
-        <hr className='my-4 border-white' />
-
-        {/* Links */}
-        <nav className='flex flex-col gap-4'>
-          <Link
-            to='/admin/products'
-            className='hover:text-primaryBlue  text-white'
-          >
-            Listar productos
-          </Link>
-          <Link
-            to='/admin/clients'
-            className='hover:text-primaryBlue  text-white'
-          >
-            Clientes
-          </Link>
-          <Link
-            to='/admin/income'
-            className='hover:text-primaryBlue  text-white'
-          >
-            Ingresos
-          </Link>
-        </nav>
-      </div>
-
-      {/* Cerrar sesión */}
-      <div>
-        <hr className='my-4 border-white' />
-        <div className='hover:text-primaryBlue cursor-pointer text-center p-2 font-semibold'>
-          Cerrar sesión
-        </div>
-      </div>
+    <div className="w-64 bg-gray-900 p-6 flex flex-col">
+      <h2 className="text-yellow-500 text-2xl font-bold mb-6">Admin TicketGo</h2>
+      <nav className="flex flex-col space-y-4">
+        <Link to="/admin" className="text-gray-400 hover:text-white transition">
+          Inicio
+        </Link>
+        <Link to="/admin/products" className="text-gray-400 hover:text-white transition">
+          Listar productos
+        </Link>
+        <Link to="/admin/characteristics" className="text-gray-400 hover:text-white transition">
+          Administrar características
+        </Link>
+        <Link to="/admin/users" className="text-gray-400 hover:text-white transition">
+          Gestión de usuarios
+        </Link>
+      </nav>
     </div>
   );
 };
 
-export default AdminSidebar;
+export default Sidebar;
