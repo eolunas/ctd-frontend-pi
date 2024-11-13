@@ -103,6 +103,7 @@ const Home = () => {
     //   .catch((error) => {
     //     console.error("Error fetching data:", error);
     //   });
+    window.scrollTo(0, 0);
     dispatch({ type: "GET_TOPCAT", payload: genres });
     dispatch({ type: "GET_CHARS", payload: eventList });
   }, []);
