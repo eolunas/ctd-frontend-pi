@@ -59,7 +59,7 @@ const LoginModal = ({ isOpen, onClose }) => {
             user: authStatus.user,
           },
         });
-        navigate(authStatus.role === "Administrator" ? "/admin" : "/");
+        navigate(authStatus.user.role === "Administrator" ? "/admin" : "/");
         onClose();
       } else {
         setErrors({ ...errors, form: authStatus.error });
