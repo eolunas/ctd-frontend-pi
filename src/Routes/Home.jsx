@@ -94,6 +94,8 @@ const eventList = [
 const Home = () => {
   const { state, dispatch } = useCharStates();
 
+  console.log(state.user, "aaa");
+
   useEffect(() => {
     // axios
     //   .get("https://jsonplaceholder.typicode.com/users")

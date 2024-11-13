@@ -1,26 +1,28 @@
 import { useState } from "react";
+import PropTypes from "prop-types";
+
+import { useNavigate } from "react-router-dom";
 import close from "../assets/1-Iconos/close.png";
-import advert from "../assets/1-Iconos/advert.png";
-import eyeIcon from "../assets/1-Iconos/eye.png"; // Import the eye icon
-import eyeSlashIcon from "../assets/1-Iconos/eyeSlashIcon.png"; // Import the eye-slash icon
+import eyeIcon from "../assets/1-Iconos/eye.png";
+import eyeSlashIcon from "../assets/1-Iconos/eyeSlashIcon.png";
+import { useCharStates } from "../Context";
+import { login } from "../auth";
 
 const LoginModal = ({ isOpen, onClose }) => {
-  if (!isOpen) return null;
+  const navigate = useNavigate();
+  const { dispatch } = useCharStates(); // Access dispatch from context
 
   const [formData, setFormData] = useState({
     email: "",
     password: "",
   });
-
-  const [errors, setErrors] = useState({});
   const [showPassword, setShowPassword] = useState(false);
+  const [errors, setErrors] = useState({});
 
-  // Toggle password visibility
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
 
-  // Maneja los cambios de los inputs
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({
@@ -29,7 +31,6 @@ const LoginModal = ({ isOpen, onClose }) => {
     });
   };
 
-  // Validación de campos
   const validate = () => {
     const newErrors = {};
     if (!formData.email) {
@@ -44,14 +45,28 @@ const LoginModal = ({ isOpen, onClose }) => {
     return Object.keys(newErrors).length === 0;
   };
 
-  // Maneja el envío del formulario
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (validate()) {
-      console.log("Inicio de sesión enviado:", formData);
-      // Aquí puedes realizar la lógica de inicio de sesión, como enviar los datos al backend
+      const authStatus = await login(formData);
+
+      if (authStatus.isLoggedIn) {
+        dispatch({
+          type: "LOGIN",
+          payload: {
+            isLoggedIn: true,
+            role: authStatus.user.role,
+            user: authStatus.user,
+          },
+        });
+        navigate(authStatus.user.role === "Administrator" ? "/admin" : "/");
+        onClose();
+      } else {
+        setErrors({ ...errors, form: authStatus.error });
+      }
     }
   };
+  if (!isOpen) return null;
 
   return (
     <div
@@ -73,7 +88,6 @@ const LoginModal = ({ isOpen, onClose }) => {
           Inicia sesión
         </h2>
         <form onSubmit={handleSubmit} className='space-y-4'>
-          {/* Correo Electrónico */}
           <div>
             <label htmlFor='email' className='block text-sm text-white mb-1'>
               Correo Electrónico
@@ -92,17 +106,15 @@ const LoginModal = ({ isOpen, onClose }) => {
                 className='flex items-center p-1 px-2 gap-2 rounded-lg mt-2'
                 style={{
                   backgroundColor: "rgba(242, 161, 161, 0.14)",
-                  border: "2px solid rgba(223, 22, 22, 0.39)", // Added "solid" for border style
+                  border: "2px solid rgba(223, 22, 22, 0.39)",
                 }}
               >
                 <img src={close} className='w-5 h-5' alt='' />
-
                 <p className='text-[#DABEBE] text-sm '>{errors.email}</p>
               </div>
             )}
           </div>
 
-          {/* Contraseña */}
           <div className='relative'>
             <label htmlFor='password' className='block text-sm text-white mb-1'>
               Contraseña
@@ -118,7 +130,7 @@ const LoginModal = ({ isOpen, onClose }) => {
                 className='w-full px-4 py-2 bg-[#1E1E1E] text-white rounded-xl'
               />
               <div
-                className=' absolute  right-3 cursor-pointer'
+                className='absolute right-3 cursor-pointer'
                 onClick={togglePasswordVisibility}
               >
                 <img
@@ -133,11 +145,10 @@ const LoginModal = ({ isOpen, onClose }) => {
                 className='flex items-center p-1 px-2 gap-2 rounded-lg mt-2'
                 style={{
                   backgroundColor: "rgba(242, 161, 161, 0.14)",
-                  border: "2px solid rgba(223, 22, 22, 0.39)", // Added "solid" for border style
+                  border: "2px solid rgba(223, 22, 22, 0.39)",
                 }}
               >
                 <img src={close} className='w-5 h-5' alt='' />
-
                 <p className='text-[#DABEBE] text-sm '>{errors.password}</p>
               </div>
             )}
@@ -148,7 +159,10 @@ const LoginModal = ({ isOpen, onClose }) => {
             </p>
           </div>
 
-          {/* Botón de Iniciar Sesión */}
+          {errors.form && (
+            <div className='text-red-500 text-sm mt-2'>{errors.form}</div>
+          )}
+
           <button
             type='submit'
             className='w-full py-2 bg-secondaryYellow text-white text-lg font-bold rounded-md'
@@ -159,6 +173,10 @@ const LoginModal = ({ isOpen, onClose }) => {
       </div>
     </div>
   );
+};
+LoginModal.propTypes = {
+  isOpen: PropTypes.bool.isRequired, // Expecting a boolean value for isOpen
+  onClose: PropTypes.func.isRequired, // Expecting a function for onClose
 };
 
 export default LoginModal;
