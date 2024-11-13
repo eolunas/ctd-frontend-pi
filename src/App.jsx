@@ -1,5 +1,5 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import { Context } from "./Context";
+import { Context, useCharStates } from "./Context";
 import Home from "./Routes/Home";
 import EventDetail from "./Routes/EventDetail";
 import { Layout } from "./Layouts/Layout";
@@ -8,8 +8,9 @@ import Favs from "./Routes/Favs";
 // import ListaEventos from "./Routes/EventList";
 import ListProductsAdmin from "./Components/ListProductsAdmin";
 
-
 function App() {
+
+
   return (
     <Context>
       <Router basename='/ctd-frontend-pi/'>
@@ -27,7 +28,7 @@ function App() {
             <Route path='products' element={<ListProductsAdmin />} />
             <Route path='clients' element={<ListProductsAdmin />} />
             <Route path='income' element={<ListProductsAdmin />} />
-            
+
             {/* Agrega más rutas de administrador aquí */}
           </Route>
         </Routes>

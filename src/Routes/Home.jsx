@@ -92,7 +92,9 @@ const eventList = [
 ];
 
 const Home = () => {
-  const { dispatch } = useCharStates();
+  const { state, dispatch } = useCharStates();
+
+  console.log(state.user, "aaa");
 
   useEffect(() => {
     // axios

@@ -1,47 +1,55 @@
-/* eslint-disable react/prop-types */
-import axios from 'axios';
-import { createContext, useContext, useEffect, useReducer } from 'react';
-import { reducer } from './Reducers/reducer';
+// Context.js
+import {
+  createContext,
+  useContext,
+  useReducer,
+  useEffect,
+  useState,
+} from "react";
+import { reducer } from "./Reducers/reducer";
+import { getAuthStatus } from "./auth";
 
 const CharStates = createContext(null);
-const favs = JSON.parse(localStorage.getItem('favs')) || [];
-const theme = localStorage.getItem('theme') == 'true';
+
 const initialState = {
   topCategories: [],
   list: [],
-  favs: favs,
-  theme: theme,
-}
+  favs: JSON.parse(localStorage.getItem("favs")) || [],
+  theme: localStorage.getItem("theme") === "true",
+  isLoggedIn: false,
+  user: null,
+};
 
 export const Context = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
-  // useEffect(() => {
-  //   axios.get('https://jsonplaceholder.typicode.com/users')
-  //     .then(res => {
-  //       dispatch({ type: 'GET_CHARS', payload: res.data })
-  //     })
-  //     .catch(error => {
-  //       console.error('Error fetching data:', error); 
-  //     });
-  // }, []);
+  const [loading, setLoading] = useState(true); // Estado de carga
 
   useEffect(() => {
-    localStorage.setItem('favs', JSON.stringify(state.favs));
+    localStorage.setItem("favs", JSON.stringify(state.favs));
   }, [state.favs]);
 
-  // Aplicar la clase de tema al body del documento
   useEffect(() => {
-    document.body.className = state.theme ? 'light' : 'dark';
+    document.body.className = state.theme ? "light" : "dark";
   }, [state.theme]);
 
+  // Cargar estado de autenticación desde localStorage al inicializar el contexto
+  useEffect(() => {
+    const { isLoggedIn, user } = getAuthStatus();
+    if (isLoggedIn) {
+      dispatch({
+        type: "LOGIN",
+        payload: { isLoggedIn, user },
+      });
+    }
+
+    setLoading(false); // Se completó la carga
+  }, []);
+
   return (
-    <CharStates.Provider value={{ state, dispatch }}>
+    <CharStates.Provider value={{ state, dispatch, loading }}>
       {children}
     </CharStates.Provider>
   );
 };
 
-// Hook personalizado para usar el contexto
-export const useCharStates = () => {
-  return useContext(CharStates);
-};
+export const useCharStates = () => useContext(CharStates);
