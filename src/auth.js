@@ -1,17 +1,19 @@
 // auth.js
 import axios from 'axios';
 
+const API = "https://ticketgo-api.onrender.com"
+
 export const login = async (credentials) => {
   try {
     // Step 1: Request login and get the token
-    const loginResponse = await axios.post('https://ticketgo-api.onrender.com/login', credentials);
+    const loginResponse = await axios.post(`${API}/login`, credentials);
     const { token } = loginResponse.data;
 
     // Save the token to localStorage or session storage
     localStorage.setItem('authToken', token);
 
     // Step 2: Fetch user details, including role, with the token
-    const userResponse = await axios.get('https://ticketgo-api.onrender.com/user/me', {
+    const userResponse = await axios.get(`${API}/user/me`, {
       headers: { Authorization: `Bearer ${token}` }
     });
 
