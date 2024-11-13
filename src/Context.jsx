@@ -9,6 +9,7 @@ import {
 import { reducer } from "./Reducers/reducer";
 import { getAuthStatus } from "./auth";
 
+
 const CharStates = createContext(null);
 
 const initialState = {
@@ -23,6 +24,7 @@ const initialState = {
 };
 
 export const Context = ({ children }) => {
+
   const [state, dispatch] = useReducer(reducer, initialState);
   const [loading, setLoading] = useState(true); // Estado de carga
 
