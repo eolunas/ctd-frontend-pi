@@ -1,4 +1,5 @@
-import { Link } from "react-router-dom";
+// Navbar.js
+import { Link, useNavigate } from "react-router-dom";
 import { useCharStates } from "../Context";
 import logo from "../assets/0-Logo/isologo.svg";
 import slogan from "../assets/0-Logo/Slogan.svg";
@@ -8,9 +9,15 @@ import RegisterModal from "../modals/RegisterModal";
 import LoginModal from "../modals/LoginModal";
 
 const Navbar = () => {
-  const { state } = useCharStates();
+  const { state, dispatch, loading } = useCharStates(); // Obtén loading del contexto
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   const [isRegisterModalOpen, setIsRegisterModalOpen] = useState(false);
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    dispatch({ type: "LOGOUT" });
+    navigate("/");
+  };
 
   const openLoginModal = () => {
     setIsLoginModalOpen(true);
@@ -38,14 +45,21 @@ const Navbar = () => {
           <img className='md:mb-[4px]' src={slogan} alt='Slogan' />
         </div>
       </Link>
-      <div className='flex md:gap-5 gap-2'>
-        <Button type='secondary' onClick={openLoginModal}>
-          Iniciar sesión
-        </Button>
-        <Button onClick={openRegisterModal}>Crear cuenta</Button>
-        <LoginModal isOpen={isLoginModalOpen} onClose={closeModal} />
-        <RegisterModal isOpen={isRegisterModalOpen} onClose={closeModal} />
-      </div>
+      {!state.isLoggedIn ? (
+        <div className='flex md:gap-5 gap-2'>
+          <Button type='secondary' onClick={openLoginModal}>
+            Iniciar sesión
+          </Button>
+          <Button onClick={openRegisterModal}>Crear cuenta</Button>
+          <LoginModal isOpen={isLoginModalOpen} onClose={closeModal} />
+          <RegisterModal isOpen={isRegisterModalOpen} onClose={closeModal} />
+        </div>
+      ) : loading ? (
+        // Muestra "Cargando..." mientras loading sea true
+        <span>Cargando...</span>
+      ) : (
+        <button onClick={handleLogout}>{state.user?.fullName}</button>
+      )}
     </nav>
   );
 };
