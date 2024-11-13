@@ -15,6 +15,8 @@ const initialState = {
   topCategories: [],
   list: [],
   favs: JSON.parse(localStorage.getItem("favs")) || [],
+  homeFilters: {},
+
   theme: localStorage.getItem("theme") === "true",
   isLoggedIn: false,
   user: null,

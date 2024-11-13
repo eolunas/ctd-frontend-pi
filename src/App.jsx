@@ -7,6 +7,7 @@ import AdminLayout from "./Layouts/AdminLayout";
 import Favs from "./Routes/Favs";
 // import ListaEventos from "./Routes/EventList";
 import ListProductsAdmin from "./Components/ListProductsAdmin";
+import UserManagement from "./Components/UserManagement";
 
 function App() {
 
@@ -26,7 +27,7 @@ function App() {
           {/* Rutas de administrador */}
           <Route path='/admin' element={<AdminLayout />}>
             <Route path='products' element={<ListProductsAdmin />} />
-            <Route path='clients' element={<ListProductsAdmin />} />
+            <Route path='users' element={<UserManagement />} />
             <Route path='income' element={<ListProductsAdmin />} />
 
             {/* Agrega más rutas de administrador aquí */}

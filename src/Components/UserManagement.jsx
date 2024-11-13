@@ -1,23 +1,33 @@
 // src/Routes/UserManagement.jsx
-import React from "react";
+import React, { useState } from "react";
 
 const UserManagement = () => {
-  const users = [
+  // Datos de ejemplo de los usuarios
+  const [users, setUsers] = useState([
     {
       id: "1",
       name: "Juan David",
       email: "Juandavid20@gmail.com",
       role: "Administrador",
-      lastAccess: "10/29/2024",
+      hasPermission: true, // Estado inicial del permiso
     },
     {
       id: "2",
       name: "Daniel Medina",
       email: "Danielmedina30@gmail.com",
       role: "Usuario",
-      lastAccess: "10/29/2024",
+      hasPermission: false, // Estado inicial del permiso
     },
-  ];
+  ]);
+
+  // Función para cambiar el estado de permisos
+  const togglePermission = (userId) => {
+    setUsers((prevUsers) =>
+      prevUsers.map((user) =>
+        user.id === userId ? { ...user, hasPermission: !user.hasPermission } : user
+      )
+    );
+  };
 
   return (
     <div className="p-8 bg-black text-white flex flex-col w-full">
@@ -28,7 +38,6 @@ const UserManagement = () => {
             <tr className="text-gray-400 border-b border-gray-700">
               <th className="px-4 py-2 border-r border-gray-700 text-left">Usuario</th>
               <th className="px-4 py-2 border-r border-gray-700 text-left">Rol</th>
-              <th className="px-4 py-2 border-r border-gray-700 text-left">Último acceso</th>
               <th className="px-4 py-2 text-left">Otorgar permisos</th>
             </tr>
           </thead>
@@ -46,11 +55,15 @@ const UserManagement = () => {
                   </div>
                 </td>
                 <td className="px-4 py-2 text-gray-300 border-r border-gray-700">{user.role}</td>
-                <td className="px-4 py-2 text-gray-300 border-r border-gray-700">{user.lastAccess}</td>
                 <td className="px-4 py-2 text-gray-300">
                   <label className="inline-flex relative items-center cursor-pointer">
-                    <input type="checkbox" className="sr-only peer" />
-                    <div className="w-9 h-5 bg-gray-600 rounded-full peer peer-focus:ring-2 peer-focus:ring-cyan-500 peer-checked:bg-cyan-500"></div>
+                    <input
+                      type="checkbox"
+                      className="sr-only peer"
+                      checked={user.hasPermission}
+                      onChange={() => togglePermission(user.id)}
+                    />
+                    <div className="w-9 h-5 bg-gray-600 rounded-full peer peer-focus:ring-2 peer-focus:ring-cyan-500 peer-checked:bg-cyan-500 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all"></div>
                   </label>
                 </td>
               </tr>

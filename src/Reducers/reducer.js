@@ -8,8 +8,11 @@ export const reducer = (state, action) => {
         case 'ADD_FAVS':
             return { ...state, favs: [...state.favs, action.payload] };
         case 'REMOVE_FAVS':
-            const filteredFavs = state.favs.filter(item => item.id !== action.payload.id);
-            return { ...state, favs: [...filteredFavs] };
+            // eslint-disable-next-line no-case-declarations
+            const filteredFavs = state.favs.filter(item => item.id != action.payload.id);
+            return {...state, favs: [...filteredFavs] };
+        case 'SET_FILTERS':
+            return {...state, homeFilters: action.payload};
         case 'TOGGLE_THEME':
             localStorage.setItem('theme', `${action.payload}`);
             return { ...state, theme: action.payload };

@@ -3,8 +3,8 @@ import { useScreenSize } from "../Hooks/useScreenSize";
 import { useCharStates } from "../Context";
 import FavIcon from "../assets/1-Iconos/Home/favorite-card.svg";
 import FavIconFilled from "../assets/1-Iconos/Home/favorite-filled.svg";
-import Place from "../assets/1-Iconos/Home/place.svg";
-import Genre from "../assets/1-Iconos/Home/genre.svg";
+import PlaceIcon from "../assets/1-Iconos/Home/place.svg";
+import GenreIcon from "../assets/1-Iconos/Home/genre.svg";
 
 // eslint-disable-next-line react/prop-types
 const Card = ({ event }) => {
@@ -18,7 +18,7 @@ const Card = ({ event }) => {
     });
 
   return (
-    <div key={event.id} className="overflow-hidden">
+    <div key={event.id} className="z-10 overflow-hidden">
       <Link className="relative" to={`/detail/${event.id}`} state={{ event }}>
         <img
           className="w-full aspect-2/1 object-cover cursor-pointer rounded-3xl"
@@ -40,7 +40,7 @@ const Card = ({ event }) => {
             onClick={() => addFav(event.id)}
           >
             <img
-              className="size-6"
+              className="size-6 cursor-pointer"
               src={stored ? FavIconFilled : FavIcon}
               alt="Favorite Icon"
             />
@@ -49,11 +49,11 @@ const Card = ({ event }) => {
         <p className="text-secondaryYellow text-xl">{event.city}</p>
         <div className="flex">
           <span className="w-3/5 text-white text-sm flex gap-2">
-            <img className="size-6" src={Place} alt="Place Icon" />
+            <img className="size-6" src={PlaceIcon} alt="Place Icon" />
             {event.site}
           </span>
           <span className="w-2/5 text-white text-sm flex gap-2">
-            <img className="size-6" src={Genre} alt="Genre Icon" />
+            <img className="size-6" src={GenreIcon} alt="Genre Icon" />
             {event.genre}
           </span>
         </div>
