@@ -1,7 +1,7 @@
 export const reducer = (state, action) => {
     switch (action.type) {
         case 'SET_DATA':
-            const {genres, events, topGenres} = action.payload;
+            const { genres, events, topGenres } = action.payload;
             return { ...state, genres, list: events, topCategories: topGenres };
         case 'GET_CHARS':
             return { ...state, list: action.payload };
@@ -12,12 +12,20 @@ export const reducer = (state, action) => {
         case 'REMOVE_FAVS':
             // eslint-disable-next-line no-case-declarations
             const filteredFavs = state.favs.filter(item => item.id != action.payload.id);
-            return {...state, favs: [...filteredFavs] };
+            return { ...state, favs: [...filteredFavs] };
         case 'SET_FILTERS':
-            return {...state, homeFilters: action.payload};
+            return { ...state, homeFilters: action.payload };
         case 'TOGGLE_THEME':
             localStorage.setItem('theme', `${action.payload}`);
             return { ...state, theme: action.payload };
+
+        case 'REGISTER':
+            return {
+                ...state,
+                user: action.payload.user,
+            };
+        case "SET_REGISTRATION_SUCCESS":
+            return { ...state, registrationSuccess: action.payload };
         case 'LOGIN':
             return {
                 ...state,

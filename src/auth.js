@@ -3,6 +3,22 @@ import axios from 'axios';
 
 const API = "https://ticketgo-api.onrender.com"
 
+export const register = async (userData) => {
+  try {
+    // Send registration data to the server
+    await axios.post(`${API}/user/registration`, userData);
+
+    // Return success response without login info
+    console.log('Registro succes');
+    return { isRegistered: true };
+
+  } catch (error) {
+    console.error('Registro fallido:', error);
+    return { isRegistered: false, error: 'Error en el registro' };
+  }
+};
+
+
 export const login = async (credentials) => {
   try {
     // Step 1: Request login and get the token
