@@ -14,14 +14,14 @@ const Suggested = () => {
 
     if (lowerCaseGenres.length > 0) {
       auxList = auxList.filter((item) =>
-        lowerCaseGenres.includes(item.genre.toLowerCase())
+        lowerCaseGenres.includes(item.genreName.toLowerCase())
       );
     }
 
     if (date) {
       const dateFilter = new Date(date).toISOString().split("T")[0]; // Solo YYYY-MM-DD
       auxList = auxList.filter((item) => {
-        const dateEvent = new Date(item.date).toISOString().split("T")[0];
+        const dateEvent = new Date(item.eventDate).toISOString().split("T")[0];
         return dateFilter === dateEvent;
       });
     }

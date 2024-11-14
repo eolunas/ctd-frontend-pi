@@ -15,8 +15,8 @@ const animatedComponents = makeAnimated();
 const Searcher = () => {
   const { state, dispatch } = useCharStates();
 
-  const categories = state.topCategories.map((item) => {
-    return { value: item.title, label: item.title };
+  const categories = state.genres.map((item) => {
+    return { value: item.name, label: item.name };
   });
 
   const [filters, setFilters] = useState({});

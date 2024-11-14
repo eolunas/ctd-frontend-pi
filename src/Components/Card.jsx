@@ -20,16 +20,20 @@ const Card = ({ event }) => {
   return (
     <div key={event.id} className="z-10 overflow-hidden">
       <Link className="relative" to={`/detail/${event.id}`} state={{ event }}>
-        <img
-          className="w-full aspect-2/1 object-cover cursor-pointer rounded-3xl"
-          src={event.images[screenSize]}
-          alt={event.name}
-        />
-        <div className={`
+        <div className="w-full h-60 flex items-center justify-center overflow-hidden cursor-pointer rounded-3xl">
+          <img
+            className="w-full h-full object-cover"
+            src={event.images[screenSize]}
+            alt={event.name}
+          />
+        </div>
+        <div
+          className={`
           bg-secondaryYellow absolute bottom-0 left-0 w-5/12 h-1/4 rounded-tr-2xl rounded-bl-2xl
-          flex flex-col justify-center items-center`}>
-          <span className="text-white text-2xl">{event.date}</span>
-          <span className="text-white text-lg">{event.time}hrs</span>
+          flex flex-col justify-center items-center`}
+        >
+          <span className="text-white text-xl">{event.eventDate}</span>
+          <span className="text-white text-lg">{event.eventTime}</span>
         </div>
       </Link>
       <div className="my-5 flex flex-col gap-4 lg:mx-5">
@@ -54,7 +58,7 @@ const Card = ({ event }) => {
           </span>
           <span className="w-2/5 text-white text-sm flex gap-2">
             <img className="size-6" src={GenreIcon} alt="Genre Icon" />
-            {event.genre}
+            {event.genreName}
           </span>
         </div>
       </div>

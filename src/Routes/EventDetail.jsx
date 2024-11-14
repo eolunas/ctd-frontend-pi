@@ -1,118 +1,170 @@
-import { useEffect } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
-import BackArrowIcon from "../assets/1-Iconos/Detalle producto/back-white.svg";
+import { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import { fetchEventById } from "../api/eventApi";
+import BackArrowIcon from "../assets/1-Iconos/DetalleProducto/back-white.svg";
+import PlaceIcon from "../assets/1-Iconos/DetalleProducto/place.svg";
+import GenreIcon from "../assets/1-Iconos/DetalleProducto/genre.svg";
+import LocationIcon from "../assets/1-Iconos/DetalleProducto/city.svg";
+import TimeIcon from "../assets/1-Iconos/DetalleProducto/hour.svg";
+import Button from "../Components/Button";
+import { useScreenSize } from "../Hooks/useScreenSize";
 
 const EventDetail = () => {
+  const { id } = useParams();
   const navigate = useNavigate();
-  const { state } = useLocation();
-  const event = state?.event;
+  const screenSize = useScreenSize();
+  const [event, setEvent] = useState({});
 
   useEffect(() => {
-    window.scrollTo(0, 0);
-  }, []);
+    const getEventById = async () => {
+      const event = await fetchEventById(id);
+      console.log(event.data);
+      setEvent(event.data);
+    };
 
-  if (!event) return <p>Event not found</p>;
+    getEventById();
+
+    window.scrollTo(0, 0);
+  }, [id]);
 
   return (
-    <div className="text-white px-4 sm:p-8">
-      <a
-        onClick={() => navigate(-1)}
-        className="flex justify-end align-center gap-2 text-white text-sm w-full h-4"
-      >
-        <img className="size-4 h-auto" src={BackArrowIcon} alt="BackArrow Icon" />
-        <span className="flex justify-center items-center">Regresar</span>
-      </a>
-
-      <div className="flex justify-between items-center mb-8">
-        <h2 className="text-3xl font-bold text-yellow-500">{event.name}</h2>
-      </div>
-
-      {/* Información principal del evento */}
-      <div className="flex flex-col gap-4">
-        <div className="flex flex-wrap items-center gap-4 text-gray-400">
-          <p className="text-lg">{event.date}</p>
-          <p>
-            {event.city}, {event.country}
-          </p>
-          <p>{event.genre}</p>
-          <p>{event.site}</p>
-        </div>
-
-        <div className="flex flex-col md:flex-row gap-4">
-          {/* Imagen principal del evento */}
-          <div className="flex-1">
+    <>
+      {event && (
+        <div className="text-white px-6 sm:p-8">
+          {/* Botón de regresar a Home */}
+          <a
+            onClick={() => navigate(-1)}
+            className="flex justify-end align-center gap-2 text-white text-sm w-full h-4"
+          >
             <img
-              src={event.images.large}
-              alt={event.name}
-              className="w-full h-auto object-cover rounded-lg"
+              className="size-4 h-auto"
+              src={BackArrowIcon}
+              alt="BackArrow Icon"
             />
+            <span className="flex justify-center items-center">Regresar</span>
+          </a>
+
+          {/* Titulo y botones de función */}
+          <div className="flex justify-between items-center my-4">
+            <h2 className="w-8/12 text-2xl font-bold text-secondaryYellow md:text-3xl">
+              {event.name}
+            </h2>
+            <div className="flex flex-col md:flex-row gap-2">
+              <Button color="secondaryYellow">Reservar</Button>
+              <Button type="secondary" color="secondaryYellow">
+                + Favorito
+              </Button>
+            </div>
+          </div>
+
+          {/* Fecha del evento */}
+          <p className="text-2xl mb-6 md:text-3xl">{event.eventDate}</p>
+
+          {/*  Descripcion general */}
+          <div className="flex flex-col items-center gap-4 my-6 text-gray-400">
+            <div className="flex gap-6 w-full">
+              <span className="flex gap-2 w-4/12">
+                <img className="size-6" src={TimeIcon} alt="Time Icon" />
+                {event.eventTime}
+              </span>
+              <span className="flex gap-2">
+                <img
+                  className="size-6"
+                  src={LocationIcon}
+                  alt="Location Icon"
+                />
+                {event.city}
+              </span>
+            </div>
+            <div className="flex gap-6 w-full">
+              <span className="flex gap-2 w-4/12">
+                <img className="size-6" src={GenreIcon} alt="Genre Icon" />
+                {event.genreName}
+              </span>
+              <span className="flex gap-2">
+                <img className="size-6" src={PlaceIcon} alt="Place Icon" />
+                {event.site}
+              </span>
+            </div>
           </div>
 
           {/* Galería de imágenes */}
-          <div className="flex flex-col gap-2">
-            <img
-              src={event.images.medium}
-              alt={`${event.name} image 1`}
-              className="w-full h-auto object-cover rounded-lg"
-            />
-            <img
-              src={event.images.small}
-              alt={`${event.name} image 2`}
-              className="w-full h-auto object-cover rounded-lg"
-            />
-          </div>
+          {event?.images?.[screenSize] && (
+            <div className="flex flex-col md:flex-row gap-4">
+              <div className="w-full h-60 flex items-center justify-center overflow-hidden cursor-pointer rounded-3xl">
+                <img
+                  className="w-full h-full object-cover"
+                  src={event.images[screenSize]}
+                  alt={event.name}
+                />
+              </div>
+              <div className="flex w-full md:flex-wrap md:basis-[60%]">
+                {event.gallery.map((item, index) => {
+                  if (index < 4)
+                    return (
+                      <img
+                        key={item.id}
+                        src={item.imageUrl}
+                        alt={`${event.name} image ${item.id}`}
+                        className="p-1 w-3/12 h-auto object-cover rounded-3xl md:w-3/6"
+                      />
+                    );
+                })}
+              </div>
+            </div>
+          )}
+
+          {/* Sección de características */}
+          <section className="my-4 px-6 py-5 bg-gray-700/20 shadow-lg rounded-2xl">
+            <h3 className="text-xl font-bold text-primaryBlue mb-6">
+              Características
+            </h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+              <div className="flex items-center justify-start">
+                <img
+                  src="path/to/icon-sanitario.svg"
+                  alt="Sanitarios"
+                  className="w-6 h-6"
+                />
+                <p>Sanitarios</p>
+              </div>
+              <div className="flex items-center justify-start">
+                <img
+                  src="path/to/icon-meetgreet.svg"
+                  alt="Meet & Greet"
+                  className="w-6 h-6"
+                />
+                <p>Meet & Greet</p>
+              </div>
+              <div className="flex items-center justify-start">
+                <img
+                  src="path/to/icon-seguridad.svg"
+                  alt="Seguridad"
+                  className="w-6 h-6"
+                />
+                <p>Seguridad</p>
+              </div>
+              <div className="flex items-center justify-start">
+                <img
+                  src="path/to/icon-wifi.svg"
+                  alt="Wi-Fi"
+                  className="w-6 h-6"
+                />
+                <p>Wi-Fi</p>
+              </div>
+            </div>
+          </section>
+
+          {/* Descripción del evento */}
+          <section className="mb-6">
+            <h3 className="text-xl font-bold text-yellow-500 mb-2">
+              Descripción
+            </h3>
+            <p className="text-white">{event.description}</p>
+          </section>
         </div>
-
-        {/* Sección de características */}
-        <section className="mt-6">
-          <h3 className="text-xl font-bold text-cyan-500 mb-2">
-            Características
-          </h3>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
-            <div className="flex items-center justify-center space-x-2">
-              <img
-                src="path/to/icon-sanitario.svg"
-                alt="Sanitarios"
-                className="w-6 h-6"
-              />
-              <p>Sanitarios</p>
-            </div>
-            <div className="flex items-center justify-center space-x-2">
-              <img
-                src="path/to/icon-meetgreet.svg"
-                alt="Meet & Greet"
-                className="w-6 h-6"
-              />
-              <p>Meet & Greet</p>
-            </div>
-            <div className="flex items-center justify-center space-x-2">
-              <img
-                src="path/to/icon-seguridad.svg"
-                alt="Seguridad"
-                className="w-6 h-6"
-              />
-              <p>Seguridad</p>
-            </div>
-            <div className="flex items-center justify-center space-x-2">
-              <img
-                src="path/to/icon-wifi.svg"
-                alt="Wi-Fi"
-                className="w-6 h-6"
-              />
-              <p>Wi-Fi</p>
-            </div>
-          </div>
-        </section>
-
-        {/* Descripción del evento */}
-        <section className="mt-6">
-          <h3 className="text-xl font-bold text-yellow-500 mb-2">
-            Descripción
-          </h3>
-          <p className="text-gray-400">{event.description}</p>
-        </section>
-      </div>
-    </div>
+      )}
+    </>
   );
 };
 

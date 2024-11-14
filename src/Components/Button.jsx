@@ -1,11 +1,10 @@
-// Button.js
-const Button = ({ children, type = "primary", onClick }) => {
+const Button = ({ children, type = "primary", color = "primaryBlue", onClick }) => {
   const baseStyles =
-    "inline-block md:px-6 px-1 text-sm md:text-md py-1 rounded-full cursor-pointer text-center transition duration-200 ease-in-out";
+    "h-10 flex justify-center items-center md:px-6 px-1.5 text-sm md:text-md py-1.5 rounded-full cursor-pointer text-center transition duration-200 ease-in-out";
 
-  const primaryStyles = "bg-primaryBlue text-white hover:text-white";
-  const secondaryStyles =
-    "bg-black border-primaryBlue border text-primaryBlue hover:text-primaryBlue";
+  // Estilos basados en el tipo y color personalizado
+  const primaryStyles = `bg-${color} text-white hover:bg-opacity-90`;
+  const secondaryStyles = `bg-transparent border-${color} border text-${color} hover:bg-${color} hover:bg-opacity-10`;
 
   const buttonStyles = type === "primary" ? primaryStyles : secondaryStyles;
 
