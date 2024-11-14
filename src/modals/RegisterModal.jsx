@@ -110,6 +110,7 @@ const RegisterModal = ({ isOpen, onClose }) => {
           <SuccesRegisterModal
             onClose={onClose}
             resetRegistrationSuccess={resetRegistrationSuccess}
+            formData={formData}
           />
         )}
         {loading && (

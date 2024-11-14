@@ -1,10 +1,29 @@
+import { login } from "..//auth";
+import { useCharStates } from "../Context";
+
 export default function SuccesRegisterModal({
   onClose,
   resetRegistrationSuccess,
+  formData,
 }) {
-  const handleClose = () => {
+  const { dispatch } = useCharStates();
+  const handleClose = async () => {
     resetRegistrationSuccess(); // Pone registrationSuccess en false
     onClose(); // Cierra el modal
+    const authStatus = await login(formData);
+
+    if (authStatus.isLoggedIn) {
+      dispatch({
+        type: "LOGIN",
+        payload: {
+          isLoggedIn: true,
+          role: authStatus.user.role,
+          user: authStatus.user,
+        },
+      });
+    }
+
+    console.log(formData);
   };
 
   return (
