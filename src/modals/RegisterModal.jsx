@@ -1,41 +1,66 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import close from "../assets/1-Iconos/close.png";
 import eyeIcon from "../assets/1-Iconos/eye.png"; // Asegúrate de tener el ícono de ojo
 import eyeSlashIcon from "../assets/1-Iconos/eyeSlashIcon.png"; // Ícono de ojo cerrado
+import { useCharStates } from "../Context";
+import SuccesRegisterModal from "./SuccesRegisterModal";
 
 const RegisterModal = ({ isOpen, onClose }) => {
-  if (!isOpen) return null;
+  const { handleRegister, state, resetRegistrationSuccess } = useCharStates();
+  const [loading, setLoading] = useState(false);
+  console.log(state.registrationSuccess);
 
   const [formData, setFormData] = useState({
-    nombre: "",
-    apellido: "",
     email: "",
     password: "",
+    name: "",
+    lastName: "",
   });
 
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (validate()) {
+      setLoading(true);
+      handleRegister(formData)
+        .then(() => {
+          setLoading(false);
+        })
+        .catch((error) => {
+          setLoading(false); // Finaliza el loading si hay un error
+          console.error("Error en el registro:", error);
+        });
+    }
+  };
+  useEffect(() => {
+    if (!isOpen) {
+      // Resetea el formulario cuando el modal se cierra
+      setFormData({
+        email: "",
+        password: "",
+        name: "",
+        lastName: "",
+      });
+    }
+  }, [isOpen]);
   const [errors, setErrors] = useState({});
   const [showPassword, setShowPassword] = useState(false);
-
   // Toggle password visibility
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
-  };
-
+  if (!isOpen) return null;
   const validate = () => {
     const newErrors = {};
-    if (!formData.nombre.trim()) {
-      newErrors.nombre = "Ingresa un nombre.";
+    if (!formData.name.trim()) {
+      newErrors.name = "Ingresa un nombre.";
     }
-    if (!formData.apellido.trim()) {
-      newErrors.apellido = "Ingresa tu apellido.";
+    if (!formData.lastName.trim()) {
+      newErrors.lastname = "Ingresa tu apellido.";
     }
     if (!formData.email) {
       newErrors.email = "Ingresa un correo electronico valido";
@@ -62,14 +87,6 @@ const RegisterModal = ({ isOpen, onClose }) => {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (validate()) {
-      console.log("Formulario enviado:", formData);
-      // Aquí puedes realizar la lógica de registro, como enviar los datos al backend
-    }
-  };
-
   return (
     <div
       className='fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50'
@@ -88,18 +105,35 @@ const RegisterModal = ({ isOpen, onClose }) => {
         <h2 className='text-center text-lg font-bold text-primaryBlue mb-4'>
           Crea tu cuenta
         </h2>
+
+        {state.registrationSuccess && (
+          <SuccesRegisterModal
+            onClose={onClose}
+            resetRegistrationSuccess={resetRegistrationSuccess}
+            formData={formData}
+          />
+        )}
+        {loading && (
+          <div className='absolute inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50'>
+            <div className='bg-black border-[#424242] border p-10  rounded-lg flex items-center gap-2'>
+              <div className='w-6 h-6 border-4 border-t-4 border-t-primaryBlue border-white rounded-full animate-spin'></div>
+              <span className='text-primaryBlue'>Registrando...</span>
+            </div>
+          </div>
+        )}
+
         <form onSubmit={handleSubmit} className='space-y-4'>
           {/* Nombre y Apellido en la misma línea */}
           <div className='sm:flex gap-4'>
             <div className='flex-1'>
-              <label htmlFor='nombre' className='block text-sm text-white mb-1'>
+              <label htmlFor='name' className='block text-sm text-white mb-1'>
                 Nombre
               </label>
               <input
                 type='text'
-                id='nombre'
-                name='nombre'
-                value={formData.nombre}
+                id='name'
+                name='name'
+                value={formData.name}
                 onChange={handleChange}
                 placeholder='Nombre'
                 className='w-full px-4 py-2 bg-[#1E1E1E] text-white rounded-xl'
@@ -120,16 +154,16 @@ const RegisterModal = ({ isOpen, onClose }) => {
             </div>
             <div className='flex-1'>
               <label
-                htmlFor='apellido'
+                htmlFor='lastName'
                 className='block text-sm text-white sm:mt-0 mt-4 mb-1'
               >
                 Apellido
               </label>
               <input
                 type='text'
-                id='apellido'
-                name='apellido'
-                value={formData.apellido}
+                id='lastName'
+                name='lastName'
+                value={formData.lastName}
                 onChange={handleChange}
                 placeholder='Apellido'
                 className='w-full px-4 py-2 bg-[#1E1E1E] text-white rounded-xl'

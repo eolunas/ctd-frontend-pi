@@ -6,7 +6,7 @@ import {
   useState,
 } from "react";
 import { reducer } from "./Reducers/reducer";
-import { getAuthStatus } from "./auth";
+import { getAuthStatus, register } from "./auth";
 import { fetchEvents } from "./api/eventApi";
 import { fetchGenres } from "./api/genreApi";
 
@@ -21,6 +21,7 @@ const initialState = {
   theme: localStorage.getItem("theme") === "true",
   isLoggedIn: false,
   user: null,
+  registrationSuccess: false,
 };
 
 export const Context = ({ children }) => {
@@ -42,7 +43,14 @@ export const Context = ({ children }) => {
         console.log(topGenresResponse.data);
         console.log(eventsResponse.data);
 
-        dispatch({ type: "SET_DATA", payload: { genres: genresResponse.data, topGenres: topGenresResponse.data, events: eventsResponse.data } });
+        dispatch({
+          type: "SET_DATA",
+          payload: {
+            genres: genresResponse.data,
+            topGenres: topGenresResponse.data,
+            events: eventsResponse.data,
+          },
+        });
       } catch (error) {
         console.error("Error fetching data:", error);
         // Puedes manejar el error aquí, por ejemplo, despachando una acción de error
@@ -60,6 +68,34 @@ export const Context = ({ children }) => {
     document.body.className = state.theme ? "light" : "dark";
   }, [state.theme]);
 
+  const handleRegister = async (userData) => {
+    const result = await register(userData);
+    if (result.isRegistered) {
+      dispatch({
+        type: "REGISTER",
+        payload: result,
+      });
+      console.log("Registro completado");
+
+      // Después de registrar correctamente, actualizar el estado en el contexto
+      dispatch({
+        type: "SET_REGISTRATION_SUCCESS",
+        payload: true,
+      });
+    } else {
+      dispatch({
+        type: "SET_REGISTRATION_SUCCESS",
+        payload: false,
+      });
+      console.error(result.error);
+    }
+  };
+  const resetRegistrationSuccess = () => {
+    dispatch({
+      type: "SET_REGISTRATION_SUCCESS",
+      payload: false,
+    });
+  };
   // Cargar estado de autenticación desde localStorage al inicializar el contexto
   useEffect(() => {
     const { isLoggedIn, user } = getAuthStatus();
@@ -74,7 +110,15 @@ export const Context = ({ children }) => {
   }, []);
 
   return (
-    <CharStates.Provider value={{ state, dispatch, loading }}>
+    <CharStates.Provider
+      value={{
+        state,
+        dispatch,
+        loading,
+        handleRegister,
+        resetRegistrationSuccess,
+      }}
+    >
       {children}
     </CharStates.Provider>
   );
