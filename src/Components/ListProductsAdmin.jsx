@@ -1,7 +1,7 @@
 // src/Routes/ProductList.jsx
-import React from "react";
-import { Link } from "react-router-dom";
 
+import { Link } from "react-router-dom";
+import { useCharStates } from "../Context";
 // Importa las imágenes de los iconos locales
 import editIcon from "../assets/Admin/line-md_edit.svg";
 import deleteIcon from "../assets/Admin/material-symbols_delete-outline.svg";
@@ -9,12 +9,10 @@ import viewIcon from "../assets/Admin/lucide_eye.svg";
 import plusIcon from "../assets/Admin/add-fav-button.svg";
 
 const ProductList = () => {
-  const products = [
-    { id: "01", name: "Shakira World Tour" },
-    { id: "02", name: "Aventura: Cerrando ciclos" },
-    { id: "03", name: "Apolo7 & Friends" },
-    // Agrega más productos según sea necesario
-  ];
+  const { state } = useCharStates();
+  console.log(state.list);
+
+  const products = state.list;
 
   return (
     <div className="p-8 bg-black text-white flex flex-col w-full">
@@ -41,26 +39,26 @@ const ProductList = () => {
                 <td className="px-4 py-2 text-center">
                   <div className="flex justify-center space-x-4">
                     <Link
-                      to={`/admin/products/edit/${product.id}`}
-                      className="flex items-center text-yellow-500 hover:text-yellow-400"
+                      to="#"
+                      onClick={(e) => e.preventDefault()}
+                      className="flex items-center text-yellow-500 hover:text-yellow-400 cursor-pointer"
                     >
                       <img src={editIcon} alt="Editar" className="w-4 h-4 mr-1" /> Editar
                     </Link>
                     <Link
-                      to={`/admin/products/view/${product.id}`}
-                      className="flex items-center text-cyan-500 hover:text-cyan-400"
+                      to="#"
+                      onClick={(e) => e.preventDefault()}
+                      className="flex items-center text-cyan-500 hover:text-cyan-400 cursor-pointer"
                     >
                       <img src={viewIcon} alt="Ver" className="w-4 h-4 mr-1" /> Ver
                     </Link>
                     <Link
-                      to={`/admin/products/view/${product.id}`}
-                      className="flex items-center text-red-500 hover:text-red-400"
+                      to="#"
+                      onClick={(e) => e.preventDefault()}
+                      className="flex items-center text-red-500 hover:text-red-400 cursor-pointer"
                     >
-                      <img src={deleteIcon} alt="Ver" className="w-4 h-4 mr-1" /> Eliminar
-                    </Link>
-                    {/* <button className="flex items-center text-red-500 hover:text-red-400 bg-transparent focus:outline-none focus:ring-0">
                       <img src={deleteIcon} alt="Eliminar" className="w-4 h-4 mr-1" /> Eliminar
-                    </button> */}
+                    </Link>
                   </div>
                 </td>
               </tr>

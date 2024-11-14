@@ -13,9 +13,9 @@ const Sidebar = () => {
         <Link to="/admin/products" className="text-gray-400 hover:text-white transition">
           Listar productos
         </Link>
-        <Link to="/admin/characteristics" className="text-gray-400 hover:text-white transition">
+        <div className="text-gray-400 cursor-not-allowed"> {/* Deshabilita "Administrar características" */}
           Administrar características
-        </Link>
+        </div>
         <Link to="/admin/users" className="text-gray-400 hover:text-white transition">
           Gestión de usuarios
         </Link>
