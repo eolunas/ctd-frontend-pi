@@ -7,12 +7,14 @@ import Button from "./Button";
 import { useState } from "react";
 import RegisterModal from "../modals/RegisterModal";
 import LoginModal from "../modals/LoginModal";
+import UserDropdown from "./UserDropDown";
 
 const Navbar = () => {
   const { state, dispatch, loading } = useCharStates(); // Obtén loading del contexto
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   const [isRegisterModalOpen, setIsRegisterModalOpen] = useState(false);
   const navigate = useNavigate();
+  console.log(state.user);
 
   const handleLogout = () => {
     dispatch({ type: "LOGOUT" });
@@ -58,7 +60,7 @@ const Navbar = () => {
         // Muestra "Cargando..." mientras loading sea true
         <span>Cargando...</span>
       ) : (
-        <button onClick={handleLogout}>{state.user?.fullName}</button>
+        <UserDropdown state={state} handleLogout={handleLogout} />
       )}
     </nav>
   );
