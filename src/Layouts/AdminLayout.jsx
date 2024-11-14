@@ -1,4 +1,3 @@
-
 // src/Layouts/AdminLayout.jsx
 import { Outlet, useLocation } from "react-router-dom";
 import Navbar from "../Components/Navbar";
@@ -42,14 +41,13 @@ const AdminLayout = () => {
                   <span className="text-cyan-500 font-semibold text-center">Listar productos</span>
                 </Link>
 
-                {/* Tarjeta: Administrar características */}
-                <Link
-                  to="/admin/characteristics"
-                  className="flex flex-col items-center justify-center bg-gray-800 p-6 rounded-lg hover:bg-gray-700 transition w-full"
+                {/* Tarjeta: Administrar características (sin funcionalidad de clic) */}
+                <div
+                  className="flex flex-col items-center justify-center bg-gray-800 p-6 rounded-lg cursor-not-allowed w-full"
                 >
                   <img src={manageCharacteristicsIcon} alt="Administrar características" className="w-12 h-12 mb-4" />
                   <span className="text-cyan-500 font-semibold text-center">Administrar Características</span>
-                </Link>
+                </div>
 
                 {/* Tarjeta: Gestión de usuarios */}
                 <Link
