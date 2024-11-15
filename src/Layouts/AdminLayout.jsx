@@ -1,4 +1,3 @@
-
 // src/Layouts/AdminLayout.jsx
 import { Outlet, useLocation } from "react-router-dom";
 import Navbar from "../Components/Navbar";
@@ -18,46 +17,73 @@ const AdminLayout = () => {
   const isAdminHome = location.pathname === "/admin";
 
   return (
-    <div className="flex flex-col min-h-screen bg-black text-white">
+    <div className='flex flex-col min-h-screen bg-black text-white'>
       {/* Navbar */}
       <Navbar />
 
+      <div className=' flex-grow mt-4   sm:hidden  max-w-xs mx-auto'>
+        <p className='bg-gray-800 text-white p-6 rounded-lg text-center'>
+          Por el momento no está disponible nuestro servicio en móvil, utiliza
+          el panel de administrador desde una computadora o tablet.
+        </p>
+      </div>
+
       {/* Contenido principal para pantallas grandes */}
-      <div className="flex flex-1">
+      <div className='flex flex-1 sm:flex hidden'>
         {/* Barra lateral */}
         <AdminSidebar />
 
         {/* Panel de administración principal */}
-        <main className="flex-1 flex flex-col items-center p-8">
+        <main className='flex-1 flex flex-col items-center p-8'>
           {isAdminHome && (
             <>
-              <h1 className="text-3xl font-bold text-yellow-500 mb-8">Panel de Administración</h1>
-              <div className="grid gap-6 w-full max-w-3xl sm:grid-cols-1 lg:grid-cols-3">
+              <h1 className='text-3xl font-bold text-yellow-500 mb-8'>
+                Panel de Administración
+              </h1>
+              <div className='grid gap-6 w-full max-w-3xl sm:grid-cols-1 lg:grid-cols-3'>
                 {/* Tarjeta: Listar productos */}
                 <Link
-                  to="/admin/products"
-                  className="flex flex-col items-center justify-center bg-gray-800 p-6 rounded-lg hover:bg-gray-700 transition w-full"
+                  to='/admin/products'
+                  className='flex flex-col items-center justify-center bg-gray-800 p-6 rounded-lg hover:bg-gray-700 transition w-full'
                 >
-                  <img src={listProductsIcon} alt="Listar productos" className="w-12 h-12 mb-4" />
-                  <span className="text-cyan-500 font-semibold text-center">Listar productos</span>
+                  <img
+                    src={listProductsIcon}
+                    alt='Listar productos'
+                    className='w-12 h-12 mb-4'
+                  />
+                  <span className='text-cyan-500 font-semibold text-center'>
+                    Listar productos
+                  </span>
                 </Link>
 
                 {/* Tarjeta: Administrar características */}
                 <Link
-                  to="/admin/characteristics"
-                  className="flex flex-col items-center justify-center bg-gray-800 p-6 rounded-lg hover:bg-gray-700 transition w-full"
+                  to='/admin/characteristics'
+                  className='flex flex-col items-center justify-center bg-gray-800 p-6 rounded-lg hover:bg-gray-700 transition w-full'
                 >
-                  <img src={manageCharacteristicsIcon} alt="Administrar características" className="w-12 h-12 mb-4" />
-                  <span className="text-cyan-500 font-semibold text-center">Administrar Características</span>
+                  <img
+                    src={manageCharacteristicsIcon}
+                    alt='Administrar características'
+                    className='w-12 h-12 mb-4'
+                  />
+                  <span className='text-cyan-500 font-semibold text-center'>
+                    Administrar Características
+                  </span>
                 </Link>
 
                 {/* Tarjeta: Gestión de usuarios */}
                 <Link
-                  to="/admin/users"
-                  className="flex flex-col items-center justify-center bg-gray-800 p-6 rounded-lg hover:bg-gray-700 transition w-full"
+                  to='/admin/users'
+                  className='flex flex-col items-center justify-center bg-gray-800 p-6 rounded-lg hover:bg-gray-700 transition w-full'
                 >
-                  <img src={manageUsersIcon} alt="Gestión de usuarios" className="w-12 h-12 mb-4" />
-                  <span className="text-cyan-500 font-semibold text-center">Gestión de usuarios</span>
+                  <img
+                    src={manageUsersIcon}
+                    alt='Gestión de usuarios'
+                    className='w-12 h-12 mb-4'
+                  />
+                  <span className='text-cyan-500 font-semibold text-center'>
+                    Gestión de usuarios
+                  </span>
                 </Link>
               </div>
             </>
