@@ -1,20 +1,17 @@
 import { Navigate } from "react-router-dom";
 import { useCharStates } from "./Context";
 
-const PrivateRoute = ({ children, role }) => {
+const PrivateRoute = ({ children }) => {
   const { state } = useCharStates();
 
-  if (!state.isLoggedIn) {
-    // Si no está autenticado, redirigir al inicio de sesión
-    return <Navigate to='/' />;
-  }
+  console.log(state.user?.role);
 
-  if (state.user.role !== role) {
-    // Si no tiene el rol necesario, redirigir a una página de no autorizado
+  // Si el usuario no está autenticado (estado `isLoggedIn` es falso) o no tiene el rol 'Administrator'
+  if (!state.isLoggedIn || state.user?.role !== "Administrator") {
     return <Navigate to='/unauthorized' />;
   }
 
-  // Si cumple con las condiciones, renderizar el contenido
+  // Si está autenticado y es administrador, renderizar el contenido
   return children;
 };
 

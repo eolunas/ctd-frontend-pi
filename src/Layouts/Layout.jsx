@@ -15,12 +15,11 @@ export const Layout = () => {
       if (user.role === "Administrator") {
         navigate("/admin");
       } else {
-        navigate("/");
+        // navigate("/");
       }
     }
   }, []);
 
-  console.log(location.pathname);
   return (
     <div
       className={`flex flex-col min-h-screen ${
