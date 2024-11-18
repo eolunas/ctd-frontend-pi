@@ -2,7 +2,7 @@ import axios from 'axios';
 
 const axiosInstance = axios.create({
   baseURL: 'https://ticketgo-api.onrender.com',
-  timeout: 5000,
+  timeout: 10000,
 });
 
 // Opcional: Configura interceptores para autenticación o manejo de errores

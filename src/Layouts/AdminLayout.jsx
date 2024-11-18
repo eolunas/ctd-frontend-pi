@@ -29,7 +29,7 @@ const AdminLayout = () => {
       </div>
 
       {/* Contenido principal para pantallas grandes */}
-      <div className='flex flex-1 sm:flex hidden'>
+      <div className=' flex-1 sm:flex hidden'>
         {/* Barra lateral */}
         <AdminSidebar />
 
@@ -57,11 +57,15 @@ const AdminLayout = () => {
                 </Link>
 
                 {/* Tarjeta: Administrar características (sin funcionalidad de clic) */}
-                <div
-                  className="flex flex-col items-center justify-center bg-gray-800 p-6 rounded-lg cursor-not-allowed w-full"
-                >
-                  <img src={manageCharacteristicsIcon} alt="Administrar características" className="w-12 h-12 mb-4" />
-                  <span className="text-cyan-500 font-semibold text-center">Administrar Características</span>
+                <div className='flex flex-col items-center justify-center bg-gray-800 p-6 rounded-lg cursor-not-allowed w-full'>
+                  <img
+                    src={manageCharacteristicsIcon}
+                    alt='Administrar características'
+                    className='w-12 h-12 mb-4'
+                  />
+                  <span className='text-cyan-500 font-semibold text-center'>
+                    Administrar Características
+                  </span>
                 </div>
 
                 {/* Tarjeta: Gestión de usuarios */}
