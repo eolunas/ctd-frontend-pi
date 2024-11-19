@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const axiosInstance = axios.create({
-  baseURL: 'https://ticketgo-api.onrender.com',
+  baseURL: 'http://34.230.54.123:8080',
   timeout: 10000,
 });
 

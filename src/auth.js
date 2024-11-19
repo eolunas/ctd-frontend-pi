@@ -1,7 +1,7 @@
 // auth.js
 import axios from 'axios';
 
-const API = "https://ticketgo-api.onrender.com"
+const API = "http://34.230.54.123:8080"
 export const register = async (userData) => {
   try {
     await axios.post(`${API}/user/registration`, userData);
