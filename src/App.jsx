@@ -8,6 +8,7 @@ import Favs from "./Routes/Favs";
 // import ListaEventos from "./Routes/EventList";
 import ListProductsAdmin from "./Components/ListProductsAdmin";
 import UserManagement from "./Components/UserManagement";
+import AdminHome from "./Components/AdminHome";
 
 function App() {
 
@@ -26,6 +27,7 @@ function App() {
 
           {/* Rutas de administrador */}
           <Route path='/admin' element={<AdminLayout />}>
+            <Route index element={<AdminHome />} />
             <Route path='products' element={<ListProductsAdmin />} />
             <Route path='users' element={<UserManagement />} />
             <Route path='income' element={<ListProductsAdmin />} />
