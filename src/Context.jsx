@@ -39,10 +39,6 @@ export const Context = ({ children }) => {
             fetchEvents(),
           ]);
 
-        // console.log(genresResponse.data);
-        // console.log(topGenresResponse.data);
-        // console.log(eventsResponse.data);
-
         dispatch({
           type: "SET_DATA",
           payload: {

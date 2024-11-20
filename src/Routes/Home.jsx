@@ -3,6 +3,7 @@ import { useCharStates } from "../Context";
 import Searcher from "../Components/Searcher";
 import Categories from "../Components/Categories";
 import Suggested from "../Components/Suggested";
+import ResultFilters from "../Components/ResultFilters";
 
 const Home = () => {
   const { state } = useCharStates();
@@ -15,7 +16,8 @@ const Home = () => {
     <>
       <Searcher />
       {/* Renderizado condicional según filtrado */}
-      {Object.keys(state.homeFilters).length == 0 && <Categories />}
+      {Object.keys(state.homeFilters).length > 0 && <ResultFilters />}
+      <Categories />
       <Suggested />
     </>
   );

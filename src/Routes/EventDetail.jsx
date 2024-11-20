@@ -41,7 +41,7 @@ const EventDetail = () => {
   return (
     <>
       {event && (
-        <div className="text-white px-6 sm:p-8">
+        <div className="text-white px-6 sm:px-20">
           {/* Botón de regresar a Home */}
           <a
             onClick={() => navigate(-1)}
@@ -66,7 +66,7 @@ const EventDetail = () => {
           <p className="text-2xl mb-6 md:text-3xl">{event.eventDate}</p>
 
           {/* Descripción general */}
-          <div className="flex flex-col items-center gap-4 my-6 text-gray-400">
+          <div className="flex flex-col items-center gap-4 mt-6 mb-16 text-gray-400">
             <div className="flex gap-6 w-full">
               <span className="flex gap-2 w-4/12">
                 <img className="size-6" src={TimeIcon} alt="Time Icon" />
@@ -91,8 +91,8 @@ const EventDetail = () => {
 
           {/* Galería de imágenes */}
           {event?.images?.[screenSize] && (
-            <div className="flex flex-col md:flex-row gap-4">
-              <div className="w-full h-60 flex items-center justify-center overflow-hidden cursor-pointer rounded-3xl">
+            <div className="flex flex-col md:flex-row gap-1 mb-16">
+              <div className="w-full aspect-[5/4] flex items-center justify-center overflow-hidden cursor-pointer rounded-xl">
                 <img
                   className="w-full h-full object-cover"
                   src={event.images[screenSize]}
@@ -107,7 +107,7 @@ const EventDetail = () => {
                         key={item.id}
                         src={item.imageUrl}
                         alt={`${event.name} image ${item.id}`}
-                        className="p-1 w-3/12 h-auto object-cover rounded-3xl md:w-3/6"
+                        className="p-1 w-3/12 aspect-[5/4] object-cover rounded-xl md:w-3/6"
                       />
                     );
                 })}
@@ -116,38 +116,38 @@ const EventDetail = () => {
           )}
 
           {/* Sección de características */}
-          <section className="my-4 px-6 py-5 bg-gray-700/20 shadow-lg rounded-2xl">
+          <section className="my-4 px-6 py-5 bg-gray-700/20 shadow-lg rounded-2xl mb-16">
             <h3 className="text-xl font-bold text-primaryBlue mb-6">Características</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-              <div className="flex items-center justify-start">
+              <div className="flex items-center justify-start gap-2">
                 <img src={SanitarioIcon} alt="Sanitarios" className="w-6 h-6" />
                 <p>Sanitarios</p>
               </div>
-              <div className="flex items-center justify-start">
+              <div className="flex items-center justify-start gap-2">
                 <img src={MeetGreetIcon} alt="Meet & Greet" className="w-6 h-6" />
                 <p>Meet & Greet</p>
               </div>
-              <div className="flex items-center justify-start">
+              <div className="flex items-center justify-start gap-2">
                 <img src={SeguridadIcon} alt="Seguridad" className="w-6 h-6" />
                 <p>Seguridad</p>
               </div>
-              <div className="flex items-center justify-start">
+              <div className="flex items-center justify-start gap-2">
                 <img src={WifiIcon} alt="Wi-Fi" className="w-6 h-6" />
                 <p>Wi-Fi</p>
               </div>
-              <div className="flex items-center justify-start">
+              <div className="flex items-center justify-start gap-2">
                 <img src={AccesibilidadIcon} alt="Accesibilidad" className="w-6 h-6" />
                 <p>Accesibilidad</p>
               </div>
-              <div className="flex items-center justify-start">
+              <div className="flex items-center justify-start gap-2">
                 <img src={EstacionamientoIcon} alt="Estacionamiento" className="w-6 h-6" />
                 <p>Estacionamiento</p>
               </div>
-              <div className="flex items-center justify-start">
+              <div className="flex items-center justify-start gap-2">
                 <img src={MerchandisingIcon} alt="Merchandising" className="w-6 h-6" />
                 <p>Merchandising</p>
               </div>
-              <div className="flex items-center justify-start">
+              <div className="flex items-center justify-start gap-2">
                 <img src={DescansoIcon} alt="Área de descanso" className="w-6 h-6" />
                 <p>Área de descanso</p>
               </div>

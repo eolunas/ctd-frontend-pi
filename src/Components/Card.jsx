@@ -20,7 +20,10 @@ const Card = ({ event }) => {
   return (
     <div key={event.id} className="z-10 overflow-hidden">
       <Link className="relative" to={`/detail/${event.id}`} state={{ event }}>
-        <div className="w-full h-60 flex items-center justify-center overflow-hidden cursor-pointer rounded-3xl">
+        <div
+          className={`w-full aspect-[5/3] flex items-center justify-center 
+        overflow-hidden cursor-pointer rounded-xl`}
+        >
           <img
             className="w-full h-full object-cover"
             src={event.images[screenSize]}
@@ -29,11 +32,15 @@ const Card = ({ event }) => {
         </div>
         <div
           className={`
-          bg-secondaryYellow absolute bottom-0 left-0 w-5/12 h-1/4 rounded-tr-2xl rounded-bl-2xl
+          bg-secondaryYellow absolute bottom-0 left-0 w-5/12 h-1/4 rounded-tr-2xl rounded-bl-xl
           flex flex-col justify-center items-center`}
         >
-          <span className="text-white text-xl">{event.eventDate}</span>
-          <span className="text-white text-lg">{event.eventTime}</span>
+          <span className="text-white text-lg sm:text-xl lg:text-2xl">
+            {event.eventDate}
+          </span>
+          <span className="text-white text-sm sm:text-lg lg:text-xl">
+            {event.eventTime}
+          </span>
         </div>
       </Link>
       <div className="my-5 flex flex-col gap-4 lg:mx-5">

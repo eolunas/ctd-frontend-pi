@@ -7,6 +7,9 @@ import CalendarIcon from "../assets/1-Iconos/Home/date.svg";
 import LocationIcon from "../assets/1-Iconos/Home/city.svg";
 import Select from "react-select";
 import makeAnimated from "react-select/animated";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+
 import { useCharStates } from "../Context";
 import { useState } from "react";
 
@@ -20,6 +23,8 @@ const Searcher = () => {
   });
 
   const [filters, setFilters] = useState({});
+  const [dateRange, setDateRange] = useState([null, null]);
+  const [startDate, endDate] = dateRange;
 
   const handleInputChange = (e) => {
     let { name, value } =
@@ -30,9 +35,17 @@ const Searcher = () => {
             value: e ? e.map((option) => option.value.toLowerCase()) : [],
           };
 
+    let allNullDate = false;
+    if (name == "dates") {
+      setDateRange(value);
+      allNullDate = value.every((item) => item === null);
+    }
+
     setFilters((prevFilters) => {
-      if(name != "genres") value = value.replace(/^\s+|\s+(?=\s)/g, "");
-      if (value === null || value.length == 0) {
+      if (name != "genres" && name != "dates")
+        value = value.replace(/^\s+|\s+(?=\s)/g, "");
+
+      if (value === null || value.length == 0 || allNullDate) {
         // Si el valor es nulo, eliminamos la clave del estado
         const { [name]: _, ...newFilters } = prevFilters;
         return newFilters;
@@ -54,7 +67,7 @@ const Searcher = () => {
   return (
     <div
       className={`
-      flex flex-col justify-center items-center w-vw h-auto mb-3 p-6 gap-5
+      flex flex-col justify-center items-center w-vw h-auto mb-3 p-6 gap-1
       bg-searcher-mb bg-cover bg-center
       md:bg-searcher-tb md:p-10 md:flex-row
       lg:bg-searcher-pc`}
@@ -84,53 +97,63 @@ const Searcher = () => {
           flex flex-col justify-center items-center h-full bg-white p-3 rounded-lg w-full max-w-[650px] gap-3 z-10
         `}
       >
-        <div className="flex flex-col justify-center items-center gap-3 w-full sm:flex-row">
+        <div className="flex flex-col justify-center items-center relative gap-1.5 w-full">
+          <label className="flex gap-1 text-gray-700 w-full">
+            <img className="size-6" src={GenreIcon} alt="Genre Icon" />
+            Género
+          </label>
+          <Select
+            name="genres"
+            onChange={handleInputChange}
+            className="w-full text-sm"
+            placeholder="Seleccione..."
+            closeMenuOnSelect={false}
+            components={animatedComponents}
+            isMulti
+            options={categories}
+          />
+        </div>
+
+        <div className="flex flex-col justify-center items-center gap-3 w-full sm:flex-row md:flex-col lg:flex-row">
           <div className="flex flex-col justify-center items-center relative gap-1.5 w-full">
             <label className="flex gap-1 text-gray-700 w-full">
-              <img className="size-6" src={GenreIcon} alt="Genre Icon" />
-              Género
+              <img className="size-6" src={CalendarIcon} alt="Calendar Icon" />
+              Fechas
             </label>
-            <Select
-              name="genres"
-              onChange={handleInputChange}
-              className="w-full text-sm"
-              placeholder="Seleccione..."
-              closeMenuOnSelect={false}
-              components={animatedComponents}
-              isMulti
-              options={categories}
+            <DatePicker
+              name="dates"
+              wrapperClassName="w-full"
+              clearButtonClassName="mx-2"
+              className={`border border-gray-300 text-gray-900 text-sm rounded-md 
+            focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5`}
+              selectsRange={true}
+              startDate={startDate}
+              endDate={endDate}
+              onChange={(update) =>
+                handleInputChange({ target: { name: "dates", value: update } })
+              }
+              isClearable={true}
+              placeholderText="Selecciona un rango de fechas"
             />
           </div>
 
-          <div className="flex flex-col justify-center items-center relative gap-1.5 w-full sm:max-w-44">
+          <div className="flex flex-col justify-center items-center relative gap-1.5 w-full ">
             <label className="flex gap-1 text-gray-700 w-full">
-              <img className="size-6" src={CalendarIcon} alt="Calendar Icon" />
-              Fecha
+              <img className="size-6" src={LocationIcon} alt="Location Icon" />
+              Ciudad
             </label>
             <input
-              name="date"
+              name="city"
+              value={filters.city || ""}
               onChange={handleInputChange}
-              type="date"
-              className="text-sm w-full border border-gray-300 rounded-md p-2 text-gray-700 focus:ring-blue-500 focus:border-blue-500"
-              placeholder="Selecciona una fecha"
+              type="text"
+              className={`border border-gray-300 text-gray-900 text-sm rounded-md 
+                      focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5`}
+              placeholder="Todo Colombia"
             />
           </div>
         </div>
-        <div className="flex flex-col justify-center items-center relative gap-1.5 w-full">
-          <label className="flex gap-1 text-gray-700 w-full">
-            <img className="size-6" src={LocationIcon} alt="Location Icon" />
-            Ciudad
-          </label>
-          <input
-            name="city"
-            value={filters.city || ""}
-            onChange={handleInputChange}
-            type="text"
-            className={`border border-gray-300 text-gray-900 text-sm rounded-md 
-                      focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5`}
-            placeholder="Todo Colombia"
-          />
-        </div>
+
         <div className="flex justify-center items-center gap-3 relative w-full">
           <UsersIcon className="h-6 w-6 text-black absolute left-2" />
           <input
