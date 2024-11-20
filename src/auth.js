@@ -1,22 +1,21 @@
 // auth.js
 import axios from 'axios';
 
-const API = "https://ticketgo-api.onrender.com"
-
+const API = "http://34.230.54.123:8080"
 export const register = async (userData) => {
   try {
-    // Send registration data to the server
     await axios.post(`${API}/user/registration`, userData);
-
-    // Return success response without login info
-    console.log('Registro succes');
     return { isRegistered: true };
-
   } catch (error) {
-    console.error('Registro fallido:', error);
-    return { isRegistered: false, error: 'Error en el registro' };
+    let errorMessage = "Error en el registro";
+    if (error.response?.status === 400) {
+      errorMessage = "El correo ya está registrado";
+    }
+    return { isRegistered: false, error: errorMessage };
   }
 };
+
+
 
 
 export const login = async (credentials) => {

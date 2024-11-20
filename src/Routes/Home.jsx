@@ -6,7 +6,6 @@ import Suggested from "../Components/Suggested";
 
 const Home = () => {
   const { state } = useCharStates();
-  console.log(state.user, "aaa");
 
   useEffect(() => {
     window.scrollTo(0, 0);

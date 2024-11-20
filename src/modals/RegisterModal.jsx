@@ -8,7 +8,6 @@ import SuccesRegisterModal from "./SuccesRegisterModal";
 const RegisterModal = ({ isOpen, onClose }) => {
   const { handleRegister, state, resetRegistrationSuccess } = useCharStates();
   const [loading, setLoading] = useState(false);
-  console.log(state.registrationSuccess);
 
   const [formData, setFormData] = useState({
     email: "",
@@ -26,15 +25,26 @@ const RegisterModal = ({ isOpen, onClose }) => {
     if (validate()) {
       setLoading(true);
       handleRegister(formData)
-        .then(() => {
+        .then((response) => {
           setLoading(false);
+          if (!response.isRegistered) {
+            setErrors((prevErrors) => ({
+              ...prevErrors,
+              server: response.error, // Agrega el error del servidor
+            }));
+          }
         })
         .catch((error) => {
           setLoading(false); // Finaliza el loading si hay un error
           console.error("Error en el registro:", error);
+          setErrors((prevErrors) => ({
+            ...prevErrors,
+            server: "Ya hay una cuenta registrada con este correo electronico.",
+          }));
         });
     }
   };
+
   useEffect(() => {
     if (!isOpen) {
       // Resetea el formulario cuando el modal se cierra
@@ -56,17 +66,34 @@ const RegisterModal = ({ isOpen, onClose }) => {
   if (!isOpen) return null;
   const validate = () => {
     const newErrors = {};
+
+    // Validar nombre
     if (!formData.name.trim()) {
       newErrors.name = "Ingresa un nombre.";
+    } else if (formData.name.trim().length < 3) {
+      newErrors.name = "El nombre debe tener al menos 3 caracteres.";
+    } else if (!/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/.test(formData.name)) {
+      newErrors.name =
+        "El nombre no debe contener números ni caracteres especiales.";
     }
+
+    // Validar apellido
     if (!formData.lastName.trim()) {
-      newErrors.lastname = "Ingresa tu apellido.";
+      newErrors.lastName = "Ingresa tu apellido.";
+    } else if (formData.lastName.trim().length < 3) {
+      newErrors.lastName = "El apellido debe tener al menos 3 caracteres.";
+    } else if (!/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/.test(formData.lastName)) {
+      newErrors.lastName = "El apellido no debe contener números.";
     }
+
+    // Validar correo electrónico
     if (!formData.email) {
-      newErrors.email = "Ingresa un correo electronico valido";
+      newErrors.email = "Ingresa un correo electrónico válido.";
     } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
       newErrors.email = "El correo electrónico no es válido.";
     }
+
+    // Validar contraseña
     if (!formData.password) {
       newErrors.password = "Ingrese una contraseña.";
     } else {
@@ -76,7 +103,7 @@ const RegisterModal = ({ isOpen, onClose }) => {
       }
       if (!/[A-Z]/.test(formData.password)) {
         newErrors.password =
-          "La contraseña debe contener al menos una  mayúscula.";
+          "La contraseña debe contener al menos una mayúscula.";
       }
       if (!/\d/.test(formData.password)) {
         newErrors.password = "La contraseña debe contener al menos un número.";
@@ -138,7 +165,7 @@ const RegisterModal = ({ isOpen, onClose }) => {
                 placeholder='Nombre'
                 className='w-full px-4 py-2 bg-[#1E1E1E] text-white rounded-xl'
               />
-              {errors.nombre && (
+              {errors.name && (
                 <div
                   className='flex items-center p-1 px-2 gap-2 rounded-lg mt-2'
                   style={{
@@ -148,7 +175,7 @@ const RegisterModal = ({ isOpen, onClose }) => {
                 >
                   <img src={close} className='w-5 h-5' alt='' />
 
-                  <p className='text-[#DABEBE] text-sm '>{errors.nombre}</p>
+                  <p className='text-[#DABEBE] text-sm '>{errors.name}</p>
                 </div>
               )}
             </div>
@@ -168,7 +195,7 @@ const RegisterModal = ({ isOpen, onClose }) => {
                 placeholder='Apellido'
                 className='w-full px-4 py-2 bg-[#1E1E1E] text-white rounded-xl'
               />
-              {errors.apellido && (
+              {errors.lastName && (
                 <div
                   className='flex items-center p-1 px-2 gap-2 rounded-lg mt-2'
                   style={{
@@ -178,7 +205,7 @@ const RegisterModal = ({ isOpen, onClose }) => {
                 >
                   <img src={close} className='w-5 h-5' alt='' />
 
-                  <p className='text-[#DABEBE] text-sm '>{errors.apellido}</p>
+                  <p className='text-[#DABEBE] text-sm '>{errors.lastName}</p>
                 </div>
               )}
             </div>
@@ -259,6 +286,18 @@ const RegisterModal = ({ isOpen, onClose }) => {
               </a>
             </p>
           </div>
+          {errors.server && (
+            <div
+              className='flex items-center p-1 px-2 gap-2 rounded-lg mt-2'
+              style={{
+                backgroundColor: "rgba(242, 161, 161, 0.14)",
+                border: "2px solid rgba(223, 22, 22, 0.39)",
+              }}
+            >
+              <img src={close} className='w-5 h-5' alt='' />
+              <p className='text-[#DABEBE] text-sm'>{errors.server}</p>
+            </div>
+          )}
 
           {/* Botón de Enviar */}
           <button

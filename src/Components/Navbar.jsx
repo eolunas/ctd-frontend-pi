@@ -14,7 +14,6 @@ const Navbar = () => {
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   const [isRegisterModalOpen, setIsRegisterModalOpen] = useState(false);
   const navigate = useNavigate();
-  console.log(state.user);
 
   const handleLogout = () => {
     dispatch({ type: "LOGOUT" });

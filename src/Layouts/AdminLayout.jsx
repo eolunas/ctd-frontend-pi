@@ -26,14 +26,12 @@ const AdminLayout = () => {
       </div>
 
       {/* Contenido principal para pantallas grandes */}
-      <div className='flex flex-1 sm:flex hidden'>
+      <div className=' flex-1 sm:flex hidden'>
         {/* Barra lateral */}
         <AdminSidebar />
 
         {/* Panel de administración principal */}
         <main className='flex-1 flex flex-col items-center p-8'>
-          
-          {/* Outlet para mostrar el contenido de cada sección específica */}
           <Outlet />
         </main>
       </div>

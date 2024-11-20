@@ -18,9 +18,12 @@ const ProductList = () => {
     <div className='p-8 bg-black text-white flex flex-col w-full'>
       <div className='flex justify-between items-center mb-4'>
         <h2 className='text-2xl font-bold text-cyan-500'>Lista de productos</h2>
-        <button className='flex items-center bg-yellow-500 text-white font-semibold px-4 py-2 rounded-full hover:bg-yellow-400 transition'>
-          <img src={plusIcon} alt='Agregar' className='w-5 h-5 mr-2' /> Agregar
-        </button>
+        <Link
+          to="/admin/products/new"
+          className="flex items-center bg-yellow-500 text-white font-semibold px-4 py-2 rounded-full hover:bg-yellow-400 transition"
+        >
+          <img src={plusIcon} alt="Agregar" className="w-5 h-5 mr-2" /> Agregar
+        </Link>
       </div>
       <div className='overflow-x-auto'>
         <table className='min-w-full bg-gray-800 rounded-lg overflow-hidden border border-gray-700'>
