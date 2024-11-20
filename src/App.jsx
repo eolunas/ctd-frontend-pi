@@ -10,6 +10,8 @@ import ListProductsAdmin from "./Components/ListProductsAdmin";
 import UserManagement from "./Components/UserManagement";
 import PrivateRoute from "./PrivateRoute";
 import Unauthorized from "./Routes/Unauthorized";
+import AdminHome from "./Components/AdminHome";
+import AddProduct from "./Components/AddProduct";
 
 function App() {
   return (
@@ -34,9 +36,12 @@ function App() {
               </PrivateRoute>
             }
           >
+            <Route index element={<AdminHome />} />
             <Route path='products' element={<ListProductsAdmin />} />
             <Route path='users' element={<UserManagement />} />
             <Route path='income' element={<ListProductsAdmin />} />
+            <Route path='products/new' element={<AddProduct />} />
+
             {/* Agrega más rutas de administrador aquí */}
           </Route>
         </Routes>

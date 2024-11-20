@@ -9,6 +9,9 @@ import LocationIcon from "../assets/1-Iconos/DetalleProducto/city.svg";
 import TimeIcon from "../assets/1-Iconos/DetalleProducto/hour.svg";
 import Button from "../Components/Button";
 import { useScreenSize } from "../Hooks/useScreenSize";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCoffee } from '@fortawesome/free-solid-svg-icons';
+import { faRestroom } from '@fortawesome/free-solid-svg-icons';
 
 // Importa los íconos de características locales
 import SanitarioIcon from "../assets/Detail/wc.svg";
@@ -151,6 +154,10 @@ const EventDetail = () => {
                 <img src={DescansoIcon} alt="Área de descanso" className="w-6 h-6" />
                 <p>Área de descanso</p>
               </div>
+              <i class="fa-solid fa-restroom" ></i>         
+              <FontAwesomeIcon icon={faRestroom} style={{ color: "#74C0FC" }} />
+              <FontAwesomeIcon icon={faCoffee} />
+  
             </div>
           </section>
 
