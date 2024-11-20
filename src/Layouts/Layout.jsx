@@ -7,19 +7,6 @@ export const Layout = () => {
   const location = useLocation();
   const isHomeRoute = location.pathname === "/";
 
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    const user = JSON.parse(localStorage.getItem("user"));
-    if (user) {
-      if (user.role === "Administrator") {
-        navigate("/admin");
-      } else {
-        // navigate("/");
-      }
-    }
-  }, []);
-
   return (
     <div
       className={`flex flex-col min-h-screen ${
@@ -27,7 +14,7 @@ export const Layout = () => {
       }`}
     >
       <Navbar />
-      <main className='flex-grow'>
+      <main className='flex-grow max-w-[1480px] self-center'>
         <Outlet />
       </main>
       <Footer />

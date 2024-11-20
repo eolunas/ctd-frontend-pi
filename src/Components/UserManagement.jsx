@@ -9,16 +9,12 @@ const UserManagement = () => {
   const [isConfirmOpen, setIsConfirmOpen] = useState(false);
   const [isErrorOpen, setIsErrorOpen] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null); // Usuario seleccionado
-  const token = localStorage.getItem("authToken");
 
   // Función para obtener usuarios desde la API
   const fetchUsers = async () => {
     try {
       const response = await axios.get(
-        "http://34.230.54.123:8080/admin/users",
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
+        "http://54.147.179.179:8080/admin/users"
       );
       console.log("Usuarios obtenidos:", response.data);
       setUsers(response.data);
@@ -33,20 +29,14 @@ const UserManagement = () => {
 
   // Función para cambiar el rol de un usuario
   const changeUserRole = async (userId, role) => {
+    console.log(userId, role);
     try {
-      await axios.put(
-        `http://34.230.54.123:8080/admin`,
-        null,
-        {
-          params: { userId, role },
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      );
+      await axios.put(`http://54.147.179.179:8080/admin`, null, {
+        params: { userId, role },
+      });
       console.log(`Rol cambiado exitosamente para el usuario ${userId}`);
       setUsers((prevUsers) =>
-        prevUsers.map((user) =>
-          user.id === userId ? { ...user, role } : user
-        )
+        prevUsers.map((user) => (user.id === userId ? { ...user, role } : user))
       );
     } catch (error) {
       console.error("Error al cambiar el rol:", error);
@@ -56,9 +46,33 @@ const UserManagement = () => {
   };
 
   // Función para abrir confirmación
+  // Función para abrir confirmación
   const handleOpenConfirm = (user) => {
     setSelectedUser(user);
     setIsConfirmOpen(true);
+  };
+
+  // Mensaje dinámico para confirmación
+  const getConfirmationMessage = () => {
+    if (!selectedUser) return { title: "", description: "" };
+
+    if (selectedUser.role === "Administrator") {
+      return {
+        title:
+          "Al revocar el rol de administrador, le limitaras los accesos al sitio web",
+        description: `¿Estás seguro de que deseas revocar el rol de administrador a ${selectedUser.fullName}?`,
+        confirmText: "Sí, revocar permisos",
+        cancelText: "No, cancelar",
+      };
+    } else {
+      return {
+        title:
+          "Al otorgar el rol de administrador a este usuario, le concederás acceso completo para editar y gestionar el contenido del sitio web. ",
+        description: `¿Estás seguro de que deseas otorgar el rol de administrador a ${selectedUser.fullName}?`,
+        confirmText: "Sí, otorgar permisos",
+        cancelText: "No, cancelar",
+      };
+    }
   };
 
   // Función para confirmar el cambio de rol
@@ -78,36 +92,47 @@ const UserManagement = () => {
   }, []);
 
   return (
-    <div className="p-8 bg-black text-white flex flex-col w-full">
-      <h2 className="text-2xl font-bold text-cyan-500 mb-4">Gestión de usuarios</h2>
-      {error && <p className="text-red-500">{error}</p>}
-      <div className="overflow-x-auto">
-        <table className="min-w-full bg-gray-800 rounded-lg overflow-hidden border border-gray-700">
+    <div className='p-8 bg-black text-white flex flex-col w-full'>
+      <h2 className='text-2xl font-bold text-cyan-500 mb-4'>
+        Gestión de usuarios
+      </h2>
+      {error && <p className='text-red-500'>{error}</p>}
+      <div className='overflow-x-auto'>
+        <table className='min-w-full bg-gray-800 rounded-lg overflow-hidden border border-gray-700'>
           <thead>
-            <tr className="text-gray-400 border-b border-gray-700">
-              <th className="px-4 py-2 border-r border-gray-700 text-left">Usuario</th>
-              <th className="px-4 py-2 border-r border-gray-700 text-left">Rol</th>
-              <th className="px-4 py-2 text-left">Otorgar permisos</th>
+            <tr className='text-gray-400 border-b border-gray-700'>
+              <th className='px-4 py-2 border-r border-gray-700 text-left'>
+                Usuario
+              </th>
+              <th className='px-4 py-2 border-r border-gray-700 text-left'>
+                Rol
+              </th>
+              <th className='px-4 py-2 text-left'>Otorgar permisos</th>
             </tr>
           </thead>
           <tbody>
             {users.map((user) => (
-              <tr key={user.id} className="border-b border-gray-700">
-                <td className="px-4 py-2 text-gray-300 border-r border-gray-700 flex items-center">
-                  <div className="bg-yellow-500 text-black font-bold w-10 h-10 flex items-center justify-center rounded-full mr-3">
-                    {user.fullName.split(" ").map((n) => n[0]).join("")}
+              <tr key={user.id} className='border-b border-gray-700'>
+                <td className='px-4 py-2 text-gray-300 border-r border-gray-700 flex items-center'>
+                  <div className='bg-yellow-500 text-black font-bold w-10 h-10 flex items-center justify-center rounded-full mr-3'>
+                    {user.fullName
+                      .split(" ")
+                      .map((n) => n[0])
+                      .join("")}
                   </div>
                   <div>
-                    <p className="font-semibold">{user.fullName}</p>
-                    <p className="text-gray-400 text-sm">{user.email}</p>
+                    <p className='font-semibold'>{user.fullName}</p>
+                    <p className='text-gray-400 text-sm'>{user.email}</p>
                   </div>
                 </td>
-                <td className="px-4 py-2 text-gray-300 border-r border-gray-700">{user.role}</td>
-                <td className="px-4 py-2 text-gray-300">
-                  <label className="inline-flex relative items-center cursor-pointer">
+                <td className='px-4 py-2 text-gray-300 border-r border-gray-700'>
+                  {user.role}
+                </td>
+                <td className='px-4 py-2 text-gray-300'>
+                  <label className='inline-flex relative items-center cursor-pointer'>
                     <input
-                      type="checkbox"
-                      className="sr-only peer"
+                      type='checkbox'
+                      className='sr-only peer'
                       checked={user.role === "Administrator"}
                       onChange={() => handleOpenConfirm(user)}
                     />
@@ -123,10 +148,10 @@ const UserManagement = () => {
       {/* Mensaje de confirmación */}
       {isConfirmOpen && selectedUser && (
         <ConfirmationMessage
-          title="Al otorgar el rol de administrador"
-          description={`¿Estás seguro de que deseas otorgar el rol de administrador a ${selectedUser.fullName}?`}
-          confirmText="Sí, otorgar acceso"
-          cancelText="No, cancelar"
+          title={getConfirmationMessage().title}
+          description={getConfirmationMessage().description}
+          confirmText={getConfirmationMessage().confirmText}
+          cancelText={getConfirmationMessage().cancelText}
           onConfirm={handleConfirmAction}
           onCancel={() => setIsConfirmOpen(false)}
         />
@@ -135,9 +160,9 @@ const UserManagement = () => {
       {/* Mensaje de error */}
       {isErrorOpen && (
         <ErrorMessage
-          title="Lo sentimos :("
-          description="No tienes permisos suficientes para acceder al Panel de administrador."
-          buttonText="Volver a Inicio"
+          title='Lo sentimos :('
+          description='No tienes permisos suficientes para acceder al Panel de administrador.'
+          buttonText='Volver a Inicio'
           onClose={() => setIsErrorOpen(false)}
         />
       )}

@@ -1,7 +1,7 @@
 // auth.js
 import axios from 'axios';
 
-const API = "http://34.230.54.123:8080"
+const API = "http://54.147.179.179:8080"
 export const register = async (userData) => {
   try {
     await axios.post(`${API}/user/registration`, userData);
