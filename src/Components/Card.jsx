@@ -58,12 +58,12 @@ const Card = ({ event }) => {
           </a>
         </div>
         <p className="text-secondaryYellow text-xl">{event.city}</p>
-        <div className="flex">
-          <span className="w-3/5 text-white text-sm flex gap-2">
+        <div className="flex justify-between">
+          <span className="text-white text-sm flex gap-2">
             <img className="size-6" src={PlaceIcon} alt="Place Icon" />
             {event.site}
           </span>
-          <span className="w-2/5 text-white text-sm flex gap-2">
+          <span className="text-white text-sm flex gap-2">
             <img className="size-6" src={GenreIcon} alt="Genre Icon" />
             {event.genreName}
           </span>
