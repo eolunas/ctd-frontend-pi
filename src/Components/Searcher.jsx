@@ -155,14 +155,13 @@ const Searcher = () => {
         </div>
 
         <div className="flex justify-center items-center gap-3 relative w-full">
-          <UsersIcon className="h-6 w-6 text-black absolute left-2" />
           <input
             name="event"
             value={filters.event || ""}
             onChange={handleInputChange}
             type="text"
             className={`border border-gray-300 text-gray-900 text-sm rounded-md 
-                        focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5`}
+                        focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5`}
             placeholder="Artista o evento"
           />
           <a

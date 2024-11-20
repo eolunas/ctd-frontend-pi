@@ -6,7 +6,7 @@ const ResultFilters = () => {
   const { state } = useCharStates();
 
   const filteredList = useMemo(() => {
-    const { genres, date, city, event } = state.homeFilters;
+    const { genres, dates, city, event } = state.homeFilters;
     let auxList = state.list;
 
     // Convertimos `genres` a minúsculas para una comparación eficiente
@@ -18,11 +18,11 @@ const ResultFilters = () => {
       );
     }
 
-    if (date) {
-      const dateFilter = new Date(date).toISOString().split("T")[0]; // Solo YYYY-MM-DD
+    if (dates) {
+      const [startDate, endDate] = dates.map((date) => new Date(date));
       auxList = auxList.filter((item) => {
-        const dateEvent = new Date(item.eventDate).toISOString().split("T")[0];
-        return dateFilter === dateEvent;
+        const dateEvent = new Date(item.eventDate);
+        return dateEvent >= startDate && dateEvent <= endDate;
       });
     }
 
@@ -47,9 +47,7 @@ const ResultFilters = () => {
     <div className="z-10 m-6 md:m-10">
       <div>
         <h3 className="text-xl font-bold text-cyan-500 mb-5">Filtros</h3>
-        <div className="flex gap-2">
-
-        </div>
+        <div className="flex gap-2">{/* {genres, date, city, event} */}</div>
       </div>
       <h2 className="text-2xl font-bold text-cyan-500 mb-5">
         Resultados ({filteredList.length})
