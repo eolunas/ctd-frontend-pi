@@ -86,7 +86,7 @@ const Calendar = () => {
 
             const selectedClass =
               selectedDate?.day === day && selectedDate?.month === monthKey
-                ? "bg-[#F7AA00] text-black font-bold"
+                ? "bg-secondaryYellow text-black font-bold"
                 : "";
 
             return (
