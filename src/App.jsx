@@ -5,6 +5,7 @@ import EventDetail from "./Routes/EventDetail";
 import { Layout } from "./Layouts/Layout";
 import AdminLayout from "./Layouts/AdminLayout";
 import Favs from "./Routes/Favs";
+
 // import ListaEventos from "./Routes/EventList";
 import ListProductsAdmin from "./Components/ListProductsAdmin";
 import UserManagement from "./Components/UserManagement";
@@ -12,6 +13,7 @@ import PrivateRoute from "./PrivateRoute";
 import Unauthorized from "./Routes/Unauthorized";
 import AdminHome from "./Components/AdminHome";
 import AddProduct from "./Components/AddProduct";
+import FeatureManagement from "./Components/FeatureManagement";
 
 function App() {
   return (
@@ -39,7 +41,7 @@ function App() {
             <Route index element={<AdminHome />} />
             <Route path='products' element={<ListProductsAdmin />} />
             <Route path='users' element={<UserManagement />} />
-            <Route path='income' element={<ListProductsAdmin />} />
+            <Route path="features" element={<FeatureManagement />} />       
             <Route path='products/new' element={<AddProduct />} />
 
             {/* Agrega más rutas de administrador aquí */}
