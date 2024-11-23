@@ -10,7 +10,16 @@ import GenreIcon from "../assets/1-Iconos/Home/genre.svg";
 const Card = ({ event }) => {
   const screenSize = useScreenSize();
   const { state, dispatch } = useCharStates();
-  const stored = state.favs.find((item) => item.id == event.id);
+
+  // Validación para evitar errores si event no está definido
+  if (!event) {
+    console.error("No se proporcionó un evento para el componente Card.");
+    return null;
+  }
+
+  // Validación para favoritos
+  const stored = state.favs.find((item) => item.id === event.id);
+
   const addFav = (id) =>
     dispatch({
       type: stored ? "REMOVE_FAVS" : "ADD_FAVS",
@@ -26,8 +35,8 @@ const Card = ({ event }) => {
         >
           <img
             className="w-full h-full object-cover"
-            src={event.images[screenSize]}
-            alt={event.name}
+            src={event.images?.[screenSize] || "path/to/placeholder.jpg"} // Validación para imágenes
+            alt={event.name || "Nombre no disponible"} // Validación para el nombre
           />
         </div>
         <div
@@ -36,17 +45,19 @@ const Card = ({ event }) => {
           flex flex-col justify-center items-center`}
         >
           <span className="text-white text-lg sm:text-xl lg:text-2xl">
-            {event.eventDate}
+            {event.eventDate || "Fecha no disponible"} {/* Validación para la fecha */}
           </span>
           <span className="text-white text-sm sm:text-lg lg:text-xl">
-            {event.eventTime}
+            {event.eventTime || "Hora no disponible"} {/* Validación para la hora */}
           </span>
         </div>
       </Link>
       <div className="my-5 flex flex-col gap-4 lg:mx-5">
         <div className="flex w-full justify-between">
-          <h3 className="text-white font-semibold text-2xl">{event.name}</h3>
-          <a
+          <h3 className="text-white font-semibold text-2xl">
+            {event.name || "Nombre no disponible"} {/* Validación para el nombre */}
+          </h3>
+          <button
             className="basis-[15%] flex justify-end m-2"
             onClick={() => addFav(event.id)}
           >
@@ -55,17 +66,19 @@ const Card = ({ event }) => {
               src={stored ? FavIconFilled : FavIcon}
               alt="Favorite Icon"
             />
-          </a>
+          </button>
         </div>
-        <p className="text-secondaryYellow text-xl">{event.city}</p>
+        <p className="text-secondaryYellow text-xl">
+          {event.city || "Ciudad no especificada"} {/* Validación para la ciudad */}
+        </p>
         <div className="flex justify-between">
           <span className="text-white text-sm flex gap-2">
             <img className="size-6" src={PlaceIcon} alt="Place Icon" />
-            {event.site}
+            {event.site || "Lugar no especificado"} {/* Validación para el sitio */}
           </span>
           <span className="text-white text-sm flex gap-2">
             <img className="size-6" src={GenreIcon} alt="Genre Icon" />
-            {event.genreName}
+            {event.genreName || "Género no especificado"} {/* Validación para el género */}
           </span>
         </div>
       </div>
@@ -74,24 +87,3 @@ const Card = ({ event }) => {
 };
 
 export default Card;
-
-{
-  /* 
-  Backup
-
-  <div className="card">
-    <Link to={`/detail/${id}`}>
-      <img src="images/doctor.jpg" alt="Foto doctor" />
-      <div className={`info-container ${!state.theme && "dark-info-container"}`}>
-          <span className="name-indicator">{name}</span>
-          <span className="username-indicator">{username}</span>
-      </div>
-    </Link>
-    <span className="id-indicator">{id}</span>
-    <button onClick={addFav} className="favButton">
-      {stored ?"💚" : "🤍"}
-    </button>
-  </div> 
-    
-*/
-}
