@@ -14,6 +14,7 @@ const CharStates = createContext(null);
 
 const initialState = {
   genres: [],
+  cities: [],
   topCategories: [],
   list: [],
   favs: JSON.parse(localStorage.getItem("favs")) || [],
@@ -39,17 +40,35 @@ export const Context = ({ children }) => {
             fetchEvents(),
           ]);
 
+console.log({
+  genres: genresResponse.data,
+  cities: ["Bogotá", "Cali", "Bucaramanga", "Yopal"],
+  topGenres: topGenresResponse.data,
+  events: eventsResponse.data,
+})
+
         dispatch({
           type: "SET_DATA",
           payload: {
             genres: genresResponse.data,
+            cities: ["Bogotá", "Cali", "Bucaramanga", "Yopal"],
             topGenres: topGenresResponse.data,
             events: eventsResponse.data,
           },
         });
       } catch (error) {
         console.error("Error fetching data:", error);
-        // Puedes manejar el error aquí, por ejemplo, despachando una acción de error
+        
+        dispatch({
+          type: "SET_DATA",
+          payload: {
+            genres: [],
+            cities: ["Bogotá", "Cali", "Bucaramanga", "Yopal"],
+            topGenres: [],
+            events:[],
+          },
+        });
+
       }
     };
 

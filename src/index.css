@@ -53,6 +53,43 @@ button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
 }
 
+/* Cambio de scroll */
+/* Personaliza el contenedor del scrollbar */
+::-webkit-scrollbar {
+  width: 8px; /* Ancho de la barra vertical */
+  height: 8px; /* Alto de la barra horizontal */
+  background: transparent; /* Fondo del contenedor de la barra */
+}
+
+/* Cambia el diseño del track (el fondo del scrollbar) */
+::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.1); /* Fondo del track */
+  border-radius: 10px; /* Bordes redondeados */
+}
+
+/* Cambia el diseño del thumb (la parte que se mueve) */
+::-webkit-scrollbar-thumb {
+  background: rgba(0, 123, 255, 0.7); /* Color del scrollbar */
+  border-radius: 10px; /* Bordes redondeados */
+}
+
+/* Estilo al interactuar (hover) con el thumb */
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 123, 255, 0.9); /* Más oscuro al pasar el cursor */
+}
+
+/* Ocultar completamente la barra si no se desea que se vea */
+::-webkit-scrollbar {
+  display: none; /* La barra será invisible */
+}
+
+/* Opcional: Añadir un diseño redondeado al contenedor scroll */
+.scroll-container {
+  overflow-y: auto; /* Habilitar scroll vertical */
+  scrollbar-width: thin; /* Scroll más delgado para navegadores compatibles (Firefox) */
+  scrollbar-color: rgba(0, 123, 255, 0.7) transparent; /* Color para Firefox */
+}
+
 @media (prefers-color-scheme: light) {
   :root {
     color: #213547;

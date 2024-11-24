@@ -35,12 +35,12 @@ const Card = ({ event }) => {
         >
           <img
             className="w-full h-full object-cover"
-            src={event.images?.[screenSize] || "path/to/placeholder.jpg"} // Validación para imágenes
+            src={event.coverImageUrl || "path/to/placeholder.jpg"} // Validación para imágenes
             alt={event.name || "Nombre no disponible"} // Validación para el nombre
           />
         </div>
         <div
-          className={`
+          className={` hidden
           bg-secondaryYellow absolute bottom-0 left-0 w-5/12 h-1/4 rounded-tr-2xl rounded-bl-xl
           flex flex-col justify-center items-center`}
         >
@@ -57,17 +57,18 @@ const Card = ({ event }) => {
           <h3 className="text-white font-semibold text-2xl">
             {event.name || "Nombre no disponible"} {/* Validación para el nombre */}
           </h3>
-          <button
-            className="basis-[15%] flex justify-end m-2"
-            onClick={() => addFav(event.id)}
-          >
-            <img
-              className="size-6 cursor-pointer"
-              src={stored ? FavIconFilled : FavIcon}
-              alt="Favorite Icon"
-            />
-          </button>
-        </div>
+          <div className="basis-[15%] flex justify-end m-2">
+            <a
+              onClick={() => addFav(event.id)}
+            >
+              <img
+                className="size-6 cursor-pointer"
+                src={stored ? FavIconFilled : FavIcon}
+                alt="Favorite Icon"
+              />
+            </a>
+          </div>
+          </div>
         <p className="text-secondaryYellow text-xl">
           {event.city || "Ciudad no especificada"} {/* Validación para la ciudad */}
         </p>

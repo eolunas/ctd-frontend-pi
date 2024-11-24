@@ -45,10 +45,6 @@ const ResultFilters = () => {
 
   return (
     <div className="z-10 m-6 md:m-10">
-      <div>
-        <h3 className="text-xl font-bold text-cyan-500 mb-5">Filtros</h3>
-        <div className="flex gap-2">{/* {genres, date, city, event} */}</div>
-      </div>
       <h2 className="text-2xl font-bold text-cyan-500 mb-5">
         Resultados ({filteredList.length})
       </h2>

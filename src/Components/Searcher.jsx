@@ -1,7 +1,4 @@
-import {
-  MagnifyingGlassCircleIcon,
-  UsersIcon,
-} from "@heroicons/react/24/solid";
+import { MagnifyingGlassCircleIcon } from "@heroicons/react/24/solid";
 import GenreIcon from "../assets/1-Iconos/Home/genre.svg";
 import CalendarIcon from "../assets/1-Iconos/Home/date.svg";
 import LocationIcon from "../assets/1-Iconos/Home/city.svg";
@@ -12,6 +9,7 @@ import "react-datepicker/dist/react-datepicker.css";
 
 import { useCharStates } from "../Context";
 import { useState } from "react";
+import InputCustom from "./InputCustom";
 
 const animatedComponents = makeAnimated();
 
@@ -20,6 +18,10 @@ const Searcher = () => {
 
   const categories = state.genres.map((item) => {
     return { value: item.name, label: item.name };
+  });
+
+  const cities = state.cities.map((item) => {
+    return { value: item, label: item };
   });
 
   const [filters, setFilters] = useState({});
@@ -48,6 +50,10 @@ const Searcher = () => {
       if (value === null || value.length == 0 || allNullDate) {
         // Si el valor es nulo, eliminamos la clave del estado
         const { [name]: _, ...newFilters } = prevFilters;
+        // Si no hay filtros se ejecuta funcion:
+        if(Object.keys(newFilters).length == 0 ) 
+          dispatch({ type: "SET_FILTERS", payload: newFilters });
+
         return newFilters;
       }
 
@@ -98,14 +104,14 @@ const Searcher = () => {
         `}
       >
         <div className="flex flex-col justify-center items-center relative gap-1.5 w-full">
-          <label className="flex gap-1 text-gray-700 w-full">
+          <label className="flex gap-1 text-gray-700 w-full ">
             <img className="size-6" src={GenreIcon} alt="Genre Icon" />
             Género
           </label>
           <Select
             name="genres"
             onChange={handleInputChange}
-            className="w-full text-sm"
+            className="w-full text-sm text-gray-500 shadow-md rounded-md "
             placeholder="Seleccione..."
             closeMenuOnSelect={false}
             components={animatedComponents}
@@ -115,8 +121,8 @@ const Searcher = () => {
         </div>
 
         <div className="flex flex-col justify-center items-center gap-3 w-full sm:flex-row md:flex-col lg:flex-row">
-          <div className="flex flex-col justify-center items-center relative gap-1.5 w-full">
-            <label className="flex gap-1 text-gray-700 w-full">
+          <div className="flex flex-col justify-center items-center relative  w-full">
+            <label className="flex gap-1 text-gray-700 w-full mb-2">
               <img className="size-6" src={CalendarIcon} alt="Calendar Icon" />
               Fechas
             </label>
@@ -124,8 +130,7 @@ const Searcher = () => {
               name="dates"
               wrapperClassName="w-full"
               clearButtonClassName="mx-2"
-              className={`border border-gray-300 text-gray-900 text-sm rounded-md 
-            focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5`}
+              className={`bg-white border border-gray-300 shadow-md text-gray-900 text-sm rounded-md w-full px-2.5 h-[38px]`}
               selectsRange={true}
               startDate={startDate}
               endDate={endDate}
@@ -137,46 +142,48 @@ const Searcher = () => {
             />
           </div>
 
-          <div className="flex flex-col justify-center items-center relative gap-1.5 w-full ">
-            <label className="flex gap-1 text-gray-700 w-full">
+          <div className="flex flex-col justify-center items-center relative w-full ">
+            <label className="flex gap-1 text-gray-700 w-full mb-2">
               <img className="size-6" src={LocationIcon} alt="Location Icon" />
               Ciudad
             </label>
-            <input
+            <Select
               name="city"
-              value={filters.city || ""}
-              onChange={handleInputChange}
-              type="text"
-              className={`border border-gray-300 text-gray-900 text-sm rounded-md 
-                      focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5`}
+              onChange={(e) =>
+                handleInputChange({
+                  target: { name: "city", value: e?.value || "" },
+                })
+              }
+              className="w-full text-sm text-gray-500 shadow-md rounded-md "
               placeholder="Todo Colombia"
+              components={animatedComponents}
+              options={cities}
+              isClearable
             />
           </div>
         </div>
 
-        <div className="flex justify-center items-center gap-3 relative w-full">
-          <input
-            name="event"
-            value={filters.event || ""}
-            onChange={handleInputChange}
-            type="text"
-            className={`border border-gray-300 text-gray-900 text-sm rounded-md 
-                        focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5`}
-            placeholder="Artista o evento"
+        <div className="flex justify-center items-center gap-3 relative w-full mt-2">
+          <InputCustom
+            name={"event"}
+            value={filters.event}
+            functionChange={handleInputChange}
           />
-          <a
-            onClick={handleSearchClick}
-            className={`
-            flex justify-center items-center bg-secondaryYellow p-2
+          {Object.keys(filters).length > 0 && (
+            <a
+              onClick={handleSearchClick}
+              className={`
+            flex justify-center items-center bg-secondaryYellow p-2 h-[38px]
             rounded-lg shadow-md cursor-pointer
             hover:bg-yellow-500 hover:shadow-lg transition-all duration-200 ease-in-out`}
-          >
-            <MagnifyingGlassCircleIcon
-              className={`
+            >
+              <MagnifyingGlassCircleIcon
+                className={`
                 h-6 w-6 text-white`}
-            />
-            <span className="text-white font-semibold">Buscar</span>
-          </a>
+              />
+              <span className="text-white font-semibold">Buscar</span>
+            </a>
+          )}
         </div>
       </form>
     </div>
