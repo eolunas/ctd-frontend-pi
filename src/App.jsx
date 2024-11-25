@@ -42,7 +42,9 @@ function App() {
             <Route path='products' element={<ListProductsAdmin />} />
             <Route path='users' element={<UserManagement />} />
             <Route path="features" element={<FeatureManagement />} />       
-            <Route path='products/new' element={<AddProduct />} />
+            <Route path="products/new" element={<AddProduct />} />
+            <Route path="products/edit/:id" element={<AddProduct />} />
+
 
             {/* Agrega más rutas de administrador aquí */}
           </Route>
