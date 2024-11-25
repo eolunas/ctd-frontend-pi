@@ -4,6 +4,7 @@ import { useCharStates } from "../Context";
 import axiosInstance from "../api/axiosInstance";
 import { fetchGenres } from "../api/genreApi";
 import { fetchCategories} from "../api/categoryApi";
+import { fetchFeatures } from "../api/featureApi";
 
 const AddProduct = () => {
   const navigate = useNavigate();
@@ -21,19 +22,40 @@ const AddProduct = () => {
     coverImageUrl: "",
     gallery: [],
     description: "",
-    features: {
-      wifi: false,
-      accessibility: false,
-      seguridad: false,
-      merchandising: false,
-      estacionamiento: false,
-      meetAndGreet: false,
-      descanso: false,
-    },
+    features: {}
   });
 
   const [genres, setGenres] = useState([]); // Estado para almacenar los géneros
   const [categories, setCategories] = useState([]);
+  const [features, setFeatures] = useState([]);
+
+
+  useEffect(() => {
+    const loadFeatures = async () => {
+      try {
+        const response = await fetchFeatures();
+        setFeatures(response); // Guarda las características en el estado
+      } catch (error) {
+        console.error("Error al cargar las características:", error);
+      }
+    };
+    loadFeatures();
+  }, []);
+
+  const handleFeatureChange = (feature) => {
+    setFormData((prev) => {
+      const isSelected = prev.selectedFeatures.find(
+        (f) => f.id === feature.id
+      );
+
+      return {
+        ...prev,
+        selectedFeatures: isSelected
+          ? prev.selectedFeatures.filter((f) => f.id !== feature.id) // Quita la característica si ya estaba seleccionada
+          : [...prev.selectedFeatures, feature], // Agrega la característica si no estaba seleccionada
+      };
+    });
+  };
 
   // Fetch genres from API on component mount
   useEffect(() => {
@@ -72,15 +94,19 @@ const AddProduct = () => {
             genreName: productData.genreName || "",
             genreId: productData.genreId || "",
             categoryId: productData.categoryId || "",
-            categoryName: productData.categoryName|| "",
+            categoryName: productData.categoryName || "",
             city: productData.city || "",
             site: productData.site || "",
             dates: productData.dates || [],
-            features: formData.features,
+            features: productData.features.reduce((acc, featureId) => {
+              acc[featureId] = true; // Marcar como seleccionada
+              return acc;
+            }, {}), // Convertir a un objeto con claves dinámicas
             coverImageUrl: productData.coverImageUrl || "",
             description: productData.description || "",
             gallery: formData.gallery.map((file) => file.name),
           });
+          
         } catch (error) {
           console.error("Error al cargar el producto:", error);
         }
@@ -109,16 +135,27 @@ const AddProduct = () => {
   const handleGalleryChange = (e) => {
     const files = Array.from(e.target.files);
     const validFiles = files.filter((file) => file.type.startsWith("image/"));
-
+  
     if (validFiles.length > 0) {
-      setFormData((prev) => ({
-        ...prev,
-        gallery: [...prev.gallery, ...validFiles],
-      }));
+      setFormData((prev) => {
+        const newGallery = [...prev.gallery, ...validFiles];
+  
+        // Validar que el total de imágenes no exceda el máximo permitido
+        if (newGallery.length > 4) {
+          alert("Solo puedes agregar un máximo de 4 imágenes.");
+          return prev; // No actualiza la galería si excede el límite
+        }
+  
+        return {
+          ...prev,
+          gallery: newGallery,
+        };
+      });
     } else {
       alert("Por favor, selecciona archivos de imagen válidos.");
     }
   };
+  
 
   const handleAddDate = () => {
     if (formData.eventDateTime) {
@@ -132,6 +169,7 @@ const AddProduct = () => {
     }
   };
   
+  
   const handleSubmit = async (e) => {
     e.preventDefault();
   
@@ -140,35 +178,61 @@ const AddProduct = () => {
       return;
     }
   
-    // Formatear fechas eliminando "T" por un espacio
-    const formattedData = {
-      ...formData,
+    // Crear FormData para enviar archivos e información JSON
+    const dataToSend = new FormData();
+  
+    // Agregar la imagen de portada
+    if (formData.coverImageUrl instanceof File) {
+      dataToSend.append("cover", formData.coverImageUrl);
+    }
+  
+    // Agregar las imágenes de la galería
+    formData.gallery.forEach((image) => {
+      if (image instanceof File) {
+        dataToSend.append("gallery", image);
+      }
+    });
+  
+    // Crear el objeto de datos JSON
+    const dto = {
+      name: formData.name,
+      city: formData.city,
+      site: formData.site,
+      genre: formData.genreId,
+      category: formData.categoryId,
+      description: formData.description,
+      features: Object.keys(formData.features).filter((key) => formData.features[key]),
+      policies: formData.eventPolicies,
       dates: formData.dates.map((date) => date.replace("T", " ")),
     };
   
-    // Imprime los datos en la consola antes de enviarlos
-    console.log("Datos a enviar:", {
-      ...formattedData,
-      genreId: formData.genreId, // Aquí imprimimos el ID del género
-    });
+    // Serializar el objeto JSON y agregarlo al FormData
+    dataToSend.append("dto", new Blob([JSON.stringify(dto)], { type: "application/json" }));
   
+    // Debug: Ver contenido del FormData
+    for (let pair of dataToSend.entries()) {
+      console.log(pair[0], pair[1]);
+    }
   
     try {
-      if (id) {
-        await axiosInstance.put(`/event/${id}`, formattedData);
-        console.log("Producto editado correctamente");
-        dispatch({ type: "EDIT_PRODUCT", payload: { id: Number(id), ...formattedData } });
-      } else {
-        const response = await axiosInstance.post("/event", formattedData);
-        console.log("Producto agregado correctamente");
-        dispatch({ type: "ADD_PRODUCT", payload: response.data });
-      }
+      const response = id
+        ? await axiosInstance.put(`/event/${id}`, dataToSend)
+        : await axiosInstance.post("/event", dataToSend);
+  
+      console.log("Producto guardado:", response.data);
+  
+      dispatch({
+        type: id ? "EDIT_PRODUCT" : "ADD_PRODUCT",
+        payload: response.data,
+      });
+  
       navigate("/admin/products");
     } catch (error) {
       console.error("Error al guardar el producto:", error);
     }
   };
-
+  
+    
   
   const handleRemoveDate = (index) => {
     setFormData((prev) => ({
@@ -177,16 +241,7 @@ const AddProduct = () => {
     }));
   };
 
-  const handleCheckboxChange = (e) => {
-    const { name, checked } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      features: {
-        ...prev.features,
-        [name]: checked,
-      },
-    }));
-  };
+  
 
   return (
     <div className="p-8 bg-black text-white w-full flex justify-center items-center relative">
@@ -363,83 +418,35 @@ const AddProduct = () => {
               required
             ></textarea>
           </div>
-         
-        {/* Características */}
-        <fieldset className="mb-6">
+         {/* Características */}
+         <fieldset className="mb-6">
   <legend className="text-gray-400 mb-4 text-lg font-semibold">Características</legend>
   <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
-    <label className="flex items-center gap-2">
-      <input
-        type="checkbox"
-        name="wifi"
-        checked={formData.features.wifi}
-        onChange={handleCheckboxChange}
-        className="w-5 h-5 text-yellow-500 bg-gray-700 border-gray-600 rounded-lg focus:ring-yellow-500"
-      />
-      <span className="text-gray-300">Wifi</span>
-    </label>
-    <label className="flex items-center gap-2">
-      <input
-        type="checkbox"
-        name="accessibility"
-        checked={formData.features.accessibility}
-        onChange={handleCheckboxChange}
-        className="w-5 h-5 text-yellow-500 bg-gray-700 border-gray-600 rounded-lg focus:ring-yellow-500"
-      />
-      <span className="text-gray-300">Accesibilidad</span>
-    </label>
-    <label className="flex items-center gap-2">
-      <input
-        type="checkbox"
-        name="seguridad"
-        checked={formData.features.seguridad}
-        onChange={handleCheckboxChange}
-        className="w-5 h-5 text-yellow-500 bg-gray-700 border-gray-600 rounded-lg focus:ring-yellow-500"
-      />
-      <span className="text-gray-300">Seguridad</span>
-    </label>
-    <label className="flex items-center gap-2">
-      <input
-        type="checkbox"
-        name="merchandising"
-        checked={formData.features.merchandising}
-        onChange={handleCheckboxChange}
-        className="w-5 h-5 text-yellow-500 bg-gray-700 border-gray-600 rounded-lg focus:ring-yellow-500"
-      />
-      <span className="text-gray-300">Merchandising</span>
-    </label>
-    <label className="flex items-center gap-2">
-      <input
-        type="checkbox"
-        name="estacionamiento"
-        checked={formData.features.estacionamiento}
-        onChange={handleCheckboxChange}
-        className="w-5 h-5 text-yellow-500 bg-gray-700 border-gray-600 rounded-lg focus:ring-yellow-500"
-      />
-      <span className="text-gray-300">Estacionamiento</span>
-    </label>
-    <label className="flex items-center gap-2">
-      <input
-        type="checkbox"
-        name="meetAndGreet"
-        checked={formData.features.meetAndGreet}
-        onChange={handleCheckboxChange}
-        className="w-5 h-5 text-yellow-500 bg-gray-700 border-gray-600 rounded-lg focus:ring-yellow-500"
-      />
-      <span className="text-gray-300">Meet and Greet</span>
-    </label>
-    <label className="flex items-center gap-2">
-      <input
-        type="checkbox"
-        name="descanso"
-        checked={formData.features.descanso}
-        onChange={handleCheckboxChange}
-        className="w-5 h-5 text-yellow-500 bg-gray-700 border-gray-600 rounded-lg focus:ring-yellow-500"
-      />
-      <span className="text-gray-300">Área de descanso</span>
-    </label>
+    {features.map((feature) => (
+      <label key={feature.id} className="flex items-center gap-2">
+        <input
+          type="checkbox"
+          name={`feature-${feature.id}`}
+          checked={!!formData.features[feature.id]} // Verificar si está seleccionada
+          onChange={(e) => {
+            const isChecked = e.target.checked;
+            setFormData((prev) => ({
+              ...prev,
+              features: {
+                ...prev.features,
+                [feature.id]: isChecked, // Actualizar el estado de la característica
+              },
+            }));
+          }}
+          className="w-5 h-5 text-yellow-500 bg-gray-700 border-gray-600 rounded-lg focus:ring-yellow-500"
+        />
+        <span className="text-gray-300">{feature.title}</span>
+      </label>
+    ))}
   </div>
 </fieldset>
+
+
           {/* Imagen de portada */}
 <div className="mb-6">
   <label className="block text-gray-400 mb-2">Imagen de portada</label>
@@ -483,7 +490,7 @@ const AddProduct = () => {
 
             {/* Galería de imágenes */}
 <div className="mb-6">
-  <label className="block text-gray-400 mb-2">Galería de imágenes</label>
+  <label className="block text-gray-400 mb-2">Galería de imágenes max(4)</label>
   <div
     className="w-full h-32 rounded-xl border-2 border-dashed border-gray-600 bg-gray-700 flex justify-center items-center cursor-pointer"
     onClick={() => document.getElementById("galleryImages").click()}
