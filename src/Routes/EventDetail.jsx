@@ -10,6 +10,7 @@ import Button from "../Components/Button";
 import { useScreenSize } from "../Hooks/useScreenSize";
 
 import Calendar from "../Components/Calendar";
+import ErrorMessage from "../Components/ErrorMessage";
 
 const EventDetail = () => {
   const { id } = useParams();
@@ -17,6 +18,8 @@ const EventDetail = () => {
   const screenSize = useScreenSize();
   const [event, setEvent] = useState({});
 
+  const [isErrorOpen, setIsErrorOpen] = useState(false);
+  const [error, setError] = useState(null);
   useEffect(() => {
     const getEventById = async () => {
       const event = await fetchEventById(id);
@@ -32,7 +35,7 @@ const EventDetail = () => {
   return (
     <>
       {event && (
-        <div className='text-white px-6 sm:px-20'>
+        <div className='text-white lg:w-[1200px] px-4'>
           {/* Botón de regresar a Home */}
           <div
             onClick={() => navigate(-1)}
@@ -42,9 +45,9 @@ const EventDetail = () => {
             <span className='flex justify-center items-center'>Regresar</span>
           </div>
 
-          <div className='flex flex-col lg:flex-row justify-between'>
+          <div className='flex flex-col w-full  lg:flex-row justify-between'>
             {/* Título y botones de función */}
-            <div>
+            <div className='w-full'>
               <div className='flex lg:flex-col justify-between gap-4 flex-row  mb-2'>
                 <div className=''>
                   <h2 className=' text-2xl font-bold text-secondaryYellow md:text-3xl'>
@@ -86,10 +89,15 @@ const EventDetail = () => {
                 </div>
               </div>
             </div>
-            <div className='flex gap-4 justify-center items-center flex-col mb-4'>
+            <div className='flex gap-4 w-full justify-center items-center flex-col mb-4'>
               <Calendar />
               <div className='w-72'>
-                <Button color='secondaryYellow'>Reservar</Button>
+                <Button
+                  color='secondaryYellow'
+                  onClick={() => setIsErrorOpen(true)}
+                >
+                  Reservar
+                </Button>
               </div>
             </div>
           </div>
@@ -120,7 +128,7 @@ const EventDetail = () => {
           )}
 
           {/* Sección de características */}
-          <section className='my-4 px-6 py-5 bg-gray-700/20 shadow-lg rounded-2xl mb-16'>
+          <section className='my-4 w-full px-6 py-5 bg-gray-700/20 shadow-lg rounded-2xl mb-16'>
             <h3 className='text-xl font-bold text-primaryBlue mb-6'>
               Características
             </h3>
@@ -138,6 +146,15 @@ const EventDetail = () => {
               })}
             </div>
           </section>
+
+          {isErrorOpen && (
+            <ErrorMessage
+              title='Lo sentimos :('
+              description='No se puede obtener la información en este momento, inténtalo más tarde.'
+              buttonText='Volver al inicio'
+              onClose={() => setIsErrorOpen(false)}
+            />
+          )}
 
           {/* Descripción del evento */}
           <section className='mb-6'>
