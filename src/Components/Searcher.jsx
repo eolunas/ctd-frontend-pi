@@ -24,6 +24,8 @@ const Searcher = () => {
     return { value: item, label: item };
   });
 
+  const data = state.list.map(item => item.name);
+
   const [filters, setFilters] = useState({});
   const [dateRange, setDateRange] = useState([null, null]);
   const [startDate, endDate] = dateRange;
@@ -100,7 +102,7 @@ const Searcher = () => {
 
       <form
         className={`
-          flex flex-col justify-center items-center h-full bg-white p-3 rounded-lg w-full max-w-[650px] gap-3 z-10
+          flex flex-col justify-center items-center h-full bg-white p-3 rounded-lg w-full max-w-[650px] gap-3 z-20
         `}
       >
         <div className="flex flex-col justify-center items-center relative gap-1.5 w-full">
@@ -168,6 +170,7 @@ const Searcher = () => {
             name={"event"}
             value={filters.event}
             functionChange={handleInputChange}
+            data={data}
           />
           {Object.keys(filters).length > 0 && (
             <a
