@@ -50,8 +50,7 @@ const ProductList = () => {
                 <td className='px-4 py-2 text-center'>
                   <div className='flex md:flex-row flex-col justify-center md:space-x-4'>
                     <Link
-                      to='#'
-                      onClick={(e) => e.preventDefault()}
+                      to={`/admin/products/edit/${product.id}`}
                       className='flex items-center text-yellow-500 hover:text-yellow-400 cursor-pointer'
                     >
                       <img
