@@ -31,7 +31,7 @@ const EventDetail = () => {
 
     window.scrollTo(0, 0);
   }, [id]);
-  console.log(event.gallery);
+  console.log(event);
 
   const openModal = (imageUrl) => {
     setSelectedImage(imageUrl);
@@ -64,10 +64,18 @@ const EventDetail = () => {
                   <h2 className=' text-2xl font-bold text-secondaryYellow md:text-3xl'>
                     {event.name}
                   </h2>
-                  <p className='text-2xl mb-8 md:text-3xl'>{event.eventDate}</p>
+                  <p className='text-2xl lg:mb-8 md:text-3xl'>
+                    {Array.isArray(event.dates) && event.dates.length > 0
+                      ? new Date(event.dates[0]).toLocaleDateString("es-ES", {
+                          day: "2-digit",
+                          month: "long",
+                          year: "numeric",
+                        })
+                      : "Fecha no disponible"}
+                  </p>
                 </div>
 
-                <div className='h-10 mb-12 flex w-32 md:w-52 justify-center items-center px-1.5 text-sm md:text-md py-1.5 rounded-full cursor-pointer text-center transition duration-200 ease-in-out border-secondaryYellow border'>
+                <div className='h-10 lg:mb-12 flex w-32 md:w-52 justify-center items-center px-1.5 text-sm md:text-md py-1.5 rounded-full cursor-pointer text-center transition duration-200 ease-in-out border-secondaryYellow border'>
                   + Favorito
                 </div>
               </div>
@@ -77,8 +85,17 @@ const EventDetail = () => {
                 <div className='flex gap-6 w-full'>
                   <span className='flex gap-2 w-4/12'>
                     <img className='size-6' src={TimeIcon} alt='Time Icon' />
-                    {event.eventTime}
+                    {Array.isArray(event.dates) && event.dates.length > 0
+                      ? `${new Date(event.dates[0]).toLocaleTimeString(
+                          "es-ES",
+                          {
+                            hour: "2-digit",
+                            minute: "2-digit",
+                          }
+                        )} hrs`
+                      : "Hora no disponible"}
                   </span>
+
                   <span className='flex gap-2'>
                     <img
                       className='size-6'
@@ -126,19 +143,26 @@ const EventDetail = () => {
                   alt={event.name}
                 />
               </div>
-              <div className='flex w-full md:flex-wrap md:basis-[60%]'>
-                {event.gallery.map((item, index) => {
-                  if (index < 4)
-                    return (
-                      <img
-                        key={item.id}
-                        src={item.imageUrl}
-                        alt={`${event.name} image ${item.id}`}
-                        className='p-1 w-3/12 aspect-[5/4] object-cover rounded-xl md:w-3/6 cursor-pointer'
-                        onClick={() => openModal(item.imageUrl)}
-                      />
-                    );
-                })}
+              <div className='flex w-full flex-wrap md:basis-[60%]'>
+                {event.gallery.slice(0, 4).map((item, index) => (
+                  <img
+                    key={item.id}
+                    src={item.imageUrl}
+                    alt={`${event.name} image ${item.id}`}
+                    className={`p-1 ${
+                      event.gallery.length === 1
+                        ? "w-full"
+                        : event.gallery.length === 2
+                        ? "w-full"
+                        : event.gallery.length === 3
+                        ? index < 2
+                          ? "w-1/2" // For the first two images
+                          : "w-full" // For the third image, in a new row
+                        : "p-1 w-3/12 aspect-[5/4] object-cover rounded-xl md:w-3/6 cursor-pointer"
+                    } aspect-[5/4] object-cover rounded-xl cursor-pointer`}
+                    onClick={() => openModal(item.imageUrl)}
+                  />
+                ))}
               </div>
             </div>
           )}
@@ -174,11 +198,22 @@ const EventDetail = () => {
 
           {/* Descripción del evento */}
           <section className='mb-6'>
-            <h3 className='text-xl font-bold text-yellow-500 mb-2'>
+            <h3 className='text-xl font-bold text-secondaryYellow mb-2'>
               Descripción
             </h3>
             <p className='text-white'>{event.description}</p>
           </section>
+
+          {event.policies ? (
+            <section className='mb-6'>
+              <h3 className='text-xl font-bold text-primaryBlue mb-2'>
+                Políticas del evento
+              </h3>
+              <p className='text-white'>{event.policies}</p>
+            </section>
+          ) : (
+            <></>
+          )}
         </div>
       )}
 

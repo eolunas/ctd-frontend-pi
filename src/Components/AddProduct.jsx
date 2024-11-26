@@ -13,11 +13,11 @@ const AddProduct = () => {
   const [formData, setFormData] = useState({
     name: "",
     genreName: "",
-    genreId: "",
+    genre: "",
     city: "",
     site: "",
     category: "",
-    // categoryName: "",
+    categoryName: "",
     dates: [],
     coverImageUrl: "",
     gallery: [],
@@ -102,9 +102,9 @@ const AddProduct = () => {
           setFormData({
             name: productData.name || "",
             genreName: productData.genreName || "",
-            genreId: productData.genreId || "",
+            genre: productData.genreId || "",
             category: productData.categoryId || "",
-            // categoryName: productData.categoryName || "",
+            categoryName: productData.categoryName || "",
             city: productData.city || "",
             site: productData.site || "",
             dates: productData.dates || [],
@@ -194,11 +194,11 @@ const AddProduct = () => {
       name: formData.name,
       city: formData.city,
       site: formData.site,
-      genre: formData.genreId,
-      category: formData.categoryId,
+      genre: formData.genre,
+      category: formData.category,
       description: formData.description,
       features: formData.features,
-      policies: formData.eventPolicies,
+      policies: formData.policies,
       dates: formData.dates.map((date) => date.replace("T", " ")),
     };
 
@@ -266,7 +266,7 @@ const AddProduct = () => {
             />
           </div>
 
-          <div className='grid grid-cols-1 md:grid-cols-2 gap-6'>
+          <div className='grid grid-cols-1 lg:grid-cols-2 gap-6'>
             <div className='mb-6'>
               <label htmlFor='city' className='block text-gray-400 mb-2'>
                 Ciudad
@@ -295,7 +295,7 @@ const AddProduct = () => {
                   );
                   setFormData((prev) => ({
                     ...prev,
-                    genreId: selectedGenre ? selectedGenre.id : "", // Actualizamos el ID
+                    genre: selectedGenre ? selectedGenre.id : "", // Actualizamos el ID
                     genreName: e.target.value, // Actualizamos el nombre del género
                   }));
                 }}
@@ -341,7 +341,11 @@ const AddProduct = () => {
                 }}
                 className='w-full px-4 py-3 rounded-xl bg-gray-700 text-white border border-gray-600 focus:outline-none focus:border-yellow-500'
               >
-                <option value=''>Selecciona una categoría</option>
+                <option>
+                  {formData.categoryName
+                    ? formData.categoryName
+                    : "Selecciona una categoría"}
+                </option>
                 {categories.map((category) => (
                   <option key={category.id} value={category.name}>
                     {category.name}
@@ -484,9 +488,26 @@ const AddProduct = () => {
             {formData.coverImageUrl && (
               <div className='mt-2 text-gray-300'>
                 {typeof formData.coverImageUrl === "string" ? (
-                  <p>Imagen actual: {formData.coverImageUrl}</p>
+                  <div>
+                    <p>Imagen actual:</p>
+                    <div className='w-[20%] mt-2'>
+                      <img
+                        className='w-full block'
+                        src={formData.coverImageUrl}
+                      />
+                    </div>
+                  </div>
                 ) : (
-                  <p>Imagen seleccionada: {formData.coverImageUrl.name}</p>
+                  <div>
+                    <p>Imagen seleccionada:</p>
+                    <div className='w-[20%] mt-2'>
+                      <img
+                        className='w-full block'
+                        src={URL.createObjectURL(formData.coverImageUrl)}
+                        alt='Imagen seleccionada'
+                      />
+                    </div>
+                  </div>
                 )}
               </div>
             )}
@@ -513,25 +534,45 @@ const AddProduct = () => {
               onChange={handleGalleryChange}
               className='hidden'
             />
-            {formData.gallery.length > 0 && (
+            {Array.isArray(formData.gallery) ? (
+              <div className='flex flex-wrap gap-4'>
+                {formData.gallery.map((image, index) => (
+                  <div key={index} className='w-[20%] mt-2'>
+                    <img
+                      className='w-full block'
+                      src={
+                        image instanceof File
+                          ? URL.createObjectURL(image)
+                          : image
+                      }
+                      alt={`Imagen ${index + 1}`}
+                    />
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <p>Imagen seleccionada: {formData.gallery?.name}</p>
+            )}
+
+            {/* {formData.gallery.length > 0 && (
               <div className='mt-2 text-gray-300'>
                 <p>Imágenes seleccionadas:</p>
                 <ul>
                   {formData.gallery.map((file, index) => (
-                    <li key={index}>{file}</li>
+                    <li key={index}>{file.name}</li>
                   ))}
                 </ul>
               </div>
-            )}
+            )} */}
           </div>
 
           {/* Event Policies */}
           <div className='mb-6'>
-            <label htmlFor='eventPolicies' className='block text-gray-400 mb-2'>
+            <label htmlFor='policies' className='block text-gray-400 mb-2'>
               Políticas del evento
             </label>
             <textarea
-              id='eventPolicies'
+              id='policies'
               name='policies'
               value={formData.policies}
               onChange={handleInputChange}
