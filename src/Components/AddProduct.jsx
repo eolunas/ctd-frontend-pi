@@ -5,10 +5,15 @@ import axiosInstance from "../api/axiosInstance";
 import { fetchGenres } from "../api/genreApi";
 import { fetchCategories } from "../api/categoryApi";
 import { fetchFeatures } from "../api/featureApi";
+import ErrorMessage from "../Components/ErrorMessage";
 
 const AddProduct = () => {
   const navigate = useNavigate();
+  const [isErrorOpen, setIsErrorOpen] = useState(false);
   const { id } = useParams();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+  const [selectedImage, setSelectedImage] = useState("");
   const { state, dispatch } = useCharStates();
   const [formData, setFormData] = useState({
     name: "",
@@ -30,6 +35,19 @@ const AddProduct = () => {
   const [genres, setGenres] = useState([]); // Estado para almacenar los géneros
   const [categories, setCategories] = useState([]);
   const [features, setFeatures] = useState([]);
+  const [errors, setErrors] = useState({});
+
+  
+
+  const openModal = (imageUrl) => {
+    setSelectedImage(imageUrl);
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setSelectedImage("");
+  };
   console.log();
 
   // const handleFeatureChange = (feature) => {
@@ -165,30 +183,78 @@ const AddProduct = () => {
       }));
     }
   };
-
+  const validateFields = () => {
+    let isValid = true;
+  
+    if (!formData.name.trim()) {
+      alert("El nombre del evento es obligatorio.");
+      isValid = false;
+    }
+  
+    if (!formData.city.trim()) {
+      alert("La ciudad es obligatoria.");
+      isValid = false;
+    }
+  
+    if (!formData.site.trim()) {
+      alert("El sitio es obligatorio.");
+      isValid = false;
+    }
+  
+    if (!formData.genre) {
+      alert("El género es obligatorio.");
+      isValid = false;
+    }
+  
+    if (!formData.category) {
+      alert("La categoría es obligatoria.");
+      isValid = false;
+    }
+  
+    if (!formData.description.trim()) {
+      alert("La descripción es obligatoria.");
+      isValid = false;
+    }
+  
+    if (!formData.policies.trim()) {
+      alert("Las políticas del evento son obligatorias.");
+      isValid = false;
+    }
+  
+    return isValid;
+  };
+  
+  
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+  
+    // Validar los campos antes de continuar
+    if (!validateFields()) {
+      // Aquí puedes manejar los errores de validación en el cliente
+      console.log("Error: Faltan campos obligatorios"); // Mensaje para depuración
+      return; // No continúes con el envío de datos
+    }
+  
     if (!formData.dates.length) {
       alert("Por favor, agrega al menos una fecha antes de guardar.");
       return;
     }
-
+  
     // Crear FormData para enviar archivos e información JSON
     const dataToSend = new FormData();
-
+  
     // Agregar la imagen de portada
     if (formData.coverImageUrl instanceof File) {
       dataToSend.append("cover", formData.coverImageUrl);
     }
-
+  
     // Agregar las imágenes de la galería
     formData.gallery.forEach((image) => {
       if (image instanceof File) {
         dataToSend.append("gallery", image);
       }
     });
-
+  
     // Crear el objeto de datos JSON
     const dto = {
       name: formData.name,
@@ -201,35 +267,50 @@ const AddProduct = () => {
       policies: formData.policies,
       dates: formData.dates.map((date) => date.replace("T", " ")),
     };
-
+  
     // Serializar el objeto JSON y agregarlo al FormData
     dataToSend.append(
       "dto",
       new Blob([JSON.stringify(dto)], { type: "application/json" })
     );
-
+  
     // Debug: Ver contenido del FormData
     for (let pair of dataToSend.entries()) {
       console.log(pair[0], pair[1]);
     }
-
+  
     try {
       const response = id
         ? await axiosInstance.put(`/event/${id}`, dataToSend)
         : await axiosInstance.post("/event", dataToSend);
-
+  
       console.log("Producto guardado:", response.data);
-
+  
       dispatch({
         type: id ? "EDIT_PRODUCT" : "ADD_PRODUCT",
         payload: response.data,
       });
-
+  
       navigate("/admin/products");
     } catch (error) {
       console.error("Error al guardar el producto:", error);
+  
+      // Manejar errores del servidor (por ejemplo, nombre duplicado)
+      if (error.response && error.response.status === 409) {
+        setErrorMessage(
+          "No se puede crear el evento porque ya existe un evento con ese nombre."
+        );
+        setIsErrorOpen(true); // Solo muestra el modal si es error del servidor
+      } else {
+        setErrorMessage(
+          "Ocurrió un error inesperado. Inténtalo de nuevo más tarde."
+        );
+        setIsErrorOpen(true); // Solo muestra el modal si es error del servidor
+      }
     }
   };
+  
+  
 
   const handleRemoveDate = (index) => {
     setFormData((prev) => ({
@@ -251,7 +332,7 @@ const AddProduct = () => {
           {id ? "Editar Producto" : "Nuevo Producto"}
         </h2>
         <form onSubmit={handleSubmit}>
-          <div className='mb-6'>
+        <div className='mb-6'>
             <label htmlFor='name' className='block text-gray-400 mb-2'>
               Nombre del Producto
             </label>
@@ -261,9 +342,14 @@ const AddProduct = () => {
               name='name'
               value={formData.name}
               onChange={handleInputChange}
-              className='w-full px-4 py-3 rounded-xl bg-gray-700 text-white border border-gray-600 focus:outline-none focus:border-yellow-500'
+              className={`w-full px-4 py-3 rounded-xl ${
+                errors.name
+                  ? "bg-gray-700 text-white border-red-500"
+                  : "bg-gray-700 text-white border-gray-600"
+              } focus:outline-none`}
               required
             />
+            {errors.name && <p className='text-red-500 text-sm'>{errors.name}</p>}
           </div>
 
           <div className='grid grid-cols-1 lg:grid-cols-2 gap-6'>
@@ -355,10 +441,7 @@ const AddProduct = () => {
             </div>
 
             <div className='mb-6'>
-              <label
-                htmlFor='eventDateTime'
-                className='block text-gray-400 mb-2'
-              >
+              <label htmlFor='eventDateTime' className='block text-gray-400 mb-2'>
                 Fecha y Hora del Evento
               </label>
               <div className='flex gap-4'>
@@ -368,7 +451,11 @@ const AddProduct = () => {
                   name='eventDateTime'
                   value={formData.eventDateTime}
                   onChange={handleInputChange}
-                  className='flex-1 px-4 py-3 rounded-xl bg-gray-700 text-white border border-gray-600 focus:outline-none focus:border-yellow-500'
+                  className={`flex-1 px-4 py-3 rounded-xl ${
+                    errors.dates
+                      ? "bg-gray-700 text-white border-red-500"
+                      : "bg-gray-700 text-white border-gray-600"
+                  } focus:outline-none`}
                 />
                 <button
                   type='button'
@@ -378,6 +465,7 @@ const AddProduct = () => {
                   Agregar
                 </button>
               </div>
+              {errors.dates && <p className='text-red-500 text-sm'>{errors.dates}</p>}
             </div>
             <div className='mb-6'>
               <h3 className='text-lg font-bold text-gray-300 mb-2'>
@@ -591,6 +679,7 @@ const AddProduct = () => {
             </button>
             <button
               type='submit'
+              onClick={() => setIsErrorOpen(true)}
               className='px-6 py-3 bg-yellow-500 text-white rounded-xl hover:bg-yellow-400 transition'
             >
               Guardar
@@ -598,6 +687,33 @@ const AddProduct = () => {
           </div>
         </form>
       </div>
+      {isErrorOpen && (
+          <ErrorMessage
+            title="Lo sentimos :( debes llenar todos los campos"
+            description={errorMessage} // Usa el mensaje dinámico
+            buttonText="volver"
+            onClose={() => setIsErrorOpen(false)}
+          />
+        )}
+
+      {isModalOpen && (
+        <div className='fixed inset-0 bg-black bg-opacity-75 flex justify-center items-center z-50'>
+          <div className='absolute inset-0' onClick={closeModal}></div>
+          <div className='relative p-4 bg-gray-800 rounded-lg max-w-4xl max-h-[90vh] overflow-hidden'>
+            <button
+              onClick={closeModal}
+              className='absolute top-2 right-2 text-white text-xl'
+            >
+              &times;
+            </button>
+            <img
+              src={selectedImage}
+              alt='Selected'
+              className='w-full h-full object-contain'
+            />
+          </div>
+        </div>
+      )}
     </div>
   );
 };
