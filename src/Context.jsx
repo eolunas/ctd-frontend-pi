@@ -7,8 +7,9 @@ import {
 } from "react";
 import { reducer } from "./Reducers/reducer";
 import { getAuthStatus, register } from "./auth";
-import { fetchEvents } from "./api/eventApi";
+import { fetchEvents, fetchCities } from "./api/eventApi";
 import { fetchGenres } from "./api/genreApi";
+import { fetchCategories } from "./api/categoryApi";
 
 const CharStates = createContext(null);
 
@@ -33,42 +34,25 @@ export const Context = ({ children }) => {
     const getData = async () => {
       try {
         // Ejecuta todas las llamadas en paralelo
-        const [genresResponse, topGenresResponse, eventsResponse] =
+        const [genresResponse, allCities, topCategories, eventsResponse] =
           await Promise.all([
             fetchGenres(),
-            fetchGenres({ topGenres: true }),
+            fetchCities(),
+            fetchCategories(),
             fetchEvents(),
           ]);
-
-console.log({
-  genres: genresResponse.data,
-  cities: ["Bogotá", "Cali", "Bucaramanga", "Yopal"],
-  topGenres: topGenresResponse.data,
-  events: eventsResponse.data,
-})
 
         dispatch({
           type: "SET_DATA",
           payload: {
             genres: genresResponse.data,
-            cities: ["Bogotá", "Cali", "Bucaramanga", "Yopal"],
-            topGenres: topGenresResponse.data,
+            cities: allCities.data,
+            topCategories: topCategories,
             events: eventsResponse.data,
           },
         });
       } catch (error) {
         console.error("Error fetching data:", error);
-        
-        dispatch({
-          type: "SET_DATA",
-          payload: {
-            genres: [],
-            cities: ["Bogotá", "Cali", "Bucaramanga", "Yopal"],
-            topGenres: [],
-            events:[],
-          },
-        });
-
       }
     };
 

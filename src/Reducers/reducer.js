@@ -1,8 +1,8 @@
 export const reducer = (state, action) => {
     switch (action.type) {
         case 'SET_DATA':
-            const { genres, cities,  events, topGenres } = action.payload;
-            return { ...state, genres, list: events, cities, topCategories: topGenres };
+            const { genres, cities,  events, topCategories } = action.payload;
+            return { ...state, genres, list: events, cities, topCategories };
         case 'GET_CHARS':
             return { ...state, list: action.payload };
         case 'GET_TOPCAT':
