@@ -2,6 +2,7 @@ import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import Footer from "../Components/Footer";
 import Navbar from "../Components/Navbar";
 import { useEffect } from "react";
+import Searcher from "../Components/Searcher";
 
 export const Layout = () => {
   const location = useLocation();
@@ -14,6 +15,13 @@ export const Layout = () => {
       }`}
     >
       <Navbar />
+      {isHomeRoute ? (
+        <div className=''>
+          <Searcher />
+        </div>
+      ) : (
+        <></>
+      )}
       <main className='flex-grow max-w-[1480px] self-center'>
         <Outlet />
       </main>

@@ -24,7 +24,7 @@ const Searcher = () => {
     return { value: item, label: item };
   });
 
-  const data = state.list.map(item => item.name);
+  const data = state.list.map((item) => item.name);
 
   const [filters, setFilters] = useState({});
   const [dateRange, setDateRange] = useState([null, null]);
@@ -53,7 +53,7 @@ const Searcher = () => {
         // Si el valor es nulo, eliminamos la clave del estado
         const { [name]: _, ...newFilters } = prevFilters;
         // Si no hay filtros se ejecuta funcion:
-        if(Object.keys(newFilters).length == 0 ) 
+        if (Object.keys(newFilters).length == 0)
           dispatch({ type: "SET_FILTERS", payload: newFilters });
 
         return newFilters;
@@ -105,16 +105,16 @@ const Searcher = () => {
           flex flex-col justify-center items-center h-full bg-white p-3 rounded-lg w-full max-w-[650px] gap-3 z-20
         `}
       >
-        <div className="flex flex-col justify-center items-center relative gap-1.5 w-full">
-          <label className="flex gap-1 text-gray-700 w-full ">
-            <img className="size-6" src={GenreIcon} alt="Genre Icon" />
+        <div className='flex flex-col justify-center items-center relative gap-1.5 w-full'>
+          <label className='flex gap-1 text-gray-700 w-full '>
+            <img className='size-6' src={GenreIcon} alt='Genre Icon' />
             Género
           </label>
           <Select
-            name="genres"
+            name='genres'
             onChange={handleInputChange}
-            className="w-full text-sm text-gray-500 shadow-md rounded-md "
-            placeholder="Seleccione..."
+            className='w-full text-sm text-gray-500 shadow-md rounded-md '
+            placeholder='Seleccione...'
             closeMenuOnSelect={false}
             components={animatedComponents}
             isMulti
@@ -122,16 +122,16 @@ const Searcher = () => {
           />
         </div>
 
-        <div className="flex flex-col justify-center items-center gap-3 w-full sm:flex-row md:flex-col lg:flex-row">
-          <div className="flex flex-col justify-center items-center relative  w-full">
-            <label className="flex gap-1 text-gray-700 w-full mb-2">
-              <img className="size-6" src={CalendarIcon} alt="Calendar Icon" />
+        <div className='flex flex-col justify-center items-center gap-3 w-full sm:flex-row md:flex-col lg:flex-row'>
+          <div className='flex flex-col justify-center items-center relative  w-full'>
+            <label className='flex gap-1 text-gray-700 w-full mb-2'>
+              <img className='size-6' src={CalendarIcon} alt='Calendar Icon' />
               Fechas
             </label>
             <DatePicker
-              name="dates"
-              wrapperClassName="w-full"
-              clearButtonClassName="mx-2"
+              name='dates'
+              wrapperClassName='w-full'
+              clearButtonClassName='mx-2'
               className={`bg-white border border-gray-300 shadow-md text-gray-900 text-sm rounded-md w-full px-2.5 h-[38px]`}
               selectsRange={true}
               startDate={startDate}
@@ -140,24 +140,24 @@ const Searcher = () => {
                 handleInputChange({ target: { name: "dates", value: update } })
               }
               isClearable={true}
-              placeholderText="Selecciona un rango de fechas"
+              placeholderText='Selecciona un rango de fechas'
             />
           </div>
 
-          <div className="flex flex-col justify-center items-center relative w-full ">
-            <label className="flex gap-1 text-gray-700 w-full mb-2">
-              <img className="size-6" src={LocationIcon} alt="Location Icon" />
+          <div className='flex flex-col justify-center items-center relative w-full '>
+            <label className='flex gap-1 text-gray-700 w-full mb-2'>
+              <img className='size-6' src={LocationIcon} alt='Location Icon' />
               Ciudad
             </label>
             <Select
-              name="city"
+              name='city'
               onChange={(e) =>
                 handleInputChange({
                   target: { name: "city", value: e?.value || "" },
                 })
               }
-              className="w-full text-sm text-gray-500 shadow-md rounded-md "
-              placeholder="Todo Colombia"
+              className='w-full text-sm text-gray-500 shadow-md rounded-md '
+              placeholder='Todo Colombia'
               components={animatedComponents}
               options={cities}
               isClearable
@@ -165,7 +165,7 @@ const Searcher = () => {
           </div>
         </div>
 
-        <div className="flex justify-center items-center gap-3 relative w-full mt-2">
+        <div className='flex justify-center items-center gap-3 relative w-full mt-2'>
           <InputCustom
             name={"event"}
             value={filters.event}
@@ -184,7 +184,7 @@ const Searcher = () => {
                 className={`
                 h-6 w-6 text-white`}
               />
-              <span className="text-white font-semibold">Buscar</span>
+              <span className='text-white font-semibold'>Buscar</span>
             </a>
           )}
         </div>

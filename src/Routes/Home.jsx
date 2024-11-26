@@ -14,7 +14,6 @@ const Home = () => {
 
   return (
     <>
-      <Searcher />
       {/* Renderizado condicional según filtrado */}
       {Object.keys(state.homeFilters).length > 0 && <ResultFilters />}
       <Categories />
