@@ -15,11 +15,12 @@ import ErrorMessage from "../Components/ErrorMessage";
 const EventDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const screenSize = useScreenSize();
   const [event, setEvent] = useState({});
-
   const [isErrorOpen, setIsErrorOpen] = useState(false);
   const [error, setError] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedImage, setSelectedImage] = useState("");
+
   useEffect(() => {
     const getEventById = async () => {
       const event = await fetchEventById(id);
@@ -30,7 +31,17 @@ const EventDetail = () => {
 
     window.scrollTo(0, 0);
   }, [id]);
-  console.log(event.features);
+  console.log(event.gallery);
+
+  const openModal = (imageUrl) => {
+    setSelectedImage(imageUrl);
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setSelectedImage("");
+  };
 
   return (
     <>
@@ -102,12 +113,16 @@ const EventDetail = () => {
             </div>
           </div>
           {/* Galería de imágenes */}
-          {event?.images?.[screenSize] && (
+          {/* Galería de imágenes */}
+          {event?.coverImageUrl && (
             <div className='flex flex-col md:flex-row gap-1 mb-16'>
-              <div className='w-full aspect-[5/4] flex items-center justify-center overflow-hidden cursor-pointer rounded-xl'>
+              <div
+                className='w-full aspect-[5/4] flex items-center justify-center overflow-hidden cursor-pointer rounded-xl'
+                onClick={() => openModal(event.coverImageUrl)}
+              >
                 <img
                   className='w-full h-full object-cover'
-                  src={event.images[screenSize]}
+                  src={event.coverImageUrl}
                   alt={event.name}
                 />
               </div>
@@ -119,7 +134,8 @@ const EventDetail = () => {
                         key={item.id}
                         src={item.imageUrl}
                         alt={`${event.name} image ${item.id}`}
-                        className='p-1 w-3/12 aspect-[5/4] object-cover rounded-xl md:w-3/6'
+                        className='p-1 w-3/12 aspect-[5/4] object-cover rounded-xl md:w-3/6 cursor-pointer'
+                        onClick={() => openModal(item.imageUrl)}
                       />
                     );
                 })}
@@ -163,6 +179,25 @@ const EventDetail = () => {
             </h3>
             <p className='text-white'>{event.description}</p>
           </section>
+        </div>
+      )}
+
+      {isModalOpen && (
+        <div className='fixed inset-0 bg-black bg-opacity-75 flex justify-center items-center z-50'>
+          <div className='absolute inset-0' onClick={closeModal}></div>
+          <div className='relative p-4 bg-gray-800 rounded-lg max-w-4xl max-h-[90vh] overflow-hidden'>
+            <button
+              onClick={closeModal}
+              className='absolute top-2 right-2 text-white text-xl'
+            >
+              &times;
+            </button>
+            <img
+              src={selectedImage}
+              alt='Selected'
+              className='w-full h-full object-contain'
+            />
+          </div>
         </div>
       )}
     </>
