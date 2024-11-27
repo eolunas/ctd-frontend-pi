@@ -33,14 +33,13 @@ const AddProduct = () => {
     features: [],
   });
 
-  console.log(formData);
+  // console.log(formData);
 
   const [genres, setGenres] = useState([]); // Estado para almacenar los géneros
   const [categories, setCategories] = useState([]);
   const [cities, setCities] = useState([]);
   const [features, setFeatures] = useState([]);
   const [errors, setErrors] = useState({});
-  console.log(cities);
 
   const openModal = (imageUrl) => {
     setSelectedImage(imageUrl);
@@ -225,8 +224,9 @@ const AddProduct = () => {
     if (!formData.features || formData.features.length === 0) {
       newErrors.features = "Debes seleccionar al menos 1 característica.";
     }
-    if (!formData.gallery || formData.gallery.length === 0) {
-      newErrors.gallery = "Debes seleccionar al menos 1 imagen.";
+
+    if (!formData.gallery || formData.gallery.length < 4) {
+      newErrors.gallery = "Debes seleccionar 4 imagenes.";
     }
     if (!formData.coverImageUrl) {
       newErrors.coverImageUrl = "Es necesario una imagen de portada.";
@@ -267,10 +267,15 @@ const AddProduct = () => {
 
     // Agregar las imágenes de la galería
     formData.gallery.forEach((image) => {
-      if (image instanceof File) {
+      if (typeof image === "string") {
+        // Agregar las URLs existentes como un campo JSON en el FormData
+        return;
+      } else if (image instanceof File) {
+        // Agregar los nuevos archivos como un campo separado
         dataToSend.append("gallery", image);
       }
     });
+    console.log(formData.gallery);
 
     // Crear el objeto de datos JSON
     const dto = {
@@ -293,7 +298,7 @@ const AddProduct = () => {
 
     // Debug: Ver contenido del FormData
     for (let pair of dataToSend.entries()) {
-      console.log(pair[0], pair[1]);
+      console.log(pair[0], pair[1], "aaaa");
     }
 
     try {

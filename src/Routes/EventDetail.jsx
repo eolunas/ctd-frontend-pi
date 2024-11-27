@@ -174,7 +174,7 @@ const EventDetail = () => {
                     alt={`${event.name} image ${item.id}`}
                     className={`p-1 ${
                       event.gallery.length === 1
-                        ? "w-full"
+                        ? "w-full md:h-full h-32"
                         : event.gallery.length === 2
                         ? "w-full"
                         : event.gallery.length === 3
