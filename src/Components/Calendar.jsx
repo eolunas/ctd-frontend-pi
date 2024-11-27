@@ -1,25 +1,40 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import dayjs from "dayjs";
 
-const Calendar = () => {
+const Calendar = ({ dates }) => {
   const [currentMonth, setCurrentMonth] = useState(dayjs()); // Mes inicial
   const [selectedDate, setSelectedDate] = useState(null); // Fecha seleccionada
   const [isSelectVisible, setIsSelectVisible] = useState(false); // Controla el select
+  console.log(dates);
+
+  const parseDates = (dates) => {
+    const formattedDates = {};
+    dates?.forEach((dateStr) => {
+      const date = dayjs(dateStr); // Convierte la fecha a dayjs
+      const monthKey = date.format("YYYY-MM"); // Obtenemos el mes en formato 'YYYY-MM'
+      const day = date.date(); // Extraemos el día
+
+      // Agregar la fecha al objeto, si aún no existe, inicializamos el mes con un array vacío
+      if (!formattedDates[monthKey]) {
+        formattedDates[monthKey] = [];
+      }
+      formattedDates[monthKey].push(day); // Agregar el día disponible
+    });
+    return formattedDates;
+  };
+
+  // Fechas disponibles basadas en las fechas recibidas
+  const availableDates = parseDates(dates);
 
   // Fechas simuladas
-  const availableDates = {
-    "2024-11": [8, 9, 10],
-    "2024-12": [4, 6, 15],
-    "2025-01": [12, 15, 20],
-    "2025-02": [5, 9],
-  };
+  // const availableDates = {
+  //   "2024-11": [8, 9, 10],
+  //   "2024-12": [4, 6, 15],
+  //   "2025-01": [12, 15, 20],
+  //   "2025-02": [5, 9],
+  // };
 
-  const fullDates = {
-    "2024-11": [6, 7],
-    "2024-12": [10],
-    "2025-01": [18],
-    "2025-02": [8],
-  };
+  const fullDates = {};
 
   // Generar la lista de meses entre el actual y los próximos 12 meses
   const monthsList = Array.from({ length: 12 }, (_, i) =>
@@ -103,6 +118,13 @@ const Calendar = () => {
       </div>
     );
   };
+  useEffect(() => {
+    // Encuentra la primera fecha disponible
+    if (dates && dates.length > 0) {
+      const firstAvailableDate = dayjs(dates[0]);
+      setCurrentMonth(firstAvailableDate.startOf("month")); // Configura currentMonth al mes de la primera fecha disponible
+    }
+  }, [dates]);
 
   return (
     <div className='bg-[#212121] rounded-3xl'>
@@ -112,7 +134,7 @@ const Calendar = () => {
       <div className='px-4'>
         {/* Controles del mes */}
 
-        <div className='lg:flex hidden justify-between items-center text-primaryBlue mb-4'>
+        <div className='md:flex hidden justify-between items-center text-primaryBlue mb-4'>
           <div className='flex items-center gap-8'>
             <div
               className='cursor-pointer p-2'
@@ -129,7 +151,7 @@ const Calendar = () => {
             </div>
           </div>
         </div>
-        <div className='lg:hidden justify-between items-center text-primaryBlue mb-4'>
+        <div className='md:hidden justify-between items-center text-primaryBlue mb-4'>
           <div className='flex items-center justify-between  w-full'>
             <select
               className='bg-[#212121] focus:non '

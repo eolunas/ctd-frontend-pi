@@ -118,7 +118,7 @@ const EventDetail = () => {
               </div>
             </div>
             <div className='flex gap-4 w-full justify-center items-center flex-col mb-4'>
-              <Calendar />
+              <Calendar dates={event.dates} />
               <div className='w-72'>
                 <Button
                   color='secondaryYellow'
