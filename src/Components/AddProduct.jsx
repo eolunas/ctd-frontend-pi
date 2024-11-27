@@ -37,8 +37,6 @@ const AddProduct = () => {
   const [features, setFeatures] = useState([]);
   const [errors, setErrors] = useState({});
 
-  
-
   const openModal = (imageUrl) => {
     setSelectedImage(imageUrl);
     setIsModalOpen(true);
@@ -185,76 +183,75 @@ const AddProduct = () => {
   };
   const validateFields = () => {
     let isValid = true;
-  
+
     if (!formData.name.trim()) {
       alert("El nombre del evento es obligatorio.");
       isValid = false;
     }
-  
+
     if (!formData.city.trim()) {
       alert("La ciudad es obligatoria.");
       isValid = false;
     }
-  
+
     if (!formData.site.trim()) {
       alert("El sitio es obligatorio.");
       isValid = false;
     }
-  
+
     if (!formData.genre) {
       alert("El género es obligatorio.");
       isValid = false;
     }
-  
+
     if (!formData.category) {
       alert("La categoría es obligatoria.");
       isValid = false;
     }
-  
+
     if (!formData.description.trim()) {
       alert("La descripción es obligatoria.");
       isValid = false;
     }
-  
+
     if (!formData.policies.trim()) {
       alert("Las políticas del evento son obligatorias.");
       isValid = false;
     }
-  
+
     return isValid;
   };
-  
-  
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
+
     // Validar los campos antes de continuar
     if (!validateFields()) {
       // Aquí puedes manejar los errores de validación en el cliente
       console.log("Error: Faltan campos obligatorios"); // Mensaje para depuración
       return; // No continúes con el envío de datos
     }
-  
+
     if (!formData.dates.length) {
       alert("Por favor, agrega al menos una fecha antes de guardar.");
       return;
     }
-  
+
     // Crear FormData para enviar archivos e información JSON
     const dataToSend = new FormData();
-  
+
     // Agregar la imagen de portada
     if (formData.coverImageUrl instanceof File) {
       dataToSend.append("cover", formData.coverImageUrl);
     }
-  
+
     // Agregar las imágenes de la galería
     formData.gallery.forEach((image) => {
       if (image instanceof File) {
         dataToSend.append("gallery", image);
       }
     });
-  
+
     // Crear el objeto de datos JSON
     const dto = {
       name: formData.name,
@@ -267,34 +264,34 @@ const AddProduct = () => {
       policies: formData.policies,
       dates: formData.dates.map((date) => date.replace("T", " ")),
     };
-  
+
     // Serializar el objeto JSON y agregarlo al FormData
     dataToSend.append(
       "dto",
       new Blob([JSON.stringify(dto)], { type: "application/json" })
     );
-  
+
     // Debug: Ver contenido del FormData
     for (let pair of dataToSend.entries()) {
       console.log(pair[0], pair[1]);
     }
-  
+
     try {
       const response = id
         ? await axiosInstance.put(`/event/${id}`, dataToSend)
         : await axiosInstance.post("/event", dataToSend);
-  
+
       console.log("Producto guardado:", response.data);
-  
+
       dispatch({
         type: id ? "EDIT_PRODUCT" : "ADD_PRODUCT",
         payload: response.data,
       });
-  
+
       navigate("/admin/products");
     } catch (error) {
       console.error("Error al guardar el producto:", error);
-  
+
       // Manejar errores del servidor (por ejemplo, nombre duplicado)
       if (error.response && error.response.status === 409) {
         setErrorMessage(
@@ -309,8 +306,6 @@ const AddProduct = () => {
       }
     }
   };
-  
-  
 
   const handleRemoveDate = (index) => {
     setFormData((prev) => ({
@@ -332,7 +327,7 @@ const AddProduct = () => {
           {id ? "Editar Producto" : "Nuevo Producto"}
         </h2>
         <form onSubmit={handleSubmit}>
-        <div className='mb-6'>
+          <div className='mb-6'>
             <label htmlFor='name' className='block text-gray-400 mb-2'>
               Nombre del Producto
             </label>
@@ -349,7 +344,9 @@ const AddProduct = () => {
               } focus:outline-none`}
               required
             />
-            {errors.name && <p className='text-red-500 text-sm'>{errors.name}</p>}
+            {errors.name && (
+              <p className='text-red-500 text-sm'>{errors.name}</p>
+            )}
           </div>
 
           <div className='grid grid-cols-1 lg:grid-cols-2 gap-6'>
@@ -441,7 +438,10 @@ const AddProduct = () => {
             </div>
 
             <div className='mb-6'>
-              <label htmlFor='eventDateTime' className='block text-gray-400 mb-2'>
+              <label
+                htmlFor='eventDateTime'
+                className='block text-gray-400 mb-2'
+              >
                 Fecha y Hora del Evento
               </label>
               <div className='flex gap-4'>
@@ -465,7 +465,9 @@ const AddProduct = () => {
                   Agregar
                 </button>
               </div>
-              {errors.dates && <p className='text-red-500 text-sm'>{errors.dates}</p>}
+              {errors.dates && (
+                <p className='text-red-500 text-sm'>{errors.dates}</p>
+              )}
             </div>
             <div className='mb-6'>
               <h3 className='text-lg font-bold text-gray-300 mb-2'>
@@ -688,13 +690,13 @@ const AddProduct = () => {
         </form>
       </div>
       {isErrorOpen && (
-          <ErrorMessage
-            title="Lo sentimos :( debes llenar todos los campos"
-            description={errorMessage} // Usa el mensaje dinámico
-            buttonText="volver"
-            onClose={() => setIsErrorOpen(false)}
-          />
-        )}
+        <ErrorMessage
+          title='Lo sentimos :('
+          description='Debes llenar todos los campos para añadir un producto' // Usa el mensaje dinámico
+          buttonText='Volver atrás'
+          onClose={() => setIsErrorOpen(false)}
+        />
+      )}
 
       {isModalOpen && (
         <div className='fixed inset-0 bg-black bg-opacity-75 flex justify-center items-center z-50'>
