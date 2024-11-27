@@ -57,7 +57,7 @@ const Card = ({ event }) => {
       <div className="my-5 flex flex-col gap-4 lg:mx-5">
         <div className="flex w-full justify-between">
           <h3 className="text-white font-semibold text-2xl">
-           {event.artist} | {event.name || "Nombre no disponible"} {/* Validación para el nombre */}
+            {event.name || "Nombre no disponible"} {/* Validación para el nombre */}
           </h3>
           <div className="basis-[15%] flex justify-end m-2">
             <a
