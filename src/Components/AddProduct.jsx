@@ -7,6 +7,7 @@ import { fetchCategories } from "../api/categoryApi";
 import { fetchFeatures } from "../api/featureApi";
 import close from "../assets/1-Iconos/close.png";
 import ErrorMessage from "../Components/ErrorMessage";
+import { fetchCities } from "../api/eventApi";
 
 const AddProduct = () => {
   const navigate = useNavigate();
@@ -16,6 +17,7 @@ const AddProduct = () => {
   const [errorMessage, setErrorMessage] = useState("");
   const [selectedImage, setSelectedImage] = useState("");
   const { state, dispatch } = useCharStates();
+
   const [formData, setFormData] = useState({
     name: "",
     genreName: "",
@@ -35,14 +37,15 @@ const AddProduct = () => {
 
   const [genres, setGenres] = useState([]); // Estado para almacenar los géneros
   const [categories, setCategories] = useState([]);
+  const [cities, setCities] = useState([]);
   const [features, setFeatures] = useState([]);
   const [errors, setErrors] = useState({});
+  console.log(cities);
 
   const openModal = (imageUrl) => {
     setSelectedImage(imageUrl);
     setIsModalOpen(true);
   };
-  console.log(errors);
 
   const closeModal = () => {
     setIsModalOpen(false);
@@ -72,6 +75,19 @@ const AddProduct = () => {
   //     categoryName: selectedCategory?.name || "",
   //   }));
   // };
+
+  useEffect(() => {
+    const loadCities = async () => {
+      try {
+        const data = await fetchCities(); // Llama a la API de categorías
+        setCities(data.data);
+      } catch (error) {
+        console.error("Error al cargar categorías:", error);
+      }
+    };
+
+    loadCities();
+  }, []);
   useEffect(() => {
     const loadFeatures = async () => {
       try {
@@ -191,7 +207,7 @@ const AddProduct = () => {
       newErrors.name = "El nombre debe tener al menos 3 caracteres.";
     }
 
-    if (!formData.city.trim()) {
+    if (!formData.city) {
       newErrors.city = "La ciudad es obligatoria.";
     }
 
@@ -362,14 +378,27 @@ const AddProduct = () => {
               <label htmlFor='city' className='block text-gray-400 mb-2'>
                 Ciudad
               </label>
-              <input
-                type='text'
+              <select
                 id='city'
                 name='city'
                 value={formData.city}
-                onChange={handleInputChange}
+                onChange={(e) =>
+                  setFormData((prev) => ({
+                    ...prev,
+                    city: e.target.value,
+                  }))
+                }
                 className='w-full px-4 py-3 rounded-xl bg-gray-700 text-white border border-gray-600 focus:outline-none focus:border-yellow-500'
-              />
+              >
+                <option value=''>Selecciona una ciudad</option>
+                {Array.isArray(cities) &&
+                  cities.map((city, index) => (
+                    <option key={index} value={city}>
+                      {city}
+                    </option>
+                  ))}
+              </select>
+
               {errors.city && (
                 <div
                   className='flex items-center p-1 px-2 gap-2 rounded-lg mt-2'
@@ -383,6 +412,7 @@ const AddProduct = () => {
                 </div>
               )}
             </div>
+
             {/* Dropdown para géneros */}
             <div className='mb-6'>
               <label htmlFor='genreName' className='block text-gray-400 mb-2'>
