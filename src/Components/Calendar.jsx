@@ -119,10 +119,19 @@ const Calendar = ({ dates }) => {
     );
   };
   useEffect(() => {
-    // Encuentra la primera fecha disponible
     if (dates && dates.length > 0) {
-      const firstAvailableDate = dayjs(dates[0]);
-      setCurrentMonth(firstAvailableDate.startOf("month")); // Configura currentMonth al mes de la primera fecha disponible
+      // Convierte las fechas a objetos dayjs y encuentra la más cercana
+      const today = dayjs();
+      const closestDate = dates
+        .map((dateStr) => dayjs(dateStr))
+        .reduce((closest, date) =>
+          Math.abs(date.diff(today)) < Math.abs(closest.diff(today))
+            ? date
+            : closest
+        );
+
+      // Configura el currentMonth al mes más cercano
+      setCurrentMonth(closestDate.startOf("month"));
     }
   }, [dates]);
 
