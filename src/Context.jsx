@@ -18,6 +18,7 @@ const initialState = {
   cities: [],
   topCategories: [],
   list: [],
+  filteredList: [],
   favs: JSON.parse(localStorage.getItem("favs")) || [],
   homeFilters: {},
   theme: localStorage.getItem("theme") === "true",
@@ -89,6 +90,7 @@ export const Context = ({ children }) => {
       console.error(result.error);
     }
   };
+  
   const resetRegistrationSuccess = () => {
     dispatch({
       type: "SET_REGISTRATION_SUCCESS",

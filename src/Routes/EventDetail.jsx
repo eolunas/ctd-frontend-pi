@@ -7,7 +7,6 @@ import GenreIcon from "../assets/1-Iconos/DetalleProducto/genre.svg";
 import LocationIcon from "../assets/1-Iconos/DetalleProducto/city.svg";
 import TimeIcon from "../assets/1-Iconos/DetalleProducto/hour.svg";
 import Button from "../Components/Button";
-import { useScreenSize } from "../Hooks/useScreenSize";
 
 import Calendar from "../Components/Calendar";
 import ErrorMessage from "../Components/ErrorMessage";
@@ -17,18 +16,37 @@ const EventDetail = () => {
   const navigate = useNavigate();
   const [event, setEvent] = useState({});
   const [isErrorOpen, setIsErrorOpen] = useState(false);
-  const [error, setError] = useState(null);
+  // const [error, setError] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedImage, setSelectedImage] = useState("");
+  const [nearestDate, setNearestDate] = useState(null);
 
   useEffect(() => {
     const getEventById = async () => {
-      const event = await fetchEventById(id);
-      setEvent(event.data);
+      const response = await fetchEventById(id);
+      const eventData = response.data;
+
+      // Convertimos las fechas y buscamos la más cercana
+      if (eventData.dates) {
+        const now = new Date();
+        const closestDate = eventData.dates
+          .map((date) => new Date(date)) // Convertir a objetos Date
+          .filter((date) => date >= now) // Filtrar fechas futuras o actuales
+          .reduce(
+            (closest, current) =>
+              Math.abs(current - now) < Math.abs(closest - now)
+                ? current
+                : closest,
+            new Date(8640000000000000)
+          ); // Fecha más lejana inicial (máximo en JS)
+
+        setNearestDate(closestDate);
+      }
+
+      setEvent(eventData);
     };
 
     getEventById();
-
     window.scrollTo(0, 0);
   }, [id]);
   console.log(event);
@@ -62,16 +80,21 @@ const EventDetail = () => {
               <div className='flex lg:flex-col justify-between gap-4 flex-row  mb-2'>
                 <div className=''>
                   <h2 className=' text-2xl font-bold text-secondaryYellow md:text-3xl'>
-                    {event.name}
+                   {event.artist} | {event.name}
                   </h2>
                   <p className='text-2xl lg:mb-8 md:text-3xl'>
-                    {Array.isArray(event.dates) && event.dates.length > 0
-                      ? new Date(event.dates[0]).toLocaleDateString("es-ES", {
+                    {nearestDate ? (
+                      <div className='text-white'>
+                        {/* Fecha más cercana:{" "} */}
+                        {nearestDate.toLocaleDateString("es-ES", {
                           day: "2-digit",
                           month: "long",
                           year: "numeric",
-                        })
-                      : "Fecha no disponible"}
+                        })}{" "}
+                      </div>
+                    ) : (
+                      <p>No hay fechas disponibles próximamente</p>
+                    )}
                   </p>
                 </div>
 
@@ -118,7 +141,7 @@ const EventDetail = () => {
               </div>
             </div>
             <div className='flex gap-4 w-full justify-center items-center flex-col mb-4'>
-              <Calendar />
+              <Calendar dates={event.dates} />
               <div className='w-72'>
                 <Button
                   color='secondaryYellow'
@@ -151,7 +174,7 @@ const EventDetail = () => {
                     alt={`${event.name} image ${item.id}`}
                     className={`p-1 ${
                       event.gallery.length === 1
-                        ? "w-full"
+                        ? "w-full md:h-full h-32"
                         : event.gallery.length === 2
                         ? "w-full"
                         : event.gallery.length === 3

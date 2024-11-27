@@ -5,7 +5,9 @@ import axiosInstance from "../api/axiosInstance";
 import { fetchGenres } from "../api/genreApi";
 import { fetchCategories } from "../api/categoryApi";
 import { fetchFeatures } from "../api/featureApi";
+import close from "../assets/1-Iconos/close.png";
 import ErrorMessage from "../Components/ErrorMessage";
+import { fetchCities } from "../api/eventApi";
 
 const AddProduct = () => {
   const navigate = useNavigate();
@@ -15,8 +17,10 @@ const AddProduct = () => {
   const [errorMessage, setErrorMessage] = useState("");
   const [selectedImage, setSelectedImage] = useState("");
   const { state, dispatch } = useCharStates();
+
   const [formData, setFormData] = useState({
     name: "",
+    artist: "",
     genreName: "",
     genre: "",
     city: "",
@@ -30,10 +34,11 @@ const AddProduct = () => {
     features: [],
   });
 
-  console.log(formData);
+  // console.log(formData);
 
   const [genres, setGenres] = useState([]); // Estado para almacenar los géneros
   const [categories, setCategories] = useState([]);
+  const [cities, setCities] = useState([]);
   const [features, setFeatures] = useState([]);
   const [errors, setErrors] = useState({});
 
@@ -48,7 +53,6 @@ const AddProduct = () => {
     setIsModalOpen(false);
     setSelectedImage("");
   };
-  console.log();
 
   // const handleFeatureChange = (feature) => {
   //   setFormData((prev) => {
@@ -73,6 +77,19 @@ const AddProduct = () => {
   //     categoryName: selectedCategory?.name || "",
   //   }));
   // };
+
+  useEffect(() => {
+    const loadCities = async () => {
+      try {
+        const data = await fetchCities(); // Llama a la API de categorías
+        setCities(data.data);
+      } catch (error) {
+        console.error("Error al cargar categorías:", error);
+      }
+    };
+
+    loadCities();
+  }, []);
   useEffect(() => {
     const loadFeatures = async () => {
       try {
@@ -119,6 +136,7 @@ const AddProduct = () => {
           const productData = response.data;
           setFormData({
             name: productData.name || "",
+            artist: productData.artist || "",
             genreName: productData.genreName || "",
             genre: productData.genreId || "",
             category: productData.categoryId || "",
@@ -147,6 +165,7 @@ const AddProduct = () => {
       [name]: value,
     }));
   };
+  
 
   const handleGalleryChange = (e) => {
     const files = Array.from(e.target.files);
@@ -184,44 +203,60 @@ const AddProduct = () => {
     }
   };
   const validateFields = () => {
-    let isValid = true;
-  
+    const newErrors = {};
+
     if (!formData.name.trim()) {
-      alert("El nombre del evento es obligatorio.");
-      isValid = false;
+      newErrors.name = "El nombre del evento es obligatorio.";
+    } else if (formData.name.trim().length < 3) {
+      newErrors.name = "El nombre debe tener al menos 3 caracteres.";
     }
-  
-    if (!formData.city.trim()) {
-      alert("La ciudad es obligatoria.");
-      isValid = false;
+
+    if (!formData.artist.trim()) {
+      newErrors.artist = "El artista del evento es obligatorio.";
+    } else if (formData.artist.trim().length < 3) {
+      newErrors.artist = "El nombre del artista debe tener al menos 3 caracteres.";
+    }
+
+
+    if (!formData.city) {
+      newErrors.city = "La ciudad es obligatoria.";
     }
   
     if (!formData.site.trim()) {
-      alert("El sitio es obligatorio.");
-      isValid = false;
+      newErrors.site = "El sitio es obligatorio.";
     }
   
     if (!formData.genre) {
-      alert("El género es obligatorio.");
-      isValid = false;
+      newErrors.genre = "El género es obligatorio.";
     }
   
     if (!formData.category) {
-      alert("La categoría es obligatoria.");
-      isValid = false;
+      newErrors.category = "La categoría es obligatoria.";
+    }
+    if (!formData.features || formData.features.length === 0) {
+      newErrors.features = "Debes seleccionar al menos 1 característica.";
+    }
+
+    if (!formData.gallery || formData.gallery.length < 4) {
+      newErrors.gallery = "Debes seleccionar 4 imagenes.";
+    }
+    if (!formData.coverImageUrl) {
+      newErrors.coverImageUrl = "Es necesario una imagen de portada.";
+    }
+
+    if (!formData.policies || !formData.policies.trim()) {
+      newErrors.policies = "Las políticas del evento son obligatorias.";
     }
   
     if (!formData.description.trim()) {
-      alert("La descripción es obligatoria.");
-      isValid = false;
+      newErrors.description = "La descripción es obligatoria.";
     }
-  
-    if (!formData.policies.trim()) {
-      alert("Las políticas del evento son obligatorias.");
-      isValid = false;
+    if (!formData.dates.length) {
+      newErrors.dates = "Necesitas al menos 1 fecha seleccionada";
     }
-  
-    return isValid;
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
   };
   
   
@@ -234,12 +269,6 @@ const AddProduct = () => {
       console.log("Error: Faltan campos obligatorios"); // Mensaje para depuración
       return; // No continúes con el envío de datos
     }
-  
-    if (!formData.dates.length) {
-      alert("Por favor, agrega al menos una fecha antes de guardar.");
-      return;
-    }
-  
     // Crear FormData para enviar archivos e información JSON
     const dataToSend = new FormData();
   
@@ -250,14 +279,20 @@ const AddProduct = () => {
   
     // Agregar las imágenes de la galería
     formData.gallery.forEach((image) => {
-      if (image instanceof File) {
+      if (typeof image === "string") {
+        // Agregar las URLs existentes como un campo JSON en el FormData
+        return;
+      } else if (image instanceof File) {
+        // Agregar los nuevos archivos como un campo separado
         dataToSend.append("gallery", image);
       }
     });
-  
+    console.log(formData.gallery);
+
     // Crear el objeto de datos JSON
     const dto = {
       name: formData.name,
+      artist: formData.artist,
       city: formData.city,
       site: formData.site,
       genre: formData.genre,
@@ -276,7 +311,7 @@ const AddProduct = () => {
   
     // Debug: Ver contenido del FormData
     for (let pair of dataToSend.entries()) {
-      console.log(pair[0], pair[1]);
+      console.log(pair[0], pair[1], "aaaa");
     }
   
     try {
@@ -332,7 +367,10 @@ const AddProduct = () => {
           {id ? "Editar Producto" : "Nuevo Producto"}
         </h2>
         <form onSubmit={handleSubmit}>
-        <div className='mb-6'>
+        
+
+          <div className='grid grid-cols-1 lg:grid-cols-2 gap-6'>
+          <div className='mb-6'>
             <label htmlFor='name' className='block text-gray-400 mb-2'>
               Nombre del Producto
             </label>
@@ -342,30 +380,85 @@ const AddProduct = () => {
               name='name'
               value={formData.name}
               onChange={handleInputChange}
-              className={`w-full px-4 py-3 rounded-xl ${
-                errors.name
-                  ? "bg-gray-700 text-white border-red-500"
-                  : "bg-gray-700 text-white border-gray-600"
-              } focus:outline-none`}
-              required
+              className={`w-full px-4 py-3 rounded-xl bg-gray-700 focus:outline-none`}
             />
-            {errors.name && <p className='text-red-500 text-sm'>{errors.name}</p>}
+            {errors.name && (
+              <div
+                className='flex items-center p-1 px-2 gap-2 rounded-lg mt-2'
+                style={{
+                  backgroundColor: "rgba(242, 161, 161, 0.14)",
+                  border: "2px solid rgba(223, 22, 22, 0.39)",
+                }}
+              >
+                <img src={close} className='w-5 h-5' alt='' />
+                <p className='text-[#DABEBE] text-sm '>{errors.name}</p>
+              </div>
+            )}
           </div>
-
-          <div className='grid grid-cols-1 lg:grid-cols-2 gap-6'>
+          <div className='mb-6'>
+              <label htmlFor='artist' className='block text-gray-400 mb-2'>
+                artista
+              </label>
+              <input
+                type='text'
+                id='artist'
+                name='artist'
+                value={formData.artist}
+                onChange={handleInputChange}
+                className='w-full px-4 py-3 rounded-xl bg-gray-700 text-white border border-gray-600 focus:outline-none focus:border-yellow-500'
+              />
+              {errors.artist && (
+                <div
+                  className='flex items-center p-1 px-2 gap-2 rounded-lg mt-2'
+                  style={{
+                    backgroundColor: "rgba(242, 161, 161, 0.14)",
+                    border: "2px solid rgba(223, 22, 22, 0.39)",
+                  }}
+                >
+                  <img src={close} className='w-5 h-5' alt='' />
+                  <p className='text-[#DABEBE] text-sm '>{errors.artist}</p>
+                </div>
+              )}
+            </div>
             <div className='mb-6'>
               <label htmlFor='city' className='block text-gray-400 mb-2'>
                 Ciudad
               </label>
-              <input
-                type='text'
+              <select
                 id='city'
                 name='city'
                 value={formData.city}
-                onChange={handleInputChange}
+                onChange={(e) =>
+                  setFormData((prev) => ({
+                    ...prev,
+                    city: e.target.value,
+                  }))
+                }
                 className='w-full px-4 py-3 rounded-xl bg-gray-700 text-white border border-gray-600 focus:outline-none focus:border-yellow-500'
-              />
+              >
+                <option value=''>Selecciona una ciudad</option>
+                {Array.isArray(cities) &&
+                  cities.map((city, index) => (
+                    <option key={index} value={city}>
+                      {city}
+                    </option>
+                  ))}
+              </select>
+
+              {errors.city && (
+                <div
+                  className='flex items-center p-1 px-2 gap-2 rounded-lg mt-2'
+                  style={{
+                    backgroundColor: "rgba(242, 161, 161, 0.14)",
+                    border: "2px solid rgba(223, 22, 22, 0.39)",
+                  }}
+                >
+                  <img src={close} className='w-5 h-5' alt='' />
+                  <p className='text-[#DABEBE] text-sm '>{errors.city}</p>
+                </div>
+              )}
             </div>
+
             {/* Dropdown para géneros */}
             <div className='mb-6'>
               <label htmlFor='genreName' className='block text-gray-400 mb-2'>
@@ -394,6 +487,18 @@ const AddProduct = () => {
                   </option>
                 ))}
               </select>
+              {errors.genre && (
+                <div
+                  className='flex items-center p-1 px-2 gap-2 rounded-lg mt-2'
+                  style={{
+                    backgroundColor: "rgba(242, 161, 161, 0.14)",
+                    border: "2px solid rgba(223, 22, 22, 0.39)",
+                  }}
+                >
+                  <img src={close} className='w-5 h-5' alt='' />
+                  <p className='text-[#DABEBE] text-sm '>{errors.genre}</p>
+                </div>
+              )}
             </div>
             <div className='mb-6'>
               <label htmlFor='site' className='block text-gray-400 mb-2'>
@@ -407,6 +512,18 @@ const AddProduct = () => {
                 onChange={handleInputChange}
                 className='w-full px-4 py-3 rounded-xl bg-gray-700 text-white border border-gray-600 focus:outline-none focus:border-yellow-500'
               />
+              {errors.site && (
+                <div
+                  className='flex items-center p-1 px-2 gap-2 rounded-lg mt-2'
+                  style={{
+                    backgroundColor: "rgba(242, 161, 161, 0.14)",
+                    border: "2px solid rgba(223, 22, 22, 0.39)",
+                  }}
+                >
+                  <img src={close} className='w-5 h-5' alt='' />
+                  <p className='text-[#DABEBE] text-sm '>{errors.site}</p>
+                </div>
+              )}
             </div>
             {/* Dropdown para categorias */}
             <div>
@@ -438,6 +555,18 @@ const AddProduct = () => {
                   </option>
                 ))}
               </select>
+              {errors.category && (
+                <div
+                  className='flex items-center p-1 px-2 gap-2 rounded-lg mt-2'
+                  style={{
+                    backgroundColor: "rgba(242, 161, 161, 0.14)",
+                    border: "2px solid rgba(223, 22, 22, 0.39)",
+                  }}
+                >
+                  <img src={close} className='w-5 h-5' alt='' />
+                  <p className='text-[#DABEBE] text-sm '>{errors.category}</p>
+                </div>
+              )}
             </div>
 
             <div className='mb-6'>
@@ -465,7 +594,18 @@ const AddProduct = () => {
                   Agregar
                 </button>
               </div>
-              {errors.dates && <p className='text-red-500 text-sm'>{errors.dates}</p>}
+              {errors.dates && (
+                <div
+                  className='flex items-center p-1 px-2 gap-2 rounded-lg mt-2'
+                  style={{
+                    backgroundColor: "rgba(242, 161, 161, 0.14)",
+                    border: "2px solid rgba(223, 22, 22, 0.39)",
+                  }}
+                >
+                  <img src={close} className='w-5 h-5' alt='' />
+                  <p className='text-[#DABEBE] text-sm '>{errors.dates}</p>
+                </div>
+              )}
             </div>
             <div className='mb-6'>
               <h3 className='text-lg font-bold text-gray-300 mb-2'>
@@ -502,8 +642,19 @@ const AddProduct = () => {
               onChange={handleInputChange}
               className='w-full px-4 py-3 rounded-xl bg-gray-700 text-white border border-gray-600 focus:outline-none focus:border-yellow-500'
               rows='4'
-              required
             ></textarea>
+            {errors.description && (
+              <div
+                className='flex items-center p-1 px-2 gap-2 rounded-lg mt-2'
+                style={{
+                  backgroundColor: "rgba(242, 161, 161, 0.14)",
+                  border: "2px solid rgba(223, 22, 22, 0.39)",
+                }}
+              >
+                <img src={close} className='w-5 h-5' alt='' />
+                <p className='text-[#DABEBE] text-sm '>{errors.description}</p>
+              </div>
+            )}
           </div>
           {/* Características */}
           <fieldset className='mb-6'>
@@ -537,6 +688,18 @@ const AddProduct = () => {
                   <span className='text-gray-300'>{feature.title}</span>
                 </label>
               ))}
+              {errors.features && (
+                <div
+                  className='flex items-center p-1 px-2 gap-2 rounded-lg mt-2'
+                  style={{
+                    backgroundColor: "rgba(242, 161, 161, 0.14)",
+                    border: "2px solid rgba(223, 22, 22, 0.39)",
+                  }}
+                >
+                  <img src={close} className='w-5 h-5' alt='' />
+                  <p className='text-[#DABEBE] text-sm '>{errors.features}</p>
+                </div>
+              )}
             </div>
           </fieldset>
 
@@ -599,6 +762,20 @@ const AddProduct = () => {
                 )}
               </div>
             )}
+            {errors.coverImageUrl && (
+              <div
+                className='flex items-center p-1 px-2 gap-2 rounded-lg mt-2'
+                style={{
+                  backgroundColor: "rgba(242, 161, 161, 0.14)",
+                  border: "2px solid rgba(223, 22, 22, 0.39)",
+                }}
+              >
+                <img src={close} className='w-5 h-5' alt='' />
+                <p className='text-[#DABEBE] text-sm '>
+                  {errors.coverImageUrl}
+                </p>
+              </div>
+            )}
           </div>
 
           {/* Galería de imágenes */}
@@ -652,6 +829,18 @@ const AddProduct = () => {
                 </ul>
               </div>
             )} */}
+            {errors.gallery && (
+              <div
+                className='flex items-center p-1 px-2 gap-2 rounded-lg mt-2'
+                style={{
+                  backgroundColor: "rgba(242, 161, 161, 0.14)",
+                  border: "2px solid rgba(223, 22, 22, 0.39)",
+                }}
+              >
+                <img src={close} className='w-5 h-5' alt='' />
+                <p className='text-[#DABEBE] text-sm '>{errors.gallery}</p>
+              </div>
+            )}
           </div>
 
           {/* Event Policies */}
@@ -666,8 +855,19 @@ const AddProduct = () => {
               onChange={handleInputChange}
               className='w-full px-4 py-3 rounded-xl bg-gray-700 text-white border border-gray-600 focus:outline-none focus:border-yellow-500'
               rows='4'
-              required
             ></textarea>
+            {errors.policies && (
+              <div
+                className='flex items-center p-1 px-2 gap-2 rounded-lg mt-2'
+                style={{
+                  backgroundColor: "rgba(242, 161, 161, 0.14)",
+                  border: "2px solid rgba(223, 22, 22, 0.39)",
+                }}
+              >
+                <img src={close} className='w-5 h-5' alt='' />
+                <p className='text-[#DABEBE] text-sm '>{errors.policies}</p>
+              </div>
+            )}
           </div>
           <div className='flex justify-end gap-4'>
             <button
@@ -679,7 +879,7 @@ const AddProduct = () => {
             </button>
             <button
               type='submit'
-              onClick={() => setIsErrorOpen(true)}
+              // onClick={() => setIsErrorOpen(true)}
               className='px-6 py-3 bg-yellow-500 text-white rounded-xl hover:bg-yellow-400 transition'
             >
               Guardar
@@ -688,13 +888,13 @@ const AddProduct = () => {
         </form>
       </div>
       {isErrorOpen && (
-          <ErrorMessage
-            title="Lo sentimos :("
-            description={errorMessage} // Usa el mensaje dinámico
-            buttonText="Volver al inicio"
-            onClose={() => setIsErrorOpen(false)}
-          />
-        )}
+        <ErrorMessage
+          title='Lo sentimos :('
+          description={errorMessage} // Usa el mensaje dinámico
+          buttonText='Volver atrás'
+          onClose={() => setIsErrorOpen(false)}
+        />
+      )}
 
       {isModalOpen && (
         <div className='fixed inset-0 bg-black bg-opacity-75 flex justify-center items-center z-50'>
