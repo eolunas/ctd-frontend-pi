@@ -40,41 +40,41 @@
 #       - name: Deploy to GitHub Pages
 #         id: deployment
 #         uses: actions/deploy-pages@v1
-name: Deploy to Netlify
+# name: Deploy to Netlify
 
-on:
-  push:
-    branches: [main] # Ajusta la rama según tu flujo de trabajo
+# on:
+#   push:
+#     branches: [main] # Ajusta la rama según tu flujo de trabajo
 
-  workflow_dispatch:
+#   workflow_dispatch:
 
-permissions:
-  contents: read
+# permissions:
+#   contents: read
 
-jobs:
-  build:
-    runs-on: ubuntu-latest
+# jobs:
+#   build:
+#     runs-on: ubuntu-latest
 
-    steps:
-      - name: Checkout your repository using git
-        uses: actions/checkout@v3
+#     steps:
+#       - name: Checkout your repository using git
+#         uses: actions/checkout@v3
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: '18' # Cambia a la versión que necesites
+#       - name: Setup Node.js
+#         uses: actions/setup-node@v3
+#         with:
+#           node-version: '18' # Cambia a la versión que necesites
 
-      - name: Install dependencies
-        run: npm install # Cambia a `yarn install` o `pnpm install` si usas otro gestor
+#       - name: Install dependencies
+#         run: npm install # Cambia a `yarn install` o `pnpm install` si usas otro gestor
 
-      - name: Build project
-        run: npm run build # Cambia el comando si usas otro para construir tu proyecto
+#       - name: Build project
+#         run: npm run build # Cambia el comando si usas otro para construir tu proyecto
 
-      - name: Deploy to Netlify
-        uses: nwtgck/actions-netlify@v1.2.3
-        with:
-          publish-dir: ./dist # Cambia a la carpeta donde tu proyecto genera los archivos para despliegue
-          production-deploy: true
-        env:
-          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
-          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+#       - name: Deploy to Netlify
+#         uses: nwtgck/actions-netlify@v1.2.3
+#         with:
+#           publish-dir: ./dist # Cambia a la carpeta donde tu proyecto genera los archivos para despliegue
+#           production-deploy: true
+#         env:
+#           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+#           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
