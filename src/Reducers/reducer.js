@@ -3,6 +3,8 @@ export const reducer = (state, action) => {
         case 'SET_DATA':
             const { genres, cities,  events, topCategories } = action.payload;
             return { ...state, genres, list: events, cities, topCategories };
+        case 'SET_DATAFILTERED':
+            return { ...state, filteredList: action.payload };
         case 'GET_CHARS':
             return { ...state, list: action.payload };
         case 'GET_TOPCAT':
