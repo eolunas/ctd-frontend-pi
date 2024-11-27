@@ -20,6 +20,7 @@ const AddProduct = () => {
 
   const [formData, setFormData] = useState({
     name: "",
+    artist: "",
     genreName: "",
     genre: "",
     city: "",
@@ -40,6 +41,8 @@ const AddProduct = () => {
   const [cities, setCities] = useState([]);
   const [features, setFeatures] = useState([]);
   const [errors, setErrors] = useState({});
+
+  
 
   const openModal = (imageUrl) => {
     setSelectedImage(imageUrl);
@@ -133,6 +136,7 @@ const AddProduct = () => {
           const productData = response.data;
           setFormData({
             name: productData.name || "",
+            artist: productData.artist || "",
             genreName: productData.genreName || "",
             genre: productData.genreId || "",
             category: productData.categoryId || "",
@@ -161,6 +165,7 @@ const AddProduct = () => {
       [name]: value,
     }));
   };
+  
 
   const handleGalleryChange = (e) => {
     const files = Array.from(e.target.files);
@@ -206,18 +211,25 @@ const AddProduct = () => {
       newErrors.name = "El nombre debe tener al menos 3 caracteres.";
     }
 
+    if (!formData.artist.trim()) {
+      newErrors.artist = "El artista del evento es obligatorio.";
+    } else if (formData.artist.trim().length < 3) {
+      newErrors.artist = "El nombre del artista debe tener al menos 3 caracteres.";
+    }
+
+
     if (!formData.city) {
       newErrors.city = "La ciudad es obligatoria.";
     }
-
+  
     if (!formData.site.trim()) {
       newErrors.site = "El sitio es obligatorio.";
     }
-
+  
     if (!formData.genre) {
       newErrors.genre = "El género es obligatorio.";
     }
-
+  
     if (!formData.category) {
       newErrors.category = "La categoría es obligatoria.";
     }
@@ -235,7 +247,7 @@ const AddProduct = () => {
     if (!formData.policies || !formData.policies.trim()) {
       newErrors.policies = "Las políticas del evento son obligatorias.";
     }
-
+  
     if (!formData.description.trim()) {
       newErrors.description = "La descripción es obligatoria.";
     }
@@ -246,25 +258,25 @@ const AddProduct = () => {
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
-
+  
+  
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+  
     // Validar los campos antes de continuar
     if (!validateFields()) {
       // Aquí puedes manejar los errores de validación en el cliente
       console.log("Error: Faltan campos obligatorios"); // Mensaje para depuración
       return; // No continúes con el envío de datos
     }
-
     // Crear FormData para enviar archivos e información JSON
     const dataToSend = new FormData();
-
+  
     // Agregar la imagen de portada
     if (formData.coverImageUrl instanceof File) {
       dataToSend.append("cover", formData.coverImageUrl);
     }
-
+  
     // Agregar las imágenes de la galería
     formData.gallery.forEach((image) => {
       if (typeof image === "string") {
@@ -280,6 +292,7 @@ const AddProduct = () => {
     // Crear el objeto de datos JSON
     const dto = {
       name: formData.name,
+      artist: formData.artist,
       city: formData.city,
       site: formData.site,
       genre: formData.genre,
@@ -289,34 +302,34 @@ const AddProduct = () => {
       policies: formData.policies,
       dates: formData.dates.map((date) => date.replace("T", " ")),
     };
-
+  
     // Serializar el objeto JSON y agregarlo al FormData
     dataToSend.append(
       "dto",
       new Blob([JSON.stringify(dto)], { type: "application/json" })
     );
-
+  
     // Debug: Ver contenido del FormData
     for (let pair of dataToSend.entries()) {
       console.log(pair[0], pair[1], "aaaa");
     }
-
+  
     try {
       const response = id
         ? await axiosInstance.put(`/event/${id}`, dataToSend)
         : await axiosInstance.post("/event", dataToSend);
-
+  
       console.log("Producto guardado:", response.data);
-
+  
       dispatch({
         type: id ? "EDIT_PRODUCT" : "ADD_PRODUCT",
         payload: response.data,
       });
-
+  
       navigate("/admin/products");
     } catch (error) {
       console.error("Error al guardar el producto:", error);
-
+  
       // Manejar errores del servidor (por ejemplo, nombre duplicado)
       if (error.response && error.response.status === 409) {
         setErrorMessage(
@@ -331,6 +344,8 @@ const AddProduct = () => {
       }
     }
   };
+  
+  
 
   const handleRemoveDate = (index) => {
     setFormData((prev) => ({
@@ -352,6 +367,9 @@ const AddProduct = () => {
           {id ? "Editar Producto" : "Nuevo Producto"}
         </h2>
         <form onSubmit={handleSubmit}>
+        
+
+          <div className='grid grid-cols-1 lg:grid-cols-2 gap-6'>
           <div className='mb-6'>
             <label htmlFor='name' className='block text-gray-400 mb-2'>
               Nombre del Producto
@@ -377,8 +395,31 @@ const AddProduct = () => {
               </div>
             )}
           </div>
-
-          <div className='grid grid-cols-1 lg:grid-cols-2 gap-6'>
+          <div className='mb-6'>
+              <label htmlFor='artist' className='block text-gray-400 mb-2'>
+                artista
+              </label>
+              <input
+                type='text'
+                id='artist'
+                name='artist'
+                value={formData.artist}
+                onChange={handleInputChange}
+                className='w-full px-4 py-3 rounded-xl bg-gray-700 text-white border border-gray-600 focus:outline-none focus:border-yellow-500'
+              />
+              {errors.artist && (
+                <div
+                  className='flex items-center p-1 px-2 gap-2 rounded-lg mt-2'
+                  style={{
+                    backgroundColor: "rgba(242, 161, 161, 0.14)",
+                    border: "2px solid rgba(223, 22, 22, 0.39)",
+                  }}
+                >
+                  <img src={close} className='w-5 h-5' alt='' />
+                  <p className='text-[#DABEBE] text-sm '>{errors.artist}</p>
+                </div>
+              )}
+            </div>
             <div className='mb-6'>
               <label htmlFor='city' className='block text-gray-400 mb-2'>
                 Ciudad
@@ -529,10 +570,7 @@ const AddProduct = () => {
             </div>
 
             <div className='mb-6'>
-              <label
-                htmlFor='eventDateTime'
-                className='block text-gray-400 mb-2'
-              >
+              <label htmlFor='eventDateTime' className='block text-gray-400 mb-2'>
                 Fecha y Hora del Evento
               </label>
               <div className='flex gap-4'>

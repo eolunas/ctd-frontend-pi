@@ -80,7 +80,7 @@ const EventDetail = () => {
               <div className='flex lg:flex-col justify-between gap-4 flex-row  mb-2'>
                 <div className=''>
                   <h2 className=' text-2xl font-bold text-secondaryYellow md:text-3xl'>
-                    {event.name}
+                   {event.artist} | {event.name}
                   </h2>
                   <p className='text-2xl lg:mb-8 md:text-3xl'>
                     {nearestDate ? (

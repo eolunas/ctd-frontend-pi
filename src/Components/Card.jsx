@@ -6,6 +6,7 @@ import FavIconFilled from "../assets/1-Iconos/Home/favorite-filled.svg";
 import PlaceIcon from "../assets/1-Iconos/Home/place.svg";
 import GenreIcon from "../assets/1-Iconos/Home/genre.svg";
 
+
 // eslint-disable-next-line react/prop-types
 const Card = ({ event }) => {
   const screenSize = useScreenSize();
@@ -24,7 +25,8 @@ const Card = ({ event }) => {
     dispatch({
       type: stored ? "REMOVE_FAVS" : "ADD_FAVS",
       payload: { id },
-    });
+    }); 
+    console.log(event);
 
   return (
     <div key={event.id} className="z-10 overflow-hidden">
@@ -55,7 +57,7 @@ const Card = ({ event }) => {
       <div className="my-5 flex flex-col gap-4 lg:mx-5">
         <div className="flex w-full justify-between">
           <h3 className="text-white font-semibold text-2xl">
-            {event.name || "Nombre no disponible"} {/* Validación para el nombre */}
+           {event.artist} | {event.name || "Nombre no disponible"} {/* Validación para el nombre */}
           </h3>
           <div className="basis-[15%] flex justify-end m-2">
             <a
