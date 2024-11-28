@@ -19,7 +19,7 @@ const InputCustom = ({ name, value, functionChange, data }) => {
           value={value || ""}
           onChange={functionChange}
           onFocus={() => setIsFocused(true)}
-          onBlur={() => setTimeout(() => setIsFocused(false), 100)}
+          onBlur={() => setTimeout(() => setIsFocused(false), 150)}
           type='text'
           className={`bg-white border border-gray-300 shadow-md text-gray-900 text-sm rounded-md w-full p-2.5 h-[38px]`}
           placeholder='Artista o evento'
@@ -57,7 +57,7 @@ const InputCustom = ({ name, value, functionChange, data }) => {
               .map((item, index) => (
                 <div
                   key={`${index}${item}`}
-                  className='flex text-black cursor-pointer m-1'
+                  className='flex text-black cursor-pointer m-1 py-1'
                   onClick={() => setSearchValue(item)}
                 >
                   {item}
