@@ -6,6 +6,7 @@ const Categories = () => {
   const { state } = useCharStates();
   return (
     <>
+    {console.log(state.topCategories)}
       {state.topCategories.length > 0 ? (
         <div className="relative m-6 md:m-10">
           <div className="absolute top-1/2  w-full aspect-square bg-blur-cover bg-cover bg-center z-0 transform -translate-y-1/2"></div>
