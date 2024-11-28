@@ -1,5 +1,5 @@
 // src/Routes/ProductList.jsx
-
+import { useNavigate } from 'react-router-dom';
 import { Link } from "react-router-dom";
 import { useCharStates } from "../Context";
 // Importa las imágenes de los iconos locales
@@ -8,22 +8,32 @@ import deleteIcon from "../assets/Admin/material-symbols_delete-outline.svg";
 import viewIcon from "../assets/Admin/lucide_eye.svg";
 import plusIcon from "../assets/Admin/add-fav-button.svg";
 
+const NavigateDiv = () => {
+  const navigate = useNavigate();
+
+  const handleClick = () => {
+    navigate('/admin/products/new');
+  };
+
+  return (
+    <div
+      onClick={handleClick}
+      className="h-10 flex justify-center items-center md:px-6 px-1.5 text-sm md:text-md py-1.5 rounded-full cursor-pointer text-center transition duration-200 ease-in-out bg-secondaryYellow text-white hover:bg-opacity-90"
+    >
+      <img src={plusIcon} alt="Agregar" className="w-5 h-5 mr-2" /> Agregar
+    </div>
+  );
+};
+
 const ProductList = () => {
   const { state } = useCharStates();
-  console.log(state.list);
-
   const products = state.list;
 
   return (
     <div className='p-8 bg-black text-white flex flex-col w-full'>
       <div className='flex justify-between items-center mb-4'>
         <h2 className='text-2xl font-bold text-cyan-500'>Lista de productos</h2>
-        <Link
-          to="/admin/products/new"
-          className="flex items-center bg-yellow-500 text-white font-semibold px-4 py-2 rounded-full hover:bg-yellow-400 transition"
-        >
-          <img src={plusIcon} alt="Agregar" className="w-5 h-5 mr-2" /> Agregar
-        </Link>
+        <NavigateDiv /> {/* Usamos el componente para el botón de navegación */}
       </div>
       <div className='overflow-x-auto'>
         <table className='min-w-full bg-gray-800 rounded-lg overflow-hidden border border-gray-700'>
