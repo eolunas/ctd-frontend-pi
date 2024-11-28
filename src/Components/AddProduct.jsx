@@ -362,7 +362,7 @@ const AddProduct = () => {
       >
         ✕
       </button>
-      <div className='bg-gray-800 p-6 rounded-2xl shadow-lg w-full max-w-4xl'>
+      <div className=' p-6 rounded-2xl shadow-lg w-full max-w-4xl'>
         <h2 className='text-3xl font-bold text-yellow-500 mb-6 text-center'>
           {id ? "Editar Producto" : "Nuevo Producto"}
         </h2>
@@ -397,7 +397,7 @@ const AddProduct = () => {
           </div>
           <div className='mb-6'>
               <label htmlFor='artist' className='block text-gray-400 mb-2'>
-                artista
+                Artista
               </label>
               <input
                 type='text'
