@@ -64,7 +64,7 @@ const EventDetail = () => {
   return (
     <>
       {event && (
-        <div className='text-white lg:w-[1200px] px-4'>
+        <div className='text-white xl:w-[1200px] px-4'>
           {/* Botón de regresar a Home */}
           <div
             onClick={() => navigate(-1)}
@@ -152,7 +152,6 @@ const EventDetail = () => {
               </div>
             </div>
           </div>
-          {/* Galería de imágenes */}
           {/* Galería de imágenes */}
           {event?.coverImageUrl && (
             <div className='flex flex-col md:flex-row gap-1 mb-16'>
