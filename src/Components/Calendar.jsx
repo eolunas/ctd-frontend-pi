@@ -34,7 +34,11 @@ const Calendar = ({ dates }) => {
   //   "2025-02": [5, 9],
   // };
 
-  const fullDates = {};
+  const fullDates = {
+    "2024-12": [22, 9, 10],
+    "2025-01": [1, 16, 17],
+    "2025-02": [20, 21],
+  };
 
   // Generar la lista de meses entre el actual y los próximos 12 meses
   const monthsList = Array.from({ length: 12 }, (_, i) =>
