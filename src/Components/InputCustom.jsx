@@ -19,7 +19,7 @@ const InputCustom = ({ name, value, functionChange, data }) => {
           value={value || ""}
           onChange={functionChange}
           onFocus={() => setIsFocused(true)}
-          onBlur={() => setTimeout(() => setIsFocused(false), 150)}
+          onBlur={() => setTimeout(() => setIsFocused(false), 300)}
           type='text'
           className={`bg-white border border-gray-300 shadow-md text-gray-900 text-sm rounded-md w-full p-2.5 h-[38px]`}
           placeholder='Artista o evento'
