@@ -60,11 +60,14 @@ const EventDetail = () => {
     setIsModalOpen(false);
     setSelectedImage("");
   };
+  const handleNavigate = () => {
+    navigate("/booking", { state: { event } });
+  };
 
   return (
     <>
       {event && (
-        <div className='text-white xl:w-[1200px] px-4'>
+        <div className='text-white '>
           {/* Botón de regresar a Home */}
           <div
             onClick={() => navigate(-1)}
@@ -143,10 +146,7 @@ const EventDetail = () => {
             <div className='flex gap-4 w-full justify-center items-center flex-col mb-4'>
               <Calendar dates={event.dates} />
               <div className='w-72'>
-                <Button
-                  color='secondaryYellow'
-                  onClick={() => setIsErrorOpen(true)}
-                >
+                <Button color='secondaryYellow' onClick={handleNavigate}>
                   Reservar
                 </Button>
               </div>
