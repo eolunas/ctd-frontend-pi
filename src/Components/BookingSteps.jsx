@@ -60,7 +60,7 @@ export const BookingSteps = () => {
           }`}
         >
           <div className='flex  gap-2 items-center justify-center text-center'>
-            <i className={`${icons[step]} text-2xl md:text-xl `} />
+            <i className={`${icons[step]} sm:text-2xl md:text-xl `} />
             <p className='text-sm lg:text-base font-bold hidden md:block'>
               {sections[index]}
             </p>

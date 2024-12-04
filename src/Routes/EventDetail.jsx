@@ -1,7 +1,7 @@
 // src/Routes/EventDetail.jsx
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { fetchEventById } from "../api/eventApi";
+import { fetchEventById, fetchDatesByEventId } from "../api/eventApi";
 import PlaceIcon from "../assets/1-Iconos/DetalleProducto/place.svg";
 import GenreIcon from "../assets/1-Iconos/DetalleProducto/genre.svg";
 import LocationIcon from "../assets/1-Iconos/DetalleProducto/city.svg";
@@ -10,9 +10,12 @@ import Button from "../Components/Button";
 
 import Calendar from "../Components/Calendar";
 import ErrorMessage from "../Components/ErrorMessage";
+import { useCharStates } from "../Context";
 
 const EventDetail = () => {
   const { id } = useParams();
+  const { state } = useCharStates();
+
   const navigate = useNavigate();
   const [event, setEvent] = useState({});
   const [isErrorOpen, setIsErrorOpen] = useState(false);
@@ -20,36 +23,47 @@ const EventDetail = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedImage, setSelectedImage] = useState("");
   const [nearestDate, setNearestDate] = useState(null);
+  const [dates, setDates] = useState(null);
+  const [selectedDate, setSelectedDate] = useState(null);
+  const handleDateSelect = (date) => {
+    console.log("Fecha seleccionada:", date);
+    setSelectedDate(date);
+  };
 
   useEffect(() => {
     const getEventById = async () => {
-      const response = await fetchEventById(id);
-      const eventData = response.data;
+      try {
+        const response = await fetchEventById(id);
+        const eventData = response.data;
+        const dates = await fetchDatesByEventId(id);
+        const dateData = dates.data;
 
-      // Convertimos las fechas y buscamos la más cercana
-      if (eventData.dates) {
-        const now = new Date();
-        const closestDate = eventData.dates
-          .map((date) => new Date(date)) // Convertir a objetos Date
-          .filter((date) => date >= now) // Filtrar fechas futuras o actuales
-          .reduce(
-            (closest, current) =>
-              Math.abs(current - now) < Math.abs(closest - now)
-                ? current
-                : closest,
-            new Date(8640000000000000)
-          ); // Fecha más lejana inicial (máximo en JS)
+        setDates(dateData);
+        setEvent(eventData);
 
-        setNearestDate(closestDate);
+        if (eventData.dates) {
+          const now = new Date();
+          const closestDate = eventData.dates
+            .map((date) => new Date(date))
+            .filter((date) => date >= now)
+            .reduce(
+              (closest, current) =>
+                Math.abs(current - now) < Math.abs(closest - now)
+                  ? current
+                  : closest,
+              new Date(8640000000000000)
+            );
+          setNearestDate(closestDate);
+        }
+      } catch (error) {
+        console.error(error);
+        setIsErrorOpen(true);
       }
-
-      setEvent(eventData);
     };
 
     getEventById();
     window.scrollTo(0, 0);
   }, [id]);
-  console.log(event);
 
   const openModal = (imageUrl) => {
     setSelectedImage(imageUrl);
@@ -61,7 +75,11 @@ const EventDetail = () => {
     setSelectedImage("");
   };
   const handleNavigate = () => {
-    navigate("/booking", { state: { event } });
+    if (state.user?.role && selectedDate) {
+      navigate("/booking", { state: { event, selectedDate, dates } });
+    } else {
+      alert("error");
+    }
   };
 
   return (
@@ -144,11 +162,12 @@ const EventDetail = () => {
               </div>
             </div>
             <div className='flex gap-4 w-full justify-center items-center flex-col mb-4'>
-              <Calendar dates={event.dates} />
-              <div className='w-72'>
-                <Button color='secondaryYellow' onClick={handleNavigate}>
-                  Reservar
-                </Button>
+              <Calendar dates={dates} onDateSelect={handleDateSelect} />
+              <div
+                className='h-10 w-1/2  bg-secondaryYellow flex justify-center items-center md:px-6 px-1.5 text-sm md:text-md py-1.5 rounded-full cursor-pointer text-center transition duration-200 ease-in-out'
+                onClick={handleNavigate}
+              >
+                Reservar
               </div>
             </div>
           </div>

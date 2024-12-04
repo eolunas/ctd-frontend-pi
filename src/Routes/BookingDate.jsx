@@ -1,23 +1,44 @@
 import { useLocation, useNavigate } from "react-router-dom";
 import GenreIcon from "../assets/1-Iconos/DetalleProducto/genre.svg";
 import PlaceIcon from "../assets/1-Iconos/DetalleProducto/place.svg";
+import dayjs from "dayjs";
+import "dayjs/locale/es";
+import Calendar from "../Components/Calendar";
+import { useState } from "react";
 
 function BookingDate() {
   const location = useLocation();
-  const { event } = location.state || {}; // Asegúrate de manejar el caso donde no haya estado
+  const { event, selectedDate, dates } = location.state || {}; // Manejo del estado
   const navigate = useNavigate();
+
+  const [showCalendar, setShowCalendar] = useState(false); // Estado para la visibilidad del calendario
+  const [selectedDates, setSelectedDates] = useState(selectedDate);
+  const handleDateSelect = (date) => {
+    console.log("Fecha seleccionada:", date);
+    setSelectedDates(date);
+  };
   const handleNavigate = () => {
     navigate("/booking/summary", { state: { event } });
   };
 
+  const handleDateChange = () => {
+    setShowCalendar((prev) => !prev); // Alterna la visibilidad del calendario
+  };
+
+  const formatSelectedDate = (date) => {
+    if (!date) return "";
+    const fullDate = dayjs(`${date.month}-${date.day}`).locale("es");
+    return fullDate.format("D [de] MMMM [de] YYYY"); // Formato: 22 de enero de 2025
+  };
+
   return (
-    <div className='bg-[#212121] text-white p-6 max-w-4xl mx-auto rounded-md shadow-lg flex gap-6'>
+    <div className='bg-[#212121] text-white p-6 w-full mx-auto rounded-md shadow-lg flex gap-6'>
       {/* Tarjeta del Evento */}
-      <div className='w-1/2   '>
+      <div className='w-1/2'>
         <img
-          src={event.coverImageUrl} // Cambia esto por tu URL de imagen
+          src={event.coverImageUrl}
           alt='Event Poster'
-          className='w-full h-52 object-cover rounded-xl '
+          className='w-full h-60 object-cover rounded-xl'
         />
         <div className='p-4'>
           <h2 className='text-xl font-semibold'>{event.name}</h2>
@@ -34,33 +55,42 @@ function BookingDate() {
       </div>
 
       {/* Información de la Reserva */}
-      <div className='w-1/2 flex flex-col justify-between '>
+      <div className='w-1/2 flex flex-col justify-between'>
         <div>
           <h3 className='text-yellow-400 text-lg font-semibold'>
             Fecha seleccionada
           </h3>
-          <p className='text-xl font-medium mt-2'>{event.date}</p>
+          <p className='text-xl font-medium mt-2'>
+            {formatSelectedDate(selectedDates)}
+          </p>
           <button
             className='text-blue-400 underline mt-2'
-            // onClick={handleDateChange}
+            onClick={handleDateChange} // Maneja la visibilidad del calendario
           >
             Cambiar fecha
           </button>
 
+          {showCalendar && ( // Renderiza el calendario si `showCalendar` es true
+            <div className='mt-4 bg-[#212121] absolute border rounded-3xl'>
+              <Calendar
+                dates={dates}
+                notDouble
+                onDateSelect={handleDateSelect}
+              />
+              <div className='flex mb-4 mx-2 gap-2'>
+                <div
+                  onClick={() => setShowCalendar(false)}
+                  className='border-primaryBlue flex justify-center items-center py-1 border rounded-full text-white w-full cursor-pointer'
+                >
+                  Cancelar
+                </div>
+              </div>
+            </div>
+          )}
+
           <h3 className='text-yellow-400 text-lg font-semibold mt-6'>
             Selecciona el número de boletos
           </h3>
-          {/* <select
-            value={ticketCount}
-            onChange={handleTicketChange}
-            className='mt-2 block w-16 p-2 bg-gray-800 border border-gray-600 rounded-md text-white text-center'
-          >
-            {[...Array(10).keys()].map((num) => (
-              <option key={num} value={num + 1}>
-                {String(num + 1).padStart(2, "0")}
-              </option>
-            ))}
-          </select> */}
         </div>
 
         <div className='mt-8 flex justify-between gap-4'>
@@ -72,7 +102,7 @@ function BookingDate() {
           </div>
           <div
             onClick={handleNavigate}
-            className='bg-primaryBlue flex justify-center items-center py-1  rounded-full text-white w-full cursor-pointer'
+            className='bg-primaryBlue flex justify-center items-center py-1 rounded-full text-white w-full cursor-pointer'
           >
             Continuar
           </div>

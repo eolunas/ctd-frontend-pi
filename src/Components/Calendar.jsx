@@ -1,43 +1,62 @@
 import { useEffect, useState } from "react";
 import dayjs from "dayjs";
 
-const Calendar = ({ dates }) => {
+const Calendar = ({ dates, onDateSelect, notDouble }) => {
   const [currentMonth, setCurrentMonth] = useState(dayjs()); // Mes inicial
   const [selectedDate, setSelectedDate] = useState(null); // Fecha seleccionada
   const [isSelectVisible, setIsSelectVisible] = useState(false); // Controla el select
-  console.log(dates);
 
   const parseDates = (dates) => {
     const formattedDates = {};
-    dates?.forEach((dateStr) => {
-      const date = dayjs(dateStr); // Convierte la fecha a dayjs
+    const unavailableDates = {};
+
+    dates?.forEach(({ eventDate, available }) => {
+      const date = dayjs(eventDate); // Convierte eventDate a un objeto dayjs
       const monthKey = date.format("YYYY-MM"); // Obtenemos el mes en formato 'YYYY-MM'
       const day = date.date(); // Extraemos el día
 
-      // Agregar la fecha al objeto, si aún no existe, inicializamos el mes con un array vacío
-      if (!formattedDates[monthKey]) {
-        formattedDates[monthKey] = [];
+      if (available) {
+        // Agregar la fecha disponible
+        if (!formattedDates[monthKey]) {
+          formattedDates[monthKey] = [];
+        }
+        formattedDates[monthKey].push(day);
+      } else {
+        // Agregar la fecha no disponible
+        if (!unavailableDates[monthKey]) {
+          unavailableDates[monthKey] = [];
+        }
+        unavailableDates[monthKey].push(day);
       }
-      formattedDates[monthKey].push(day); // Agregar el día disponible
     });
-    return formattedDates;
+
+    return { formattedDates, unavailableDates };
   };
 
-  // Fechas disponibles basadas en las fechas recibidas
-  const availableDates = parseDates(dates);
+  const { formattedDates: availableDates, unavailableDates: fullDates } =
+    parseDates(dates);
 
-  // Fechas simuladas
-  // const availableDates = {
-  //   "2024-11": [8, 9, 10],
-  //   "2024-12": [4, 6, 15],
-  //   "2025-01": [12, 15, 20],
-  //   "2025-02": [5, 9],
-  // };
+  // Resto del código permanece igual
+  const isAvailable = (monthKey, day) =>
+    availableDates[monthKey]?.includes(day);
+  const isFull = (monthKey, day) => fullDates[monthKey]?.includes(day);
 
-  const fullDates = {
-    "2024-12": [22, 9, 10],
-    "2025-01": [1, 16, 17],
-    "2025-02": [20, 21],
+  const handleDateClick = (monthKey, day) => {
+    const dateObj = dates.find(
+      ({ eventDate }) =>
+        dayjs(eventDate).format("YYYY-MM") === monthKey &&
+        dayjs(eventDate).date() === day
+    );
+
+    if (dateObj && dateObj.available) {
+      const newSelectedDate = { id: dateObj.id, day, month: monthKey };
+      setSelectedDate(newSelectedDate);
+
+      // Llama a la función pasada por las props
+      if (onDateSelect) {
+        onDateSelect(newSelectedDate);
+      }
+    }
   };
 
   // Generar la lista de meses entre el actual y los próximos 12 meses
@@ -63,16 +82,6 @@ const Calendar = ({ dates }) => {
       return;
     }
     setCurrentMonth(newMonth);
-  };
-
-  const isAvailable = (monthKey, day) =>
-    availableDates[monthKey]?.includes(day);
-  const isFull = (monthKey, day) => fullDates[monthKey]?.includes(day);
-
-  const handleDateClick = (monthKey, day) => {
-    if (isAvailable(monthKey, day)) {
-      setSelectedDate({ day, month: monthKey });
-    }
   };
 
   const renderCalendar = (date) => {
@@ -124,17 +133,16 @@ const Calendar = ({ dates }) => {
   };
   useEffect(() => {
     if (dates && dates.length > 0) {
-      // Convierte las fechas a objetos dayjs y encuentra la más cercana
       const today = dayjs();
       const closestDate = dates
-        .map((dateStr) => dayjs(dateStr))
+        .filter(({ available }) => available) // Solo fechas disponibles
+        .map(({ eventDate }) => dayjs(eventDate))
         .reduce((closest, date) =>
           Math.abs(date.diff(today)) < Math.abs(closest.diff(today))
             ? date
             : closest
         );
 
-      // Configura el currentMonth al mes más cercano
       setCurrentMonth(closestDate.startOf("month"));
     }
   }, [dates]);
@@ -144,27 +152,9 @@ const Calendar = ({ dates }) => {
       <h2 className='text-secondaryYellow p-4 text-2xl w-full border-primaryBlue border-b font-bold mb-4'>
         Fechas disponibles
       </h2>
-      <div className='px-4'>
-        {/* Controles del mes */}
 
-        <div className='md:flex hidden justify-between items-center text-primaryBlue mb-4'>
-          <div className='flex items-center gap-8'>
-            <div
-              className='cursor-pointer p-2'
-              onClick={() => changeMonths(-1)}
-            >
-              <i className='fa-solid fa-chevron-left'></i>
-            </div>
-            <p>{getMonthName(currentMonth)}</p>
-          </div>
-          <div className='flex items-center gap-8'>
-            <p>{getMonthName(currentMonth.add(1, "month"))}</p>
-            <div className='cursor-pointer p-2' onClick={() => changeMonths(1)}>
-              <i className='fa-solid fa-chevron-right'></i>
-            </div>
-          </div>
-        </div>
-        <div className='md:hidden justify-between items-center text-primaryBlue mb-4'>
+      {notDouble ? (
+        <div className=' justify-between items-center text-primaryBlue mb-4'>
           <div className='flex items-center justify-between  w-full'>
             <select
               className='bg-[#212121] focus:non '
@@ -199,14 +189,81 @@ const Calendar = ({ dates }) => {
             </div>
           </div>
         </div>
+      ) : (
+        <div>
+          <div className='md:flex hidden justify-between items-center text-primaryBlue mb-4'>
+            <div className='flex items-center gap-8'>
+              <div
+                className='cursor-pointer p-2'
+                onClick={() => changeMonths(-1)}
+              >
+                <i className='fa-solid fa-chevron-left'></i>
+              </div>
+              <p>{getMonthName(currentMonth)}</p>
+            </div>
+            <div className='flex items-center gap-8'>
+              <p>{getMonthName(currentMonth.add(1, "month"))}</p>
+              <div
+                className='cursor-pointer p-2'
+                onClick={() => changeMonths(1)}
+              >
+                <i className='fa-solid fa-chevron-right'></i>
+              </div>
+            </div>
+          </div>
+          <div className='md:hidden justify-between items-center text-primaryBlue mb-4'>
+            <div className='flex items-center justify-between  w-full'>
+              <select
+                className='bg-[#212121] focus:non '
+                value={currentMonth.format("YYYY-MM")}
+                onChange={(e) => setCurrentMonth(dayjs(e.target.value + "-01"))}
+                onBlur={() => setIsSelectVisible(false)}
+              >
+                {monthsList.map((month) => (
+                  <option
+                    key={month.format("YYYY-MM")}
+                    value={month.format("YYYY-MM")}
+                  >
+                    {getMonthName(month)}
+                  </option>
+                ))}
+              </select>
 
-        {/* Contenedor de calendarios */}
-        <div className='flex flex-col md:flex-row gap-5'>
-          {renderCalendar(currentMonth)}
-          <div className='hidden md:block'>
-            {renderCalendar(currentMonth.add(1, "month"))}
+              <div className='flex'>
+                <div
+                  className='cursor-pointer p-2'
+                  onClick={() => changeMonths(-1)}
+                >
+                  <i className='fa-solid fa-chevron-left'></i>
+                </div>
+
+                <div
+                  className='cursor-pointer p-2'
+                  onClick={() => changeMonths(1)}
+                >
+                  <i className='fa-solid fa-chevron-right'></i>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
+      )}
+
+      <div className='px-4'>
+        {/* Controles del mes */}
+
+        {/* Contenedor de calendarios */}
+
+        {notDouble ? (
+          <div className='block'>{renderCalendar(currentMonth)}</div>
+        ) : (
+          <div className='flex flex-col md:flex-row gap-5'>
+            {renderCalendar(currentMonth)}
+            <div className='hidden md:block'>
+              {renderCalendar(currentMonth.add(1, "month"))}
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

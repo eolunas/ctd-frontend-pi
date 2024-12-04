@@ -4,10 +4,10 @@ import PlaceIcon from "../assets/1-Iconos/DetalleProducto/place.svg";
 
 function BookingSummary() {
   const location = useLocation();
-  const { event } = location.state || {}; // Asegúrate de manejar el caso donde no haya estado
+  const { event, selectedDates } = location.state || {}; // Asegúrate de manejar el caso donde no haya estado
   const navigate = useNavigate();
   const handleNavigate = () => {
-    navigate("/booking/succes", { state: { event } });
+    navigate("/booking/succes", { state: { event, selectedDates } });
   };
 
   return (
