@@ -30,7 +30,12 @@ const initialState = {
 export const Context = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
   const [loading, setLoading] = useState(true); // Estado de carga
+  const [selectedDate, setSelectedDate] = useState(null);
 
+  const handleDateSelect = (date) => {
+    console.log("Fecha seleccionada:", date);
+    setSelectedDate(date);
+  };
   useEffect(() => {
     const getData = async () => {
       try {
@@ -90,7 +95,7 @@ export const Context = ({ children }) => {
       console.error(result.error);
     }
   };
-  
+
   const resetRegistrationSuccess = () => {
     dispatch({
       type: "SET_REGISTRATION_SUCCESS",
@@ -118,6 +123,9 @@ export const Context = ({ children }) => {
         loading,
         handleRegister,
         resetRegistrationSuccess,
+        selectedDate,
+        setSelectedDate,
+        handleDateSelect,
       }}
     >
       {children}

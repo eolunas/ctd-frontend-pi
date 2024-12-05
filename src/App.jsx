@@ -14,6 +14,11 @@ import Unauthorized from "./Routes/Unauthorized";
 import AdminHome from "./Components/AdminHome";
 import AddProduct from "./Components/AddProduct";
 import FeatureManagement from "./Components/FeatureManagement";
+import Categories from "./Routes/Categories";
+import BookingSummary from "./Routes/BookingSummary";
+import BookingLayout from "./Layouts/BookingLayout";
+import BookingDate from "./Routes/BookingDate";
+import BookingSucces from "./Routes/BookingSucces";
 
 function App() {
   return (
@@ -26,6 +31,12 @@ function App() {
             <Route path='unauthorized' element={<Unauthorized />} />
             <Route path='favs' element={<Favs />} />
             <Route path='detail/:id' element={<EventDetail />} />
+            <Route path='booking' element={<BookingLayout />}>
+              <Route index element={<BookingDate />} />
+              <Route path='summary' element={<BookingSummary />} />
+              <Route path='succes' element={<BookingSucces />} />
+            </Route>
+            <Route path='category/:category' element={<Categories />} />
             {/* <Route path='eventos' element={<ListaEventos />} /> */}
           </Route>
 
@@ -41,10 +52,9 @@ function App() {
             <Route index element={<AdminHome />} />
             <Route path='products' element={<ListProductsAdmin />} />
             <Route path='users' element={<UserManagement />} />
-            <Route path="features" element={<FeatureManagement />} />       
-            <Route path="products/new" element={<AddProduct />} />
-            <Route path="products/edit/:id" element={<AddProduct />} />
-
+            <Route path='features' element={<FeatureManagement />} />
+            <Route path='products/new' element={<AddProduct />} />
+            <Route path='products/edit/:id' element={<AddProduct />} />
 
             {/* Agrega más rutas de administrador aquí */}
           </Route>

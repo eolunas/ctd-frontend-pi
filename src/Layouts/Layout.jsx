@@ -21,7 +21,7 @@ export const Layout = () => {
       ) : (
         <></>
       )}
-      <main className='flex-grow max-w-[1480px] self-center'>
+      <main className='flex-grow w-full p-4 max-w-[1480px] justify-center items-center  self-center'>
         <Outlet />
       </main>
       <Footer />
