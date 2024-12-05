@@ -72,7 +72,7 @@ const Searcher = () => {
   const handleSearchClick = () => {
     const getData = async () => {
       try {
-        console.log(filters);
+        dispatch({ type: "'SET_FILTERS'", payload: filters });
         const data = await fetchFilters(filters);
         dispatch({ type: "SET_DATAFILTERED", payload: data.data });
       } catch (error) {

@@ -153,7 +153,6 @@ const EventDetail = () => {
             </div>
           </div>
           {/* Galería de imágenes */}
-          {/* Galería de imágenes */}
           {event?.coverImageUrl && (
             <div className='flex flex-col md:flex-row gap-1 mb-16'>
               <div

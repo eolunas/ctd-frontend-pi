@@ -7,3 +7,5 @@ export const fetchCities = () => axiosInstance.get(`/event/cities`);
 
 // Filtrado:
 export const fetchFilters = (filters) => axiosInstance.post(`/event/search`, filters);
+export const fetchFiltersPagination = (filters, page) => axiosInstance.post(`/event/search?page=${page}`, filters);
+
