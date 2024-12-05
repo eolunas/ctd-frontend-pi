@@ -661,7 +661,7 @@ const AddProduct = () => {
             <legend className='text-gray-400 mb-4 text-lg font-semibold'>
               Características
             </legend>
-            <div className='flex flex-wrap gap-4'>
+            <div className='flex flex-wrap gap-4'>a
               {features.map((feature) => (
                 <label
                   key={feature.id}

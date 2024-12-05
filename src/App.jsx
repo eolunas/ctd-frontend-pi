@@ -14,6 +14,7 @@ import Unauthorized from "./Routes/Unauthorized";
 import AdminHome from "./Components/AdminHome";
 import AddProduct from "./Components/AddProduct";
 import FeatureManagement from "./Components/FeatureManagement";
+import FeatureForm from "./Components/FeatureForm";
 import Categories from "./Routes/Categories";
 import BookingSummary from "./Routes/BookingSummary";
 import BookingLayout from "./Layouts/BookingLayout";
@@ -53,6 +54,8 @@ function App() {
             <Route path='products' element={<ListProductsAdmin />} />
             <Route path='users' element={<UserManagement />} />
             <Route path='features' element={<FeatureManagement />} />
+            <Route path='features/edit/:id' element={<FeatureForm />} />
+            <Route path='features/createfeature' element={<FeatureForm />} />
             <Route path='products/new' element={<AddProduct />} />
             <Route path='products/edit/:id' element={<AddProduct />} />
 
