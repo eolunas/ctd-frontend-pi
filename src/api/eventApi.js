@@ -9,3 +9,11 @@ export const fetchCities = () => axiosInstance.get(`/event/cities`);
 
 // Filtrado:
 export const fetchFilters = (filters) => axiosInstance.post(`/event/search`, filters);
+export const createReservation = (date, eventId, userId) =>
+  axiosInstance.post(`/dates/reservation`, null, {
+    params: {
+      date,
+      eventId,
+      userId,
+    },
+  });

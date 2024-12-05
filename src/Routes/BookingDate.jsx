@@ -18,7 +18,7 @@ function BookingDate() {
     setSelectedDates(date);
   };
   const handleNavigate = () => {
-    navigate("/booking/summary", { state: { event } });
+    navigate("/booking/summary", { state: { event, selectedDates } });
   };
 
   const handleDateChange = () => {
@@ -63,6 +63,7 @@ function BookingDate() {
           <p className='text-xl font-medium mt-2'>
             {formatSelectedDate(selectedDates)}
           </p>
+          <p className='text-lg font-normal mt-2'>{selectedDates.hour} hrs</p>
           <button
             className='text-blue-400 underline mt-2'
             onClick={handleDateChange} // Maneja la visibilidad del calendario
@@ -89,7 +90,7 @@ function BookingDate() {
           )}
 
           <h3 className='text-yellow-400 text-lg font-semibold mt-6'>
-            Selecciona el número de boletos
+            Valor: ${event.price} COP
           </h3>
         </div>
 

@@ -40,6 +40,7 @@ const Calendar = ({ dates, onDateSelect, notDouble }) => {
   const isAvailable = (monthKey, day) =>
     availableDates[monthKey]?.includes(day);
   const isFull = (monthKey, day) => fullDates[monthKey]?.includes(day);
+  console.log(dates);
 
   const handleDateClick = (monthKey, day) => {
     const dateObj = dates.find(
@@ -49,7 +50,13 @@ const Calendar = ({ dates, onDateSelect, notDouble }) => {
     );
 
     if (dateObj && dateObj.available) {
-      const newSelectedDate = { id: dateObj.id, day, month: monthKey };
+      const newSelectedDate = {
+        id: dateObj.id,
+        day,
+        month: monthKey,
+        hour: dayjs(dateObj.eventDate).format("HH:mm"), // Solo la hora en formato HH:mm
+        fullDate: dateObj.eventDate,
+      };
       setSelectedDate(newSelectedDate);
 
       // Llama a la función pasada por las props
@@ -134,16 +141,19 @@ const Calendar = ({ dates, onDateSelect, notDouble }) => {
   useEffect(() => {
     if (dates && dates.length > 0) {
       const today = dayjs();
-      const closestDate = dates
+      const availableDates = dates
         .filter(({ available }) => available) // Solo fechas disponibles
-        .map(({ eventDate }) => dayjs(eventDate))
-        .reduce((closest, date) =>
+        .map(({ eventDate }) => dayjs(eventDate));
+
+      if (availableDates.length > 0) {
+        const closestDate = availableDates.reduce((closest, date) =>
           Math.abs(date.diff(today)) < Math.abs(closest.diff(today))
             ? date
             : closest
         );
 
-      setCurrentMonth(closestDate.startOf("month"));
+        setCurrentMonth(closestDate.startOf("month"));
+      }
     }
   }, [dates]);
 
