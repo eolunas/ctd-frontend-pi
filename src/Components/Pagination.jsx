@@ -10,7 +10,10 @@ const Pagination = () => {
   useEffect(() => {
     const getData = async () => {
       try {
-        const data = await fetchFiltersPagination(state.homeFilters, currentPage);
+        const data = await fetchFiltersPagination(
+          state.homeFilters,
+          currentPage
+        );
         dispatch({ type: "SET_DATAFILTERED", payload: data.data });
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -23,6 +26,9 @@ const Pagination = () => {
 
   return (
     <div className="relative my-5 z-20">
+      <h2 className="text-2xl font-bold text-cyan-500 mb-5">
+        Resultados ({count})
+      </h2>
       {pages > 1 && (
         <>
           <hr></hr>
@@ -76,7 +82,7 @@ const Pagination = () => {
                   className={`flex items-center justify-center cursor-pointer 
                 pl-4 h-10 leading-tight text-gray-500 rounded-e-lg hover:text-primaryBlue`}
                   onClick={() =>
-                    setCurrentPage((prev) => Math.min(prev + 1, pages-1))
+                    setCurrentPage((prev) => Math.min(prev + 1, pages - 1))
                   }
                 >
                   <span className="mr-4">Siguiente</span>
@@ -99,6 +105,7 @@ const Pagination = () => {
               </li>
             </ul>
           </nav>
+          <hr></hr>
         </>
       )}
     </div>
