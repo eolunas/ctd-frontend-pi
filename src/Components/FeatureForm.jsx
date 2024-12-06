@@ -1,91 +1,99 @@
 import { useState, useEffect } from "react";
-import { useNavigate, useParams } from "react-router-dom";
-import ErrorMessage from "../Components/ErrorMessage"; // Componente para mostrar el mensaje de error
+import { useNavigate, useParams, useLocation } from "react-router-dom";
+import axiosInstance from "../api/axiosInstance"; // Instancia de Axios
 
-const FeatureForm = ({ action = "crear", selectedFeature = null, updateFeatures, setIsFormOpen }) => {
-  const [name, setName] = useState("");
-  const [icon, setIcon] = useState("");
-  const { id } = useParams();
-  const navigate = useNavigate();
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [errorMessage, setErrorMessage] = useState("");
-  const [isErrorOpen, setIsErrorOpen] = useState(false);
+const FeatureForm = () => {
+  const [title, setTitle] = useState("");
+  const [iconCode, setIconCode] = useState(""); // Valor para el ícono seleccionado
+  const [availableIcons, setAvailableIcons] = useState([]); // Para guardar los íconos disponibles de la API
   const [errors, setErrors] = useState({});
+  const navigate = useNavigate();
+  const { id } = useParams();
+  const location = useLocation();
+  const feature = location.state?.feature; // Usar los datos pasados desde el componente de gestión
 
-  // Validar los campos
+  // Determinar si estamos en modo de edición
+  const isEdit = Boolean(id);
+
+  // Cargar los íconos disponibles de la API
+  useEffect(() => {
+    const fetchIcons = async () => {
+      try {
+        const response = await axiosInstance.get("/feature");
+        const allIcons = response.data; // Todos los íconos disponibles
+        const uniqueIcons = getUniqueIcons(allIcons); // Filtrar íconos únicos
+
+        setAvailableIcons(uniqueIcons); // Guardamos los íconos únicos
+      } catch (error) {
+        console.error("Error al cargar los íconos:", error);
+      }
+    };
+
+    fetchIcons();
+  }, []);
+
+  // Obtener íconos únicos de la lista de características
+  const getUniqueIcons = (icons) => {
+    const iconSet = new Set(); // Usamos un Set para filtrar duplicados
+    const uniqueIcons = [];
+
+    icons.forEach(icon => {
+      const iconClass = icon.iconCode.replace("fa-solid ", ""); // Obtener la clase sin el prefijo "fa-solid"
+      if (!iconSet.has(iconClass)) {
+        uniqueIcons.push(icon);
+        iconSet.add(iconClass); // Añadimos el ícono al Set (esto evita duplicados)
+      }
+    });
+
+    return uniqueIcons;
+  };
+
+  // Si estamos en modo edición, establecemos los valores de la característica
+  useEffect(() => {
+    if (isEdit && feature) {
+      setTitle(feature.title);
+      setIconCode(feature.iconCode.replace("fa-solid ", "")); // Asumimos que el icono tiene el prefijo "fa-solid"
+    }
+  }, [isEdit, feature]);
+
+  // Validar campos
   const validateFields = () => {
     const newErrors = {};
-
-    if (!name.trim()) {
-      newErrors.name = "El nombre de la característica es obligatorio.";
-    } else if (name.trim().length < 3) {
-      newErrors.name = "La característica debe tener al menos 3 caracteres.";
-    }
-
-    if (!icon.trim()) {
-      newErrors.icon = "Debes seleccionar un icono.";
-    }
-
+    if (!title.trim()) newErrors.title = "El nombre de la característica es obligatorio.";
+    if (title.trim().length < 3) newErrors.title = "La característica debe tener al menos 3 caracteres.";
+    if (!iconCode.trim()) newErrors.iconCode = "Debes seleccionar un icono.";
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
-  // Rellenar los campos cuando es un formulario de edición
-  useEffect(() => {
-    if (action === "editar" && selectedFeature) {
-      setName(selectedFeature.name);
-      setIcon(selectedFeature.icon);
-    }
-  }, [action, selectedFeature]);
-
   // Enviar formulario
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!validateFields()) return; // Solo proceder si no hay errores
 
-    // Validar antes de enviar
-    if (!validateFields()) {
-      console.log("Error: Faltan campos obligatorios");
-      return;
-    }
-
-    // Crear el objeto de la característica
-    const newFeature = { id: action === "crear" ? Date.now() : selectedFeature.id, name, icon };
-
-    // Imprimir en consola los datos que serán enviados
-    console.log("Datos que serán enviados al backend:", newFeature);
+    const featureData = {
+      title,
+      iconCode: `fa-solid ${iconCode}`,
+    };
 
     try {
-      // Suponiendo que tu API usa PUT para editar y POST para crear
-      const response = action === "crear"
-        ? await axiosInstance.post("/feature", newFeature)
-        : await axiosInstance.put(`/feature/${id}`, newFeature);
-
-      console.log("Característica guardada:", response.data);
-
-      // Actualizar características en el estado global
-      updateFeatures(newFeature);
-
-      // Cerrar el formulario
-      setIsFormOpen(false);
-
-      // Redirigir a la lista de características
-      navigate("/admin/features");
+      if (isEdit) {
+        // Si es edición, hacemos un PUT
+        await axiosInstance.put(`/feature/${id}`, featureData);
+        console.log("Característica actualizada.");
+      } else {
+        // Si es creación, hacemos un POST
+        await axiosInstance.post("/feature", featureData);
+        console.log("Característica creada.");
+      }
+      navigate("/admin/features"); // Redirigir a la lista de características después de guardar
     } catch (error) {
       console.error("Error al guardar la característica:", error);
-
-      // Mostrar errores dependiendo del tipo
-      if (error.response && error.response.status === 409) {
-        setErrorMessage("Ya existe una característica con ese nombre.");
-      } else {
-        setErrorMessage("Ocurrió un error inesperado. Inténtalo de nuevo más tarde.");
-      }
-      setIsErrorOpen(true);
     }
   };
 
   return (
     <div className="p-8 bg-black text-white">
-      {/* Botón de cierre */}
       <button
         className="absolute top-20 right-6 text-gray-300 hover:text-white text-xl font-bold"
         onClick={() => navigate("/admin/features")}
@@ -93,71 +101,52 @@ const FeatureForm = ({ action = "crear", selectedFeature = null, updateFeatures,
         ✕
       </button>
 
-      <h2 className="text-2xl font-bold mb-4">
-        {action === "crear" ? "Crear nueva característica" : "Editar característica"}
-      </h2>
-      
+      <h2 className="text-2xl font-bold mb-4">{isEdit ? "Editar característica" : "Crear nueva característica"}</h2>
+
       <form onSubmit={handleSubmit}>
         {/* Nombre */}
         <div className="mb-4">
-          <label htmlFor="name" className="block text-gray-300">Nombre</label>
+          <label htmlFor="title" className="block text-gray-300">Nombre</label>
           <input
             type="text"
-            id="name"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
+            id="title"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
             className="w-full p-2 bg-gray-700 text-white rounded"
           />
-          {errors.name && <p className="text-red-500 text-sm">{errors.name}</p>}
+          {errors.title && <p className="text-red-500 text-sm">{errors.title}</p>}
         </div>
 
         {/* Icono */}
         <div className="mb-4">
-          <label htmlFor="icon" className="block text-gray-300">Icono (Clase FontAwesome)</label>
+          <label htmlFor="iconCode" className="block text-gray-300">Icono (Clase FontAwesome)</label>
           <div className="grid grid-cols-4 gap-4">
-            {['fa-car', 'fa-bicycle', 'fa-motorcycle'].map((iconClass) => (
-              <label key={iconClass} className="flex justify-center items-center">
+            {availableIcons.map((icon) => (
+              <label key={icon.iconCode} className="flex justify-center items-center">
                 <input
-                  type="checkbox"
-                  name="icon"
-                  value={iconClass}
-                  checked={icon === iconClass}
-                  onChange={() => setIcon(iconClass)}
+                  type="radio"
+                  name="iconCode"
+                  value={icon.iconCode.replace("fa-solid ", "")}
+                  checked={iconCode === icon.iconCode.replace("fa-solid ", "")} // Comprobamos si el ícono está seleccionado
+                  onChange={() => setIconCode(icon.iconCode.replace("fa-solid ", ""))}
                   className="mr-2"
                 />
-                <i className={`fa-solid ${iconClass} text-3xl`} />
+                <i className={`${icon.iconCode} text-3xl`} />
               </label>
             ))}
           </div>
-          {errors.icon && <p className="text-red-500 text-sm">{errors.icon}</p>}
+          {errors.iconCode && <p className="text-red-500 text-sm">{errors.iconCode}</p>}
         </div>
 
-        <div className="flex justify-between">
+        <div className="flex justify-end">
           <button
             type="submit"
             className="bg-secondaryYellow text-white py-2 px-4 rounded"
           >
-            {action === "crear" ? "Crear" : "Actualizar"}
-          </button>
-          <button
-            type="button"
-            onClick={() => setIsFormOpen(false)}
-            className="bg-red-500 text-white py-2 px-4 rounded"
-          >
-            Cancelar
+            {isEdit ? "Actualizar" : "Crear"}
           </button>
         </div>
       </form>
-
-      {/* Error modal */}
-      {isErrorOpen && (
-        <ErrorMessage
-          title="Lo sentimos :("
-          description={errorMessage}
-          buttonText="Volver atrás"
-          onClose={() => setIsErrorOpen(false)}
-        />
-      )}
     </div>
   );
 };
