@@ -70,12 +70,15 @@ const FeatureForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!validateFields()) return; // Solo proceder si no hay errores
-
+  
+    // Concatenar las clases "fa-solid", "fa-regular", y "fa-" con el nombre del ícono
+    const formattedIconCode = `fa-solid fa-regular fa-${iconCode}`;
+  
     const featureData = {
       title,
-      iconCode: `fa-solid ${iconCode}`,
+      iconCode: formattedIconCode, // Usar el código del ícono formateado
     };
-
+  
     try {
       if (isEdit) {
         // Si es edición, hacemos un PUT
@@ -91,7 +94,7 @@ const FeatureForm = () => {
       console.error("Error al guardar la característica:", error);
     }
   };
-
+  
   return (
     <div className="p-8 bg-black text-white">
       <button
@@ -112,36 +115,41 @@ const FeatureForm = () => {
             id="title"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
-            className="w-full p-2 bg-gray-700 text-white rounded"
+            className="w-full px-4 py-3 rounded-xl bg-gray-700 text-white border border-gray-600 focus:outline-none focus:border-yellow-500"
           />
           {errors.title && <p className="text-red-500 text-sm">{errors.title}</p>}
         </div>
 
-        {/* Icono */}
-        <div className="mb-4">
-          <label htmlFor="iconCode" className="block text-gray-300">Icono (Clase FontAwesome)</label>
-          <div className="grid grid-cols-4 gap-4">
-            {availableIcons.map((icon) => (
-              <label key={icon.iconCode} className="flex justify-center items-center">
+        {/* Selección de icono */}
+        <div className="mb-6">
+          <label htmlFor="iconCode" className="block text-gray-300">Selecciona un icono</label>
+          <div className="grid grid-cols-3 gap-4">
+            {[
+              "shield", "calendar-check", "charging-station", "truck-monster", "bicycle", "video",
+              "shield-cat", "utensils", "hotel", "ticket", "truck-medical", "leaf", "smoking", "crown",
+              "martini-glass-citrus", "gamepad", "temperature-arrow-up"
+            ].map((icon) => (
+              <label key={icon} className="flex items-center gap-2 cursor-pointer">
                 <input
                   type="radio"
                   name="iconCode"
-                  value={icon.iconCode.replace("fa-solid ", "")}
-                  checked={iconCode === icon.iconCode.replace("fa-solid ", "")} // Comprobamos si el ícono está seleccionado
-                  onChange={() => setIconCode(icon.iconCode.replace("fa-solid ", ""))}
-                  className="mr-2"
+                  value={icon}
+                  checked={iconCode === icon}
+                  onChange={() => setIconCode(icon)}
+                  className="form-radio"
                 />
-                <i className={`${icon.iconCode} text-3xl`} />
+                <i className={`fa-solid fa-${icon}`}></i>
               </label>
             ))}
           </div>
           {errors.iconCode && <p className="text-red-500 text-sm">{errors.iconCode}</p>}
         </div>
 
-        <div className="flex justify-end">
+        {/* Botones de acción */}
+        <div className="flex justify-between">
           <button
             type="submit"
-            className="bg-secondaryYellow text-white py-2 px-4 rounded"
+            className="px-4 py-2 bg-blue-600 rounded-lg hover:bg-blue-700"
           >
             {isEdit ? "Actualizar" : "Crear"}
           </button>

@@ -32,6 +32,8 @@ const AddProduct = () => {
     gallery: [],
     description: "",
     features: [],
+    newCategoryName: "",  // Para guardar el nombre de la nueva categoría
+    newCategoryIcon: "",  // Para guardar el icono de la nueva categoría
   });
 
   // console.log(formData);
@@ -42,7 +44,33 @@ const AddProduct = () => {
   const [features, setFeatures] = useState([]);
   const [errors, setErrors] = useState({});
 
-  
+
+  const iconOptions = [
+    { id: "fa-film", className: "fa-solid fa-film", label: "Película" },
+    { id: "fa-handshake-angle", className: "fa-solid fa-handshake-angle", label: "Acuerdo" },
+    { id: "fa-briefcase", className: "fa-solid fa-briefcase", label: "Trabajo" },
+    { id: "fa-user-graduate", className: "fa-solid fa-user-graduate", label: "Estudiante" },
+    { id: "fa-cake-candles", className: "fa-solid fa-cake-candles", label: "Cumpleaños" },
+  ];
+
+  // Manejar el cambio en el dropdown de categorías
+  const handleCategoryChange = (e) => {
+    const selectedCategory = categories.find((cat) => cat.name === e.target.value);
+    setFormData((prev) => ({
+      ...prev,
+      category: selectedCategory ? selectedCategory.id : "", 
+      categoryName: e.target.value,
+    }));
+  };
+
+  // Función para manejar el cambio en el icono seleccionado
+  const handleIconChange = (e) => {
+    const selectedIcon = e.target.value;
+    setFormData((prev) => ({
+      ...prev,
+      newCategoryIcon: selectedIcon,  // Almacenamos el icono seleccionado
+    }));
+  };
 
   const openModal = (imageUrl) => {
     setSelectedImage(imageUrl);
@@ -204,20 +232,19 @@ const AddProduct = () => {
   };
   const validateFields = () => {
     const newErrors = {};
-
+  
     if (!formData.name.trim()) {
       newErrors.name = "El nombre del evento es obligatorio.";
     } else if (formData.name.trim().length < 3) {
       newErrors.name = "El nombre debe tener al menos 3 caracteres.";
     }
-
+  
     if (!formData.artist.trim()) {
       newErrors.artist = "El artista del evento es obligatorio.";
     } else if (formData.artist.trim().length < 3) {
       newErrors.artist = "El nombre del artista debe tener al menos 3 caracteres.";
     }
-
-
+  
     if (!formData.city) {
       newErrors.city = "La ciudad es obligatoria.";
     }
@@ -230,20 +257,32 @@ const AddProduct = () => {
       newErrors.genre = "El género es obligatorio.";
     }
   
-    if (!formData.category) {
+    // Validación de categoría
+    if (formData.categoryName === "new") {
+      // Verificar que el nombre y el icono de la nueva categoría no estén vacíos
+      if (!formData.newCategoryName.trim()) {
+        newErrors.category = "El nombre de la nueva categoría es obligatorio.";
+      }
+  
+      if (!formData.newCategoryIcon.trim()) {
+        newErrors.category = "Debes seleccionar un icono para la nueva categoría.";
+      }
+    } else if (!formData.category) {
       newErrors.category = "La categoría es obligatoria.";
     }
+  
     if (!formData.features || formData.features.length === 0) {
       newErrors.features = "Debes seleccionar al menos 1 característica.";
     }
-
+  
     if (!formData.gallery || formData.gallery.length < 4) {
-      newErrors.gallery = "Debes seleccionar 4 imagenes.";
+      newErrors.gallery = "Debes seleccionar 4 imágenes.";
     }
+  
     if (!formData.coverImageUrl) {
       newErrors.coverImageUrl = "Es necesario una imagen de portada.";
     }
-
+  
     if (!formData.policies || !formData.policies.trim()) {
       newErrors.policies = "Las políticas del evento son obligatorias.";
     }
@@ -251,24 +290,24 @@ const AddProduct = () => {
     if (!formData.description.trim()) {
       newErrors.description = "La descripción es obligatoria.";
     }
-    if (!formData.dates.length) {
-      newErrors.dates = "Necesitas al menos 1 fecha seleccionada";
+  
+    if (!formData.dates || formData.dates.length === 0) {
+      newErrors.dates = "Debes agregar al menos una fecha.";
     }
+  
+    return newErrors;
 
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
   };
-  
-  
+    
   const handleSubmit = async (e) => {
     e.preventDefault();
   
     // Validar los campos antes de continuar
     if (!validateFields()) {
-      // Aquí puedes manejar los errores de validación en el cliente
-      console.log("Error: Faltan campos obligatorios"); // Mensaje para depuración
+      console.log("Error: Faltan campos obligatorios");
       return; // No continúes con el envío de datos
     }
+  
     // Crear FormData para enviar archivos e información JSON
     const dataToSend = new FormData();
   
@@ -288,7 +327,7 @@ const AddProduct = () => {
       }
     });
     console.log(formData.gallery);
-
+  
     // Crear el objeto de datos JSON
     const dto = {
       name: formData.name,
@@ -302,6 +341,29 @@ const AddProduct = () => {
       policies: formData.policies,
       dates: formData.dates.map((date) => date.replace("T", " ")),
     };
+  
+    // Si la categoría es nueva, agregamos el nombre y el icono
+    if (formData.categoryName === "new") {
+      const newCategoryData = {
+        name: formData.newCategoryName,
+        icon: `fa-solid ${formData.newCategoryIcon}`    
+      
+      };
+  
+      try {
+        // Hacemos una llamada para crear la nueva categoría
+        const response = await axiosInstance.post("/category", newCategoryData);
+        const newCategory = response.data;  // La nueva categoría creada
+  
+        // Ahora, actualizamos el DTO con la nueva categoría
+        dto.category = newCategory.id;
+      } catch (error) {
+        console.error("Error al crear la nueva categoría:", error);
+        setErrorMessage("Error al crear la nueva categoría");
+        setIsErrorOpen(true);
+        return; // No continuar si hay un error al crear la categoría
+      }
+    }
   
     // Serializar el objeto JSON y agregarlo al FormData
     dataToSend.append(
@@ -335,15 +397,16 @@ const AddProduct = () => {
         setErrorMessage(
           "No se puede crear el evento porque ya existe un evento con ese nombre."
         );
-        setIsErrorOpen(true); // Solo muestra el modal si es error del servidor
+        setIsErrorOpen(true);
       } else {
         setErrorMessage(
           "Ocurrió un error inesperado. Inténtalo de nuevo más tarde."
         );
-        setIsErrorOpen(true); // Solo muestra el modal si es error del servidor
+        setIsErrorOpen(true);
       }
     }
   };
+  
   
   
 
@@ -525,49 +588,121 @@ const AddProduct = () => {
                 </div>
               )}
             </div>
-            {/* Dropdown para categorias */}
-            <div>
-              <label htmlFor='category' className='block text-gray-400 mb-2'>
-                Tipo de evento (Categoría)
-              </label>
-              <select
-                id='categoryName'
-                name='categoryName'
-                onChange={(e) => {
-                  const selectedCategory = categories.find(
-                    (category) => category.name === e.target.value
-                  );
-                  setFormData((prev) => ({
-                    ...prev,
-                    category: selectedCategory ? selectedCategory.id : "", // Actualizamos el ID
-                  }));
-                }}
-                className='w-full px-4 py-3 rounded-xl bg-gray-700 text-white border border-gray-600 focus:outline-none focus:border-yellow-500'
-              >
-                <option>
-                  {formData.categoryName
-                    ? formData.categoryName
-                    : "Selecciona una categoría"}
-                </option>
-                {categories.map((category) => (
-                  <option key={category.id} value={category.name}>
-                    {category.name}
-                  </option>
-                ))}
-              </select>
-              {errors.category && (
-                <div
-                  className='flex items-center p-1 px-2 gap-2 rounded-lg mt-2'
-                  style={{
-                    backgroundColor: "rgba(242, 161, 161, 0.14)",
-                    border: "2px solid rgba(223, 22, 22, 0.39)",
-                  }}
-                >
-                  <img src={close} className='w-5 h-5' alt='' />
-                  <p className='text-[#DABEBE] text-sm '>{errors.category}</p>
-                </div>
-              )}
-            </div>
+{/* Dropdown para categorias */}
+<div>
+  <label htmlFor='category' className='block text-gray-400 mb-2'>
+    Tipo de evento (Categoría)
+  </label>
+  <select
+    id='categoryName'
+    name='categoryName'
+    value={formData.categoryName} // Mantener el valor seleccionado
+    onChange={(e) => {
+      const selectedCategory = categories.find(
+        (category) => category.name === e.target.value
+      );
+
+      if (e.target.value === "new") {
+        // Si seleccionan "Crear nueva categoría", mostrar los campos para el nombre y el icono
+        setFormData((prev) => ({
+          ...prev,
+          category: "", // No asignar ID aún
+          categoryName: e.target.value, // Mostrar "Crear nueva categoría"
+          newCategoryName: "", // Limpiar campo de nuevo nombre
+          newCategoryIcon: "", // Limpiar campo de nuevo icono
+        }));
+      } else {
+        setFormData((prev) => ({
+          ...prev,
+          category: selectedCategory ? selectedCategory.id : "",
+          categoryName: e.target.value,
+        }));
+      }
+    }}
+    className='w-full px-4 py-3 rounded-xl bg-gray-700 text-white border border-gray-600 focus:outline-none focus:border-yellow-500'
+  >
+    <option value=''>Selecciona una categoría</option>
+    {categories.map((category) => (
+      <option key={category.id} value={category.name}>
+        {category.name}
+      </option>
+    ))}
+    <option value='new'>Crear nueva categoría</option>
+  </select>
+
+  {/* Mostrar error si es necesario */}
+  {errors.category && (
+    <div
+      className='flex items-center p-1 px-2 gap-2 rounded-lg mt-2'
+      style={{
+        backgroundColor: "rgba(242, 161, 161, 0.14)",
+        border: "2px solid rgba(223, 22, 22, 0.39)",
+      }}
+    >
+      <img src={close} className='w-5 h-5' alt='' />
+      <p className='text-[#DABEBE] text-sm '>{errors.category}</p>
+    </div>
+  )}
+</div>
+
+{/* Campos para la nueva categoría (si se selecciona la opción de crear nueva categoría) */}
+{formData.categoryName === "new" && (
+  <div className='mb-6'>
+    <label htmlFor='newCategoryName' className='block text-gray-400 mb-2'>
+      Nombre de la nueva categoría
+    </label>
+    <input
+      type='text'
+      id='newCategoryName'
+      name='newCategoryName'
+      value={formData.newCategoryName}
+      onChange={(e) =>
+        setFormData((prev) => ({
+          ...prev,
+          newCategoryName: e.target.value,
+        }))
+      }
+      className='w-full px-4 py-3 rounded-xl bg-gray-700 text-white border border-gray-600 focus:outline-none focus:border-yellow-500'
+    />
+  </div>
+)}
+
+{/* Iconos para la nueva categoría */}
+{formData.categoryName === "new" && (
+  <div className='mb-6'>
+    <label htmlFor='newCategoryIcon' className='block text-gray-400 mb-2'>
+      Icono de la nueva categoría
+    </label>
+    {/* Usamos Tailwind para grid y 3 columnas */}
+    <div className='grid grid-cols-3 gap-4'>
+      {[ 
+        { icon: "fa-film", label: "Cine" },
+        { icon: "fa-handshake-angle", label: "Negocios" },
+        { icon: "fa-briefcase", label: "Trabajo" },
+        { icon: "fa-user-graduate", label: "Educación" },
+        { icon: "fa-cake-candles", label: "Eventos" },
+      ].map((iconOption) => (
+        <label key={iconOption.icon} className='flex items-center gap-2'>
+          <input
+            type='radio'
+            name='newCategoryIcon'
+            value={iconOption.icon}
+            checked={formData.newCategoryIcon === iconOption.icon}
+            onChange={(e) =>
+              setFormData((prev) => ({
+                ...prev,
+                newCategoryIcon: e.target.value,
+              }))
+            }
+            className='form-radio'
+          />
+          <i className={`fa-solid fa-regular fa- ${iconOption.icon}`}></i>
+          {iconOption.label}
+        </label>
+      ))}
+    </div>
+  </div>
+)}
 
             <div className='mb-6'>
               <label htmlFor='eventDateTime' className='block text-gray-400 mb-2'>
@@ -661,7 +796,7 @@ const AddProduct = () => {
             <legend className='text-gray-400 mb-4 text-lg font-semibold'>
               Características
             </legend>
-            <div className='flex flex-wrap gap-4'>a
+            <div className='flex flex-wrap gap-4'>
               {features.map((feature) => (
                 <label
                   key={feature.id}
