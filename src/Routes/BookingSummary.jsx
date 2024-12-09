@@ -42,15 +42,15 @@ function BookingSummary() {
   };
 
   return (
-    <div className='bg-[#212121] text-white p-6 max-w-4xl mx-auto rounded-md shadow-lg flex gap-6'>
+    <div className='bg-[#212121] text-white p-6 max-w-4xl mx-auto rounded-md shadow-lg flex md:flex-row flex-col gap-6'>
       {/* Tarjeta del Evento */}
-      <div className='w-1/2   '>
+      <div className='md:w-1/2 w-full   '>
         <img
           src={event.coverImageUrl} // Cambia esto por tu URL de imagen
           alt='Event Poster'
           className='w-full  h-60 object-cover rounded-xl '
         />
-        <div className='p-4'>
+        <div className='pt-4'>
           <h2 className='text-xl font-semibold'>{event.name}</h2>
           <p className='text-yellow-400 mt-2'>{event.city}</p>
           <p className='flex items-center mt-2 gap-2 text-gray-400'>
@@ -77,7 +77,7 @@ function BookingSummary() {
       </div>
 
       {/* Información de la Reserva */}
-      <div className='w-1/2 flex flex-col justify-between  '>
+      <div className='md:w-1/2 w-full flex flex-col justify-between  '>
         <div className='bg-[#424242] rounded-lg p-4 flex flex-col items-center justify-center'>
           <h3 className='text-secondaryYellow text-2xl font-semibold'>
             Información

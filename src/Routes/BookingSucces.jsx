@@ -19,15 +19,15 @@ function BookingSucces() {
   const { state } = useCharStates();
 
   return (
-    <div className='bg-[#212121] text-white p-6 max-w-4xl mx-auto rounded-md shadow-lg flex gap-6'>
+    <div className='bg-[#212121] w-full text-white p-6 max-w-4xl mx-auto rounded-md shadow-lg flex  md:flex-row flex-col gap-6'>
       {/* Tarjeta del Evento */}
-      <div className='w-1/2   '>
+      <div className='w-full md:w-1/2   '>
         <img
           src={event.coverImageUrl} // Cambia esto por tu URL de imagen
           alt='Event Poster'
           className='w-full  h-60 object-cover rounded-xl '
         />
-        <div className='p-4'>
+        <div className='pt-4'>
           <h2 className='text-xl font-semibold'>{event.name}</h2>
           <p className='text-yellow-400 mt-2'>{event.city}</p>
           <p className='flex items-center mt-2 gap-2 text-gray-400'>
@@ -54,8 +54,8 @@ function BookingSucces() {
       </div>
 
       {/* Información de la Reserva */}
-      <div className='w-1/2 flex flex-col justify-between  '>
-        <div className=' rounded-lg p-4 flex flex-col items-center justify-start text-start'>
+      <div className='w-full md:w-1/2 flex flex-col justify-between  '>
+        <div className=' rounded-lg flex flex-col items-center justify-start text-start'>
           <h3 className='text-secondaryYellow text-lg font-semibold'>
             ¡Tu reserva ha sido confirmada con éxito! Estás a un paso de vivir
             una experiencia musical única.
