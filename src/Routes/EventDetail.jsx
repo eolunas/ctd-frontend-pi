@@ -6,7 +6,6 @@ import PlaceIcon from "../assets/1-Iconos/DetalleProducto/place.svg";
 import GenreIcon from "../assets/1-Iconos/DetalleProducto/genre.svg";
 import LocationIcon from "../assets/1-Iconos/DetalleProducto/city.svg";
 import TimeIcon from "../assets/1-Iconos/DetalleProducto/hour.svg";
-import Button from "../Components/Button";
 
 import Calendar from "../Components/Calendar";
 import ErrorMessage from "../Components/ErrorMessage";
@@ -19,6 +18,8 @@ const EventDetail = () => {
   const navigate = useNavigate();
   const [event, setEvent] = useState({});
   const [isErrorOpen, setIsErrorOpen] = useState(false);
+  const [isErrorModalOpen, setIsErrorModalOpen] = useState(false);
+  const [isErrorModalDateOpen, setIsErrorModalDateOpen] = useState(false);
   // const [error, setError] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedImage, setSelectedImage] = useState("");
@@ -77,8 +78,10 @@ const EventDetail = () => {
   const handleNavigate = () => {
     if (state.user?.role && selectedDate) {
       navigate("/booking", { state: { event, selectedDate, dates } });
-    } else {
-      alert("error");
+    } else if (!state.user?.role) {
+      setIsErrorModalOpen(true);
+    } else if (!selectedDate) {
+      setIsErrorModalDateOpen(true);
     }
   };
 
@@ -275,6 +278,22 @@ const EventDetail = () => {
             />
           </div>
         </div>
+      )}
+      {isErrorModalOpen && (
+        <ErrorMessage
+          title='Lo sentimos :('
+          description='Debes estar registrado para poder reservar.'
+          buttonText='Volver a Inicio'
+          onClose={() => setIsErrorModalOpen(false)}
+        />
+      )}
+        {isErrorModalDateOpen && (
+        <ErrorMessage
+          title='Lo sentimos :('
+          description='Deber elegir una fecha para reservar.'
+          buttonText='Volver a Inicio'
+          onClose={() => setIsErrorModalDateOpen(false)}
+        />
       )}
     </>
   );
