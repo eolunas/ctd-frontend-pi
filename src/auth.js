@@ -1,7 +1,7 @@
 // auth.js
 import axios from 'axios';
 
-const API = "http://54.147.179.179:8080"
+const API = "https://50xba6bw91.execute-api.us-east-1.amazonaws.com"
 export const register = async (userData) => {
   try {
     await axios.post(`${API}/user/registration`, userData);
