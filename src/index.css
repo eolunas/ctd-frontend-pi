@@ -53,7 +53,7 @@ button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
 }
 
-/* Cambio de scroll */
+/* Cambio de scroll
 /* Personaliza el contenedor del scrollbar */
 ::-webkit-scrollbar {
   width: 8px; /* Ancho de la barra vertical */
@@ -88,7 +88,7 @@ button:focus-visible {
   overflow-y: auto; /* Habilitar scroll vertical */
   scrollbar-width: thin; /* Scroll más delgado para navegadores compatibles (Firefox) */
   scrollbar-color: rgba(0, 123, 255, 0.7) transparent; /* Color para Firefox */
-}
+} */
 
 @media (prefers-color-scheme: light) {
   :root {

@@ -14,7 +14,7 @@ const Categories = () => {
             Categorías
           </h2>
 
-          <div className="relative grid grid-cols-2 gap-4 lg:grid-cols-4">
+          <div className="relative flex gap-4 overflow-x-scroll scroll-smooth">
             {state.topCategories.map((genre, index) => (
               <CardCategory key={index} card={genre} />
             ))}

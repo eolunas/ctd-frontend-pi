@@ -11,7 +11,7 @@ const CardCategory = ({ card }) => {
   return (
     <div
       key={card.id}
-      className='flex justify-center items-center bg-black/50 p-4 shadow-lg rounded-xl sm:aspect-[2/1] cursor-pointer'
+      className='flex justify-center items-center bg-black/50 p-4 shadow-lg rounded-xl cursor-pointer min-w-60 '
       onClick={handleCardClick} // Asignar la función al clic
     >
       <h3 className='font-semibold text-secondaryYellow flex flex-col justify-center items-center gap-2 sm:text-3xl'>
