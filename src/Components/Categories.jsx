@@ -14,7 +14,7 @@ const Categories = () => {
             Categorías
           </h2>
 
-          <div className="relative flex gap-4 overflow-x-scroll scroll-smooth">
+          <div className="relative flex gap-4 overflow-x-scroll scroll-smooth p-2">
             {state.topCategories.map((genre, index) => (
               <CardCategory key={index} card={genre} />
             ))}

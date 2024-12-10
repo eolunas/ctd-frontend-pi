@@ -5,14 +5,14 @@ import { fetchFiltersPagination } from "../api/eventApi";
 const Pagination = () => {
   const { state, dispatch } = useCharStates();
   const { count, pages } = state.filteredList?.info;
-  const [currentPage, setCurrentPage] = useState(0);
+  const [currentPage, setCurrentPage] = useState(1);
 
   useEffect(() => {
     const getData = async () => {
       try {
         const data = await fetchFiltersPagination(
           state.homeFilters,
-          currentPage
+          currentPage - 1
         );
         dispatch({ type: "SET_DATAFILTERED", payload: data.data });
       } catch (error) {
@@ -31,7 +31,6 @@ const Pagination = () => {
       </h2>
       {pages > 1 && (
         <>
-          <hr></hr>
           <nav className="flex w-full">
             <ul className="flex items-center justify-between -space-x-px h-10 text-base w-full">
               <li>
@@ -39,7 +38,7 @@ const Pagination = () => {
                   className={`flex items-center justify-center cursor-pointer 
                 pr-4 h-10 leading-tight text-gray-500 rounded-e-lg hover:text-primaryBlue`}
                   onClick={() =>
-                    setCurrentPage((prev) => Math.max(prev - 1, 0))
+                    setCurrentPage((prev) => Math.max(prev - 1, 1))
                   }
                 >
                   <svg
@@ -66,13 +65,13 @@ const Pagination = () => {
                     <a
                       className={`flex items-center justify-center cursor-pointer
                       px-4 h-10 leading-tight ${
-                        currentPage == i
+                        currentPage == (i + 1)
                           ? "text-secondaryYellow"
                           : "text-gray-500"
                       } hover:text-primaryBlue`}
-                      onClick={() => setCurrentPage(i)}
+                      onClick={() => setCurrentPage(i + 1)}
                     >
-                      {i}
+                      {i+1}
                     </a>
                   </li>
                 ))}
@@ -82,7 +81,7 @@ const Pagination = () => {
                   className={`flex items-center justify-center cursor-pointer 
                 pl-4 h-10 leading-tight text-gray-500 rounded-e-lg hover:text-primaryBlue`}
                   onClick={() =>
-                    setCurrentPage((prev) => Math.min(prev + 1, pages - 1))
+                    setCurrentPage((prev) => Math.min(prev + 1, pages))
                   }
                 >
                   <span className="mr-4">Siguiente</span>
@@ -105,7 +104,7 @@ const Pagination = () => {
               </li>
             </ul>
           </nav>
-          <hr></hr>
+          <hr className="bg-primaryBlue h-0.5 border-0"></hr>
         </>
       )}
     </div>

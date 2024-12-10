@@ -5,11 +5,11 @@ import Pagination from "./Pagination";
 const ResultFilters = () => {
   const { state } = useCharStates();
   const rendered = state.filteredList?.results?.length;
-  console.log(rendered, state.filteredList)
+
   return (
     <div className="z-20">
       {rendered > 0 && (
-        <div className="z-10 m-6 md:m-10">
+        <div className="z-10 m-6 md:mx-10">
           <Pagination />
           <div className="z-10 grid grid-cols-1 gap-4 md:grid-cols-2">
             {state.filteredList?.results?.map((event, index) => (
