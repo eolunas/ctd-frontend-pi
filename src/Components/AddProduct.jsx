@@ -259,9 +259,20 @@ const AddProduct = () => {
   
     // Validación de categoría
     if (formData.categoryName === "new") {
-      // Verificar que el nombre y el icono de la nueva categoría no estén vacíos
+      // Verificar que el nombre de la nueva categoría no esté vacío
       if (!formData.newCategoryName.trim()) {
         newErrors.category = "El nombre de la nueva categoría es obligatorio.";
+      } else {
+        // Verificar que el nombre de la nueva categoría no esté repetido
+        const categoryExists = categories.some(
+          (category) =>
+            category.name.toLowerCase() === formData.newCategoryName.trim().toLowerCase()
+        );
+  
+        if (categoryExists) {
+          newErrors.category =
+            "El nombre de la nueva categoría ya existe. Por favor, elige un nombre diferente.";
+        }
       }
   
       if (!formData.newCategoryIcon.trim()) {
@@ -295,17 +306,22 @@ const AddProduct = () => {
       newErrors.dates = "Debes agregar al menos una fecha.";
     }
   
+    setErrors(newErrors); // Actualizar los errores en el estado
     return newErrors;
-
   };
+  
+  
     
   const handleSubmit = async (e) => {
     e.preventDefault();
   
     // Validar los campos antes de continuar
-    if (!validateFields()) {
-      console.log("Error: Faltan campos obligatorios");
-      return; // No continúes con el envío de datos
+    const validationErrors = validateFields(); // Ejecutar la validación
+    if (Object.keys(validationErrors).length > 0) {
+      // Si hay errores, no continuar con el envío
+      console.log("Errores de validación:", validationErrors);
+      setErrors(validationErrors); // Actualizar los errores en el estado
+      return; // Detener el envío
     }
   
     // Crear FormData para enviar archivos e información JSON
@@ -318,15 +334,10 @@ const AddProduct = () => {
   
     // Agregar las imágenes de la galería
     formData.gallery.forEach((image) => {
-      if (typeof image === "string") {
-        // Agregar las URLs existentes como un campo JSON en el FormData
-        return;
-      } else if (image instanceof File) {
-        // Agregar los nuevos archivos como un campo separado
+      if (image instanceof File) {
         dataToSend.append("gallery", image);
       }
     });
-    console.log(formData.gallery);
   
     // Crear el objeto de datos JSON
     const dto = {
@@ -346,22 +357,19 @@ const AddProduct = () => {
     if (formData.categoryName === "new") {
       const newCategoryData = {
         name: formData.newCategoryName,
-        icon: `fa-solid ${formData.newCategoryIcon}`    
-      
+        icon: `fa-solid ${formData.newCategoryIcon}`,
       };
   
       try {
-        // Hacemos una llamada para crear la nueva categoría
+        // Llamada para crear la nueva categoría
         const response = await axiosInstance.post("/category", newCategoryData);
-        const newCategory = response.data;  // La nueva categoría creada
-  
-        // Ahora, actualizamos el DTO con la nueva categoría
+        const newCategory = response.data; // La nueva categoría creada
         dto.category = newCategory.id;
       } catch (error) {
         console.error("Error al crear la nueva categoría:", error);
         setErrorMessage("Error al crear la nueva categoría");
         setIsErrorOpen(true);
-        return; // No continuar si hay un error al crear la categoría
+        return; // Detener el proceso si hay un error
       }
     }
   
@@ -371,17 +379,12 @@ const AddProduct = () => {
       new Blob([JSON.stringify(dto)], { type: "application/json" })
     );
   
-    // Debug: Ver contenido del FormData
-    for (let pair of dataToSend.entries()) {
-      console.log(pair[0], pair[1], "aaaa");
-    }
-  
     try {
       const response = id
         ? await axiosInstance.put(`/event/${id}`, dataToSend)
         : await axiosInstance.post("/event", dataToSend);
   
-      console.log("Producto guardado:", response.data);
+      console.log("Evento guardado:", response.data);
   
       dispatch({
         type: id ? "EDIT_PRODUCT" : "ADD_PRODUCT",
@@ -390,9 +393,9 @@ const AddProduct = () => {
   
       navigate("/admin/products");
     } catch (error) {
-      console.error("Error al guardar el producto:", error);
+      console.error("Error al guardar el evento:", error);
   
-      // Manejar errores del servidor (por ejemplo, nombre duplicado)
+      // Manejar errores del servidor
       if (error.response && error.response.status === 409) {
         setErrorMessage(
           "No se puede crear el evento porque ya existe un evento con ese nombre."
@@ -406,6 +409,7 @@ const AddProduct = () => {
       }
     }
   };
+  
   
   
   
@@ -675,13 +679,30 @@ const AddProduct = () => {
     </label>
     {/* Usamos Tailwind para grid y 3 columnas */}
     <div className='grid grid-cols-3 gap-4'>
-      {[ 
-        { icon: "fa-film", label: "Cine" },
-        { icon: "fa-handshake-angle", label: "Negocios" },
-        { icon: "fa-briefcase", label: "Trabajo" },
-        { icon: "fa-user-graduate", label: "Educación" },
-        { icon: "fa-cake-candles", label: "Eventos" },
-      ].map((iconOption) => (
+    {[
+  { icon: "fa-film", label: "Cine" },
+  { icon: "fa-handshake-angle", label: "Negocios" },
+  { icon: "fa-briefcase", label: "Trabajo" },
+  { icon: "fa-user-graduate", label: "Educación" },
+  { icon: "fa-cake-candles", label: "Eventos" },
+  { icon: "fa-shield", label: "Escudo" },
+  { icon: "fa-calendar-check", label: "Calendario Check" },
+  { icon: "fa-charging-station", label: "Estación de Carga" },
+  { icon: "fa-truck-monster", label: "Camión Monster" },
+  { icon: "fa-bicycle", label: "Bicicleta" },
+  { icon: "fa-video", label: "Video" },
+  { icon: "fa-shield-cat", label: "Escudo Gato" },
+  { icon: "fa-utensils", label: "Utensilios" },
+  { icon: "fa-hotel", label: "Hotel" },
+  { icon: "fa-ticket", label: "Ticket" },
+  { icon: "fa-truck-medical", label: "Camión Médico" },
+  { icon: "fa-leaf", label: "Hoja" },
+  { icon: "fa-smoking", label: "Fumar" },
+  { icon: "fa-crown", label: "Corona" },
+  { icon: "fa-martini-glass-citrus", label: "Martini con Limón" },
+  { icon: "fa-gamepad", label: "Control de Juego" },
+  { icon: "fa-temperature-arrow-up", label: "Temperatura Alta" },
+].map((iconOption) => (
         <label key={iconOption.icon} className='flex items-center gap-2'>
           <input
             type='radio'

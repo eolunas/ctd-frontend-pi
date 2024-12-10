@@ -37,7 +37,7 @@ const FeatureForm = () => {
     const iconSet = new Set(); // Usamos un Set para filtrar duplicados
     const uniqueIcons = [];
 
-    icons.forEach(icon => {
+    icons.forEach((icon) => {
       const iconClass = icon.iconCode.replace("fa-solid ", ""); // Obtener la clase sin el prefijo "fa-solid"
       if (!iconSet.has(iconClass)) {
         uniqueIcons.push(icon);
@@ -59,8 +59,10 @@ const FeatureForm = () => {
   // Validar campos
   const validateFields = () => {
     const newErrors = {};
-    if (!title.trim()) newErrors.title = "El nombre de la característica es obligatorio.";
-    if (title.trim().length < 3) newErrors.title = "La característica debe tener al menos 3 caracteres.";
+    if (!title.trim())
+      newErrors.title = "El nombre de la característica es obligatorio.";
+    if (title.trim().length < 3)
+      newErrors.title = "La característica debe tener al menos 3 caracteres.";
     if (!iconCode.trim()) newErrors.iconCode = "Debes seleccionar un icono.";
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -70,15 +72,15 @@ const FeatureForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!validateFields()) return; // Solo proceder si no hay errores
-  
+
     // Concatenar las clases "fa-solid", "fa-regular", y "fa-" con el nombre del ícono
     const formattedIconCode = `fa-solid fa-regular fa-${iconCode}`;
-  
+
     const featureData = {
       title,
       iconCode: formattedIconCode, // Usar el código del ícono formateado
     };
-  
+
     try {
       if (isEdit) {
         // Si es edición, hacemos un PUT
@@ -94,7 +96,7 @@ const FeatureForm = () => {
       console.error("Error al guardar la característica:", error);
     }
   };
-  
+
   return (
     <div className="p-8 bg-black text-white">
       <button
@@ -104,12 +106,16 @@ const FeatureForm = () => {
         ✕
       </button>
 
-      <h2 className="text-2xl font-bold mb-4">{isEdit ? "Editar característica" : "Crear nueva característica"}</h2>
+      <h2 className="text-2xl font-bold mb-4 text-yellow-500">
+        {isEdit ? "Editar característica" : "Crear nueva característica"}
+      </h2>
 
       <form onSubmit={handleSubmit}>
         {/* Nombre */}
         <div className="mb-4">
-          <label htmlFor="title" className="block text-gray-300">Nombre</label>
+          <label htmlFor="title" className="block text-gray-300">
+            Nombre
+          </label>
           <input
             type="text"
             id="title"
@@ -117,39 +123,44 @@ const FeatureForm = () => {
             onChange={(e) => setTitle(e.target.value)}
             className="w-full px-4 py-3 rounded-xl bg-gray-700 text-white border border-gray-600 focus:outline-none focus:border-yellow-500"
           />
-          {errors.title && <p className="text-red-500 text-sm">{errors.title}</p>}
+          {errors.title && (
+            <p className="text-red-500 text-sm">{errors.title}</p>
+          )}
         </div>
 
         {/* Selección de icono */}
         <div className="mb-6">
-          <label htmlFor="iconCode" className="block text-gray-300">Selecciona un icono</label>
-          <div className="grid grid-cols-3 gap-4">
-            {[
-              "shield", "calendar-check", "charging-station", "truck-monster", "bicycle", "video",
-              "shield-cat", "utensils", "hotel", "ticket", "truck-medical", "leaf", "smoking", "crown",
-              "martini-glass-citrus", "gamepad", "temperature-arrow-up"
-            ].map((icon) => (
-              <label key={icon} className="flex items-center gap-2 cursor-pointer">
-                <input
-                  type="radio"
-                  name="iconCode"
-                  value={icon}
-                  checked={iconCode === icon}
-                  onChange={() => setIconCode(icon)}
-                  className="form-radio"
-                />
-                <i className={`fa-solid fa-${icon}`}></i>
-              </label>
-            ))}
-          </div>
-          {errors.iconCode && <p className="text-red-500 text-sm">{errors.iconCode}</p>}
-        </div>
+  <label htmlFor="iconCode" className="block text-gray-300 mb-4 text-start">
+    Selecciona un icono
+  </label>
+  <div className="grid grid-cols-4 gap-5 justify-center">
+    {[
+      "shield", "calendar-check", "charging-station", "truck-monster", "bicycle", "video",
+      "shield-cat", "utensils", "hotel", "ticket", "truck-medical", "leaf", "smoking", "crown",
+      "martini-glass-citrus", "gamepad", "temperature-arrow-up"
+    ].map((icon) => (
+      <label key={icon} className="flex items-center gap-2 cursor-pointer justify-center">
+        <input
+          type="radio"
+          name="iconCode"
+          value={icon}
+          checked={iconCode === icon}
+          onChange={() => setIconCode(icon)}
+          className="form-radio"
+        />
+        <i className={`fa-solid fa-${icon} text-xl`}></i>
+      </label>
+    ))}
+  </div>
+  {errors.iconCode && <p className="text-red-500 text-sm mt-2">{errors.iconCode}</p>}
+</div>
+
 
         {/* Botones de acción */}
-        <div className="flex justify-between">
+        <div className="flex justify-center">
           <button
             type="submit"
-            className="px-4 py-2 bg-blue-600 rounded-lg hover:bg-blue-700"
+            className="px-4 py-2 bg-yellow-500 rounded-lg hover:bg-yellow-400"
           >
             {isEdit ? "Actualizar" : "Crear"}
           </button>
