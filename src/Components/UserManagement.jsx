@@ -14,7 +14,7 @@ const UserManagement = () => {
   const fetchUsers = async () => {
     try {
       const response = await axios.get(
-        "http://54.147.179.179:8080/admin/users"
+        "https://50xba6bw91.execute-api.us-east-1.amazonaws.com/admin/users"
       );
       console.log("Usuarios obtenidos:", response.data);
       setUsers(response.data);
@@ -31,9 +31,13 @@ const UserManagement = () => {
   const changeUserRole = async (userId, role) => {
     console.log(userId, role);
     try {
-      await axios.put(`http://54.147.179.179:8080/admin`, null, {
-        params: { userId, role },
-      });
+      await axios.put(
+        `https://50xba6bw91.execute-api.us-east-1.amazonaws.com/admin`,
+        null,
+        {
+          params: { userId, role },
+        }
+      );
       console.log(`Rol cambiado exitosamente para el usuario ${userId}`);
       setUsers((prevUsers) =>
         prevUsers.map((user) => (user.id === userId ? { ...user, role } : user))

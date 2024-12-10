@@ -12,7 +12,7 @@ const Categories = () => {
     const fetchEvents = async () => {
       try {
         const response = await fetch(
-          `http://54.147.179.179:8080/event/category/${category}`
+          `https://50xba6bw91.execute-api.us-east-1.amazonaws.com/event/category/${category}`
         );
         const data = await response.json();
         setEvents(data);
