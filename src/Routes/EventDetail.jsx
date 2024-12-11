@@ -282,7 +282,7 @@ const EventDetail = () => {
       {isErrorModalOpen && (
         <ErrorMessage
           title='Lo sentimos :('
-          description='Debes tener una sesión inciada para poder reservar.'
+          description='Debes tener una sesión iniciada para poder reservar.'
           buttonText='Volver a Inicio'
           onClose={() => setIsErrorModalOpen(false)}
         />
