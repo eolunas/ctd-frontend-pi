@@ -5,18 +5,35 @@ import axiosInstance from "../api/axiosInstance";
 import editIcon from "../assets/Admin/line-md_edit.svg";
 import deleteIcon from "../assets/Admin/material-symbols_delete-outline.svg";
 import plusIcon from "../assets/Admin/add-fav-button.svg";
+import ConfirmationMessage from "./ConfirmationMessage.jsx";
 
-const fetchProducts = async () => {
-  try {
-    const response = await axiosInstance.get("/event");
-    return response.data;
-  } catch (error) {
-    console.error("Error al cargar los productos:", error);
-    throw error;
-  }
-};
+
+
+
+const ProductList = () => {
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
+  const [isConfirmOpen, setIsConfirmOpen] = useState(false);
+  const [selectedProduct, setSelectedProduct] = useState(null); // Característica seleccionada
+
+  const handleOpenConfirm = (product) => {
+    setSelectedProduct(product);
+    setIsConfirmOpen(true);
+  };
+
+  const fetchProducts = async () => {
+    try {
+      const response = await axiosInstance.get("/event");
+      return response.data;
+    } catch (error) {
+      console.error("Error al cargar los productos:", error);
+      throw error;
+    }
+  };
 
 const deleteProduct = async (id) => {
+  
   try {
     await axiosInstance.delete(`/event/${id}`);
   } catch (error) {
@@ -24,12 +41,6 @@ const deleteProduct = async (id) => {
     throw error;
   }
 };
-
-const ProductList = () => {
-  const [products, setProducts] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const navigate = useNavigate();
-
   // Cargar la lista de productos al montar el componente
   useEffect(() => {
     const loadProducts = async () => {
@@ -45,15 +56,27 @@ const ProductList = () => {
     loadProducts();
   }, []);
 
+  const getConfirmationMessage = () => {
+    return {
+      description: `¿Estás seguro de que deseas eliminar el evento?`,
+      confirmText: "Sí",
+      cancelText: "No, cancelar",
+    };
+  };
+
   // Manejar la eliminación de un producto
-  const handleDeleteProduct = async (id) => {
+  const handleDeleteProduct = async () => {
+    console.log(selectedProduct);
+
     try {
-      await deleteProduct(id); // Llamar a la API para eliminar
-      setProducts((prevProducts) => prevProducts.filter((product) => product.id !== id)); // Actualizar la tabla
+      await deleteProduct(selectedProduct); // Llamar a la API para eliminar
+      setProducts((prevProducts) => prevProducts.filter((product) => product.id !== selectedProduct)); // Actualizar la tabla
     } catch (error) {
       console.error("Error al eliminar el producto:", error);
     }
   };
+  
+  
 
   return (
     <div className="p-8 bg-black text-white flex flex-col w-full">
@@ -97,7 +120,7 @@ const ProductList = () => {
                         <img src={editIcon} alt="Editar" className="w-4 h-4 mr-1" /> Editar
                       </Link>
                       <button
-                        onClick={() => handleDeleteProduct(product.id)}
+                        onClick={() => handleOpenConfirm(product.id)}
                         className="flex items-center text-red-500 hover:text-red-400 border-none bg-transparent hover:bg-transparent cursor-pointer"
                       >
                         <img src={deleteIcon} alt="Eliminar" className="w-4 h-4 mr-1" /> Eliminar
@@ -110,6 +133,17 @@ const ProductList = () => {
           </table>
         )}
       </div>
+      {isConfirmOpen && selectedProduct && (
+        <ConfirmationMessage
+          title={getConfirmationMessage().title}
+          description={getConfirmationMessage().description}
+          confirmText={getConfirmationMessage().confirmText}
+          cancelText={getConfirmationMessage().cancelText}
+          onConfirm={handleDeleteProduct}
+          onCancel={() => setIsConfirmOpen(false)}
+        />
+      )}
+
     </div>
   );
 };

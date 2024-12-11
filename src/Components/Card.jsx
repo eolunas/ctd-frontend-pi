@@ -60,15 +60,15 @@ const Card = ({ event }) => {
             {event.name || "Nombre no disponible"}{" "}
             {/* Validación para el nombre */}
           </h3>
-          <div className="basis-[15%] flex justify-end m-2">
-            <a onClick={() => addFav(event.id)}>
+          {/* <div className="basis-[15%] flex justify-end m-2">
+            <div onClick={() => addFav(event.id)}>
               <img
                 className="size-6 cursor-pointer"
                 src={stored ? FavIconFilled : FavIcon}
                 alt="Favorite Icon"
               />
-            </a>
-          </div>
+            </div>
+          </div> */}
         </div>
         <p className="text-secondaryYellow text-xl">
           {event.city || "Ciudad no especificada"}{" "}
