@@ -1,6 +1,9 @@
 import { useEffect, useState } from "react";
 import dayjs from "dayjs";
+import "dayjs/locale/es"; 
 
+
+dayjs.locale("es");
 const Calendar = ({ dates, onDateSelect, notDouble }) => {
   const [currentMonth, setCurrentMonth] = useState(dayjs()); // Mes inicial
   const [selectedDate, setSelectedDate] = useState(null); // Fecha seleccionada
@@ -69,6 +72,7 @@ const Calendar = ({ dates, onDateSelect, notDouble }) => {
   const monthsList = Array.from({ length: 12 }, (_, i) =>
     dayjs().add(i, "month").startOf("month")
   );
+
 
   // Obtiene el nombre del mes
   const getMonthName = (date) => date.format("MMMM YYYY");
