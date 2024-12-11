@@ -34,7 +34,7 @@ const ConfirmationMessage = ({
             </button>
             <button
               onClick={onCancel}
-              className='text-white px-4 w-full py-2 rounded-full'
+              className='bg-transparent text-white px-4 w-full py-2 rounded-full'
             >
               {cancelText}
             </button>

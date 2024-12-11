@@ -4,31 +4,51 @@ import axiosInstance from "../api/axiosInstance"; // Instancia de Axios
 import editIcon from "../assets/Admin/line-md_edit.svg";
 import deleteIcon from "../assets/Admin/material-symbols_delete-outline.svg";
 import plusIcon from "../assets/Admin/add-fav-button.svg";
+import ConfirmationMessage from "./ConfirmationMessage.jsx";
 
-// Funciones para interactuar con la API
-const fetchFeatures = async () => {
-  try {
-    const response = await axiosInstance.get("/feature");
-    return response.data;
-  } catch (error) {
-    console.error("Error al cargar las características:", error);
-    throw error;
-  }
-};
 
-const deleteFeature = async (id) => {
-  try {
-    await axiosInstance.delete(`/feature/${id}`);
-  } catch (error) {
-    console.error("Error al eliminar la característica:", error);
-    throw error;
-  }
-};
+
 
 const FeatureManagement = () => {
   const [features, setFeatures] = useState([]);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
+  const [isConfirmOpen, setIsConfirmOpen] = useState(false);
+  const [selectedFeature, setSelectedFeature] = useState(null); // Característica seleccionada
+
+  // Funciones para interactuar con la API
+  const fetchFeatures = async () => {
+    try {
+      const response = await axiosInstance.get("/feature");
+      return response.data;
+    } catch (error) {
+      console.error("Error al cargar las características:", error);
+      throw error;
+    }
+  };
+
+  const deleteFeature = async (id) => {
+    try {
+      await axiosInstance.delete(`/feature/${id}`);
+    } catch (error) {
+      console.error("Error al eliminar la característica:", error);
+      throw error;
+    }
+  };
+
+  const handleOpenConfirm = (feature) => {
+    console.log(feature);
+    setSelectedFeature(feature);
+    setIsConfirmOpen(true);
+  };
+
+  const getConfirmationMessage = () => {
+    return {
+      description: `¿Estás seguro de que deseas eliminar la característica?`,
+      confirmText: "Sí",
+      cancelText: "No, cancelar",
+    };
+  };
 
   // Cargar las características cuando el componente se monta
   useEffect(() => {
@@ -43,13 +63,21 @@ const FeatureManagement = () => {
       }
     };
     loadFeatures();
-  }, []);
+  }, [isConfirmOpen]); // Cuando se cierra el confirm (o se elimina), recarga la lista
 
   // Función para manejar la eliminación de una característica
-  const handleDeleteFeature = async (id) => {
+  const handleDeleteFeature = async () => {
     try {
-      await deleteFeature(id); // Eliminar de la API
-      setFeatures((prevFeatures) => prevFeatures.filter((feature) => feature.id !== id)); // Eliminar de la lista local
+      // Eliminar de la API
+      await deleteFeature(selectedFeature);
+      
+      // Actualizar la lista de características en el estado local
+      setFeatures((prevFeatures) => 
+        prevFeatures.filter((feature) => feature.id !== selectedFeature)
+      );
+      
+      // Cerrar el modal de confirmación
+      setIsConfirmOpen(false);
     } catch (error) {
       console.error("Error al eliminar la característica", error);
     }
@@ -59,7 +87,6 @@ const FeatureManagement = () => {
   const handleEditFeature = (feature) => {
     navigate(`/admin/features/edit/${feature.id}`, { state: { feature } }); // Usar el 'state' para pasar el objeto 'feature'
   };
-
   return (
     <div className="p-8 bg-black text-white flex flex-col w-full">
       <div className="flex justify-between items-center mb-4">
@@ -101,12 +128,13 @@ const FeatureManagement = () => {
 
                     {/* Botón de eliminar */}
                     <button
-                      onClick={() => handleDeleteFeature(feature.id)}
+                      onClick={() => handleOpenConfirm(feature.id)}
                       className="flex items-center text-red-500 hover:text-red-400 border-none bg-transparent hover:bg-transparent cursor-pointer"
                     >
                       <img src={deleteIcon} alt="Eliminar" className="w-6 h-6 mr-2" />
                       Eliminar
                     </button>
+                
                   </div>
                 </td>
               </tr>
@@ -114,6 +142,16 @@ const FeatureManagement = () => {
           </tbody>
         </table>
       </div>
+      {isConfirmOpen && selectedFeature && (
+        <ConfirmationMessage
+          title={getConfirmationMessage().title}
+          description={getConfirmationMessage().description}
+          confirmText={getConfirmationMessage().confirmText}
+          cancelText={getConfirmationMessage().cancelText}
+          onConfirm={handleDeleteFeature}
+          onCancel={() => setIsConfirmOpen(false)}
+        />
+      )}
     </div>
   );
 };
