@@ -25,6 +25,8 @@ const EventDetail = () => {
   const [isErrorOpen, setIsErrorOpen] = useState(false);
   const [isErrorModalOpen, setIsErrorModalOpen] = useState(false);
   const [isErrorModalDateOpen, setIsErrorModalDateOpen] = useState(false);
+  const [isErrorModalFavOpen, setIsErrorModalFavOpen] = useState(false);
+
   // const [error, setError] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedImage, setSelectedImage] = useState("");
@@ -55,14 +57,29 @@ const EventDetail = () => {
   }, [state?.user?.id, id]);
 
   const handleFavoriteToggle = async () => {
+    if (!state?.user?.id) {
+      // Si no hay usuario logueado, mostrar error
+      setIsErrorModalFavOpen(true);
+      return;
+    }
+  
     try {
-      await createFavorite(state.user.id, id);
-
-      setIsFavorite(!isFavorite); // Cambiar el estado después de la respuesta
+      const response = await createFavorite(state.user.id, id);
+  
+      if (response.status === 200) {
+        // Si la respuesta es exitosa, cambiar el estado de favoritos
+        setIsFavorite(!isFavorite);
+      } else {
+        // Si el estado no es 200, mostrar un error genérico
+        setIsErrorModalFavOpen(true);
+      }
     } catch (error) {
+      // Si ocurre un error durante la creación del favorito, mostrar el modal de error
       console.error("Error al cambiar el estado de favorito:", error);
+      setIsErrorModalFavOpen(true);
     }
   };
+  
 
   const handleDateSelect = (date) => {
     console.log("Fecha seleccionada:", date);
@@ -120,6 +137,8 @@ const EventDetail = () => {
       setIsErrorModalOpen(true);
     } else if (!selectedDate) {
       setIsErrorModalDateOpen(true);
+    } else if (!isFavorite) {
+      setIsErrorModalFavOpen(true);
     }
   };
 
@@ -163,7 +182,7 @@ const EventDetail = () => {
                 </div>
 
                 <div
-                  onClick={handleFavoriteToggle}
+                  onClick={handleFavoriteToggle} 
                   className='h-10 lg:mb-12 flex w-32 md:w-52 justify-center items-center px-1.5 text-sm md:text-md py-1.5 rounded-full cursor-pointer text-center transition duration-200 ease-in-out border-secondaryYellow border'
                 >
                   {isFavorite
@@ -332,12 +351,21 @@ const EventDetail = () => {
           onClose={() => setIsErrorModalOpen(false)}
         />
       )}
-      {isErrorModalDateOpen && (
+      {
+      isErrorModalDateOpen && (
         <ErrorMessage
           title='Lo sentimos :('
           description='Deber elegir una fecha para reservar.'
           buttonText='Volver a Inicio'
           onClose={() => setIsErrorModalDateOpen(false)}
+        />
+      )}
+      {isErrorModalFavOpen &&  (
+        <ErrorMessage
+          title='Lo sentimos :('
+          description='Debes tener una sesión iniciada para poder agregar a favoritos.'
+          buttonText='Volver a Inicio'
+          onClose={() => setIsErrorModalFavOpen(false)}
         />
       )}
     </>
