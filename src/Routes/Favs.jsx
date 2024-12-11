@@ -1,3 +1,4 @@
+
 import { useEffect, useState } from "react";
 import { useCharStates } from "../Context";
 import Card from "../Components/Card";
@@ -35,6 +36,7 @@ const Favs = () => {
         <p>Cargando tus eventos favoritos...</p>
       ) : favorites.length > 0 ? (
         <div className='z-10 grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3'>
+
           {favorites.map((favorite, index) => (
             <Card
               key={index}

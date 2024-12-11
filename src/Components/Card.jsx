@@ -17,14 +17,23 @@ const Card = ({ event }) => {
     return null;
   }
 
-  // Validación para favoritos
-  const stored = state.favs.find((item) => item.id === event.id);
+  // Verificar si el evento está en favoritos usando el estado global
+  const isFavorite = state.favs.some((item) => item.id === event.id);
 
-  const addFav = (id) =>
-    dispatch({
-      type: stored ? "REMOVE_FAVS" : "ADD_FAVS",
-      payload: { id },
-    });
+  // Función para alternar entre agregar o quitar de favoritos
+  const toggleFavorite = () => {
+    if (isFavorite) {
+      dispatch({
+        type: "REMOVE_FAV",
+        payload: { id: event.id },
+      });
+    } else {
+      dispatch({
+        type: "ADD_FAV",
+        payload: event,
+      });
+    }
+  };
 
   return (
     <div key={event.id} className="z-10 overflow-hidden">
@@ -40,7 +49,7 @@ const Card = ({ event }) => {
           />
         </div>
         <div
-          className={` hidden
+          className={`hidden
           bg-secondaryYellow absolute bottom-0 left-0 w-5/12 h-1/4 rounded-tr-2xl rounded-bl-xl
           flex flex-col justify-center items-center`}
         >
@@ -61,31 +70,19 @@ const Card = ({ event }) => {
             {/* Validación para el nombre */}
           </h3>
           <div className="basis-[15%] flex justify-end m-2">
-            <a onClick={() => addFav(event.id)}>
+            <a onClick={toggleFavorite}>
               <img
                 className="size-6 cursor-pointer"
-                src={stored ? FavIconFilled : FavIcon}
+                src={isFavorite ? FavIconFilled : FavIcon}
                 alt="Favorite Icon"
               />
             </a>
           </div>
         </div>
         <p className="text-secondaryYellow text-xl">
-          {event.city || "Ciudad no especificada"}{" "}
+          {event.city || "Ciudad no especificada"}
           {/* Validación para la ciudad */}
         </p>
-        <div className="flex justify-between">
-          <span className="text-white text-sm flex gap-2">
-            <img className="size-6" src={PlaceIcon} alt="Place Icon" />
-            {event.site || "Lugar no especificado"}{" "}
-            {/* Validación para el sitio */}
-          </span>
-          <span className="text-white text-sm flex gap-2">
-            <img className="size-6" src={GenreIcon} alt="Genre Icon" />
-            {event.genreName || "Género no especificado"}{" "}
-            {/* Validación para el género */}
-          </span>
-        </div>
       </div>
     </div>
   );
