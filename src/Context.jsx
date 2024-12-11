@@ -6,10 +6,10 @@ import {
   useState,
 } from "react";
 import { reducer } from "./Reducers/reducer";
-import { getAuthStatus, register } from "./auth";
 import { fetchEvents, fetchCities } from "./api/eventApi";
 import { fetchGenres } from "./api/genreApi";
 import { fetchCategories } from "./api/categoryApi";
+import axios from "axios";
 
 const CharStates = createContext(null);
 
@@ -19,7 +19,7 @@ const initialState = {
   topCategories: [],
   list: [],
   filteredList: [],
-  favs: JSON.parse(localStorage.getItem("favs")) || [],
+  favs: JSON.parse(localStorage.getItem("favs")) || [], // Cargar favoritos del almacenamiento local
   homeFilters: {},
   theme: localStorage.getItem("theme") === "true",
   isLoggedIn: false,
@@ -29,17 +29,34 @@ const initialState = {
 
 export const Context = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
-  const [loading, setLoading] = useState(true); // Estado de carga
-  const [selectedDate, setSelectedDate] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-  const handleDateSelect = (date) => {
-    console.log("Fecha seleccionada:", date);
-    setSelectedDate(date);
+  const toggleFavorite = async (userId, eventId) => {
+    try {
+      const isFavorite = state.favs.some((fav) => fav.id === eventId);
+
+      if (isFavorite) {
+        // Si ya es favorito, eliminarlo
+        await axios.delete(
+          `https://50xba6bw91.execute-api.us-east-1.amazonaws.com/favorite?userId=${userId}&eventId=${eventId}`
+        );
+        dispatch({ type: "REMOVE_FAV", payload: eventId });
+      } else {
+        // Si no es favorito, agregarlo
+        await axios.post(
+          `https://50xba6bw91.execute-api.us-east-1.amazonaws.com/favorite?userId=${userId}&eventId=${eventId}`
+        );
+        const event = { id: eventId }; // Ajusta según los datos del evento que tengas
+        dispatch({ type: "ADD_FAV", payload: event });
+      }
+    } catch (error) {
+      console.error("Error al alternar favorito:", error);
+    }
   };
+
   useEffect(() => {
     const getData = async () => {
       try {
-        // Ejecuta todas las llamadas en paralelo
         const [genresResponse, allCities, topCategories, eventsResponse] =
           await Promise.all([
             fetchGenres(),
@@ -73,46 +90,40 @@ export const Context = ({ children }) => {
     document.body.className = state.theme ? "light" : "dark";
   }, [state.theme]);
 
-  const handleRegister = async (userData) => {
-    const result = await register(userData);
-    if (result.isRegistered) {
-      dispatch({
-        type: "REGISTER",
-        payload: result,
-      });
-      console.log("Registro completado");
-
-      // Después de registrar correctamente, actualizar el estado en el contexto
-      dispatch({
-        type: "SET_REGISTRATION_SUCCESS",
-        payload: true,
-      });
-    } else {
-      dispatch({
-        type: "SET_REGISTRATION_SUCCESS",
-        payload: false,
-      });
-      console.error(result.error);
+  const fetchUserFavs = async (userId) => {
+    try {
+      const response = await axios.get(
+        `https://50xba6bw91.execute-api.us-east-1.amazonaws.com/favorite?userId=${userId}`
+      );
+      dispatch({ type: "SET_FAVS", payload: response.data }); // Actualiza los favoritos en el estado global
+      return response.data; // Devuelve los favoritos para uso adicional
+    } catch (error) {
+      console.error("Error al obtener los favoritos:", error);
+      throw error;
     }
   };
 
-  const resetRegistrationSuccess = () => {
-    dispatch({
-      type: "SET_REGISTRATION_SUCCESS",
-      payload: false,
-    });
-  };
-  // Cargar estado de autenticación desde localStorage al inicializar el contexto
   useEffect(() => {
-    const { isLoggedIn, user } = getAuthStatus();
-    if (isLoggedIn) {
-      dispatch({
-        type: "LOGIN",
-        payload: { isLoggedIn, user },
-      });
-    }
+    const getAuthStatus = async () => {
+      try {
+        const response = await axios.get("/auth/status");
+        if (response.data.isLoggedIn) {
+          dispatch({
+            type: "LOGIN",
+            payload: {
+              isLoggedIn: response.data.isLoggedIn,
+              user: response.data.user,
+            },
+          });
+        }
+      } catch (error) {
+        console.error("Error al verificar el estado de autenticación:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-    setLoading(false); // Se completó la carga
+    getAuthStatus();
   }, []);
 
   return (
@@ -121,11 +132,8 @@ export const Context = ({ children }) => {
         state,
         dispatch,
         loading,
-        handleRegister,
-        resetRegistrationSuccess,
-        selectedDate,
-        setSelectedDate,
-        handleDateSelect,
+        toggleFavorite,
+        fetchUserFavs,
       }}
     >
       {children}
