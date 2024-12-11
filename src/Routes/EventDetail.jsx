@@ -15,6 +15,7 @@ import TimeIcon from "../assets/1-Iconos/DetalleProducto/hour.svg";
 import Calendar from "../Components/Calendar";
 import ErrorMessage from "../Components/ErrorMessage";
 import { useCharStates } from "../Context";
+import LoginModal from "../modals/LoginModal";
 
 const EventDetail = () => {
   const { id } = useParams();
@@ -33,9 +34,16 @@ const EventDetail = () => {
   const [nearestDate, setNearestDate] = useState(null);
   const [dates, setDates] = useState(null);
   const [selectedDate, setSelectedDate] = useState(null);
-
+  const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   const [isFavorite, setIsFavorite] = useState(false);
 
+  const openLoginModal = () => {
+    setIsLoginModalOpen(true);
+  };
+
+  const closeModalLogin = () => {
+    setIsLoginModalOpen(false);
+  };
   const getSpecificFavorite = async (userId, eventId) => {
     try {
       const response = await fetchFavoritesByUserId(userId);
@@ -62,10 +70,10 @@ const EventDetail = () => {
       setIsErrorModalFavOpen(true);
       return;
     }
-  
+
     try {
       const response = await createFavorite(state.user.id, id);
-  
+
       if (response.status === 200) {
         // Si la respuesta es exitosa, cambiar el estado de favoritos
         setIsFavorite(!isFavorite);
@@ -79,7 +87,6 @@ const EventDetail = () => {
       setIsErrorModalFavOpen(true);
     }
   };
-  
 
   const handleDateSelect = (date) => {
     console.log("Fecha seleccionada:", date);
@@ -134,7 +141,7 @@ const EventDetail = () => {
     if (state.user?.role && selectedDate) {
       navigate("/booking", { state: { event, selectedDate, dates } });
     } else if (!state.user?.role) {
-      setIsErrorModalOpen(true);
+      openLoginModal();
     } else if (!selectedDate) {
       setIsErrorModalDateOpen(true);
     } else if (!isFavorite) {
@@ -182,7 +189,7 @@ const EventDetail = () => {
                 </div>
 
                 <div
-                  onClick={handleFavoriteToggle} 
+                  onClick={handleFavoriteToggle}
                   className='h-10 lg:mb-12 flex w-32 md:w-52 justify-center items-center px-1.5 text-sm md:text-md py-1.5 rounded-full cursor-pointer text-center transition duration-200 ease-in-out border-secondaryYellow border'
                 >
                   {isFavorite
@@ -236,6 +243,7 @@ const EventDetail = () => {
               >
                 Reservar
               </div>
+              <LoginModal text isOpen={isLoginModalOpen} onClose={closeModalLogin} />
             </div>
           </div>
           {/* Galería de imágenes */}
@@ -351,8 +359,7 @@ const EventDetail = () => {
           onClose={() => setIsErrorModalOpen(false)}
         />
       )}
-      {
-      isErrorModalDateOpen && (
+      {isErrorModalDateOpen && (
         <ErrorMessage
           title='Lo sentimos :('
           description='Deber elegir una fecha para reservar.'
@@ -360,7 +367,7 @@ const EventDetail = () => {
           onClose={() => setIsErrorModalDateOpen(false)}
         />
       )}
-      {isErrorModalFavOpen &&  (
+      {isErrorModalFavOpen && (
         <ErrorMessage
           title='Lo sentimos :('
           description='Debes tener una sesión iniciada para poder agregar a favoritos.'

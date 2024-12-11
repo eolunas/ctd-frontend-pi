@@ -8,7 +8,7 @@ import eyeSlashIcon from "../assets/1-Iconos/eyeSlashIcon.png";
 import { useCharStates } from "../Context";
 import { login } from "../auth";
 
-const LoginModal = ({ isOpen, onClose }) => {
+const LoginModal = ({ isOpen, onClose, text }) => {
   const navigate = useNavigate();
   const { dispatch } = useCharStates(); // Access dispatch from context
 
@@ -59,7 +59,7 @@ const LoginModal = ({ isOpen, onClose }) => {
             user: authStatus.user,
           },
         });
-        navigate(authStatus.user.role === "Administrator" ? "/admin" : "/");
+        navigate(authStatus.user.role === "Administrator" ? "/admin" : "");
         onClose();
       } else {
         setErrors({ ...errors, form: authStatus.error });
@@ -87,6 +87,12 @@ const LoginModal = ({ isOpen, onClose }) => {
         <h2 className='text-center text-lg font-bold text-primaryBlue mb-4'>
           Inicia sesión
         </h2>
+        {text ? (
+          <p className='text-center pb-4 opacity-85'>
+            Debes iniciar sesión para hacer una reserva. En caso de no tener una
+            cuenta, deberás registrarte.
+          </p>
+        ) : null}
         <form onSubmit={handleSubmit} className='space-y-4'>
           <div>
             <label htmlFor='email' className='block text-sm text-white mb-1'>
