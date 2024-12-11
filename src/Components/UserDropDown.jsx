@@ -70,7 +70,7 @@ const UserDropdown = ({ state, handleLogout }) => {
           ) : (
             <div
               className='px-4 py-2 flex items-center w-full gap-2 cursor-pointer hover:text-primaryBlue'
-              onClick={() => navigate("/")}
+              onClick={() => navigate("/favs")}
             >
               <i className='fa-solid fa-bookmark'></i>
               <p>Favoritos</p>

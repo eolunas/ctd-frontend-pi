@@ -40,7 +40,6 @@ const Calendar = ({ dates, onDateSelect, notDouble }) => {
   const isAvailable = (monthKey, day) =>
     availableDates[monthKey]?.includes(day);
   const isFull = (monthKey, day) => fullDates[monthKey]?.includes(day);
-  console.log(dates);
 
   const handleDateClick = (monthKey, day) => {
     const dateObj = dates.find(

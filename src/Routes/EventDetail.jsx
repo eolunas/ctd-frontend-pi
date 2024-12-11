@@ -1,7 +1,12 @@
 // src/Routes/EventDetail.jsx
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { fetchEventById, fetchDatesByEventId } from "../api/eventApi";
+import {
+  fetchEventById,
+  fetchDatesByEventId,
+  fetchFavoritesByUserId,
+  createFavorite,
+} from "../api/eventApi";
 import PlaceIcon from "../assets/1-Iconos/DetalleProducto/place.svg";
 import GenreIcon from "../assets/1-Iconos/DetalleProducto/genre.svg";
 import LocationIcon from "../assets/1-Iconos/DetalleProducto/city.svg";
@@ -26,6 +31,39 @@ const EventDetail = () => {
   const [nearestDate, setNearestDate] = useState(null);
   const [dates, setDates] = useState(null);
   const [selectedDate, setSelectedDate] = useState(null);
+
+  const [isFavorite, setIsFavorite] = useState(false);
+
+  const getSpecificFavorite = async (userId, eventId) => {
+    try {
+      const response = await fetchFavoritesByUserId(userId);
+      const favorites = response.data; // Lista de favoritos
+
+      const favoriteEvent = favorites.find(
+        (favorite) => favorite.id == eventId
+      );
+      setIsFavorite(!!favoriteEvent); // Actualiza isFavorite según si existe el evento
+    } catch (error) {
+      console.error("Error al obtener el favorito específico:", error);
+    }
+  };
+
+  useEffect(() => {
+    if (state?.user?.id && id) {
+      getSpecificFavorite(state.user.id, id);
+    }
+  }, [state?.user?.id, id]);
+
+  const handleFavoriteToggle = async () => {
+    try {
+      await createFavorite(state.user.id, id);
+
+      setIsFavorite(!isFavorite); // Cambiar el estado después de la respuesta
+    } catch (error) {
+      console.error("Error al cambiar el estado de favorito:", error);
+    }
+  };
+
   const handleDateSelect = (date) => {
     console.log("Fecha seleccionada:", date);
     setSelectedDate(date);
@@ -106,7 +144,7 @@ const EventDetail = () => {
                   <h2 className=' text-2xl font-bold text-secondaryYellow md:text-3xl'>
                     {event.name}
                   </h2>
-                  <p className='text-2xl lg:mb-8 md:text-3xl'>
+                  <div className='text-2xl lg:mb-8 md:text-3xl'>
                     {nearestDate ? (
                       <div className='text-white'>
                         {/* Fecha más cercana:{" "} */}
@@ -117,13 +155,20 @@ const EventDetail = () => {
                         })}{" "}
                       </div>
                     ) : (
-                      <p>No hay fechas disponibles próximamente</p>
+                      <>
+                        <p>No hay fechas disponibles próximamente</p>
+                      </>
                     )}
-                  </p>
+                  </div>
                 </div>
 
-                <div className='h-10 lg:mb-12 flex w-32 md:w-52 justify-center items-center px-1.5 text-sm md:text-md py-1.5 rounded-full cursor-pointer text-center transition duration-200 ease-in-out border-secondaryYellow border'>
-                  + Favorito
+                <div
+                  onClick={handleFavoriteToggle}
+                  className='h-10 lg:mb-12 flex w-32 md:w-52 justify-center items-center px-1.5 text-sm md:text-md py-1.5 rounded-full cursor-pointer text-center transition duration-200 ease-in-out border-secondaryYellow border'
+                >
+                  {isFavorite
+                    ? "- Quitar de Favoritos"
+                    : "+ Agregar a Favoritos"}
                 </div>
               </div>
 
@@ -287,7 +332,7 @@ const EventDetail = () => {
           onClose={() => setIsErrorModalOpen(false)}
         />
       )}
-        {isErrorModalDateOpen && (
+      {isErrorModalDateOpen && (
         <ErrorMessage
           title='Lo sentimos :('
           description='Deber elegir una fecha para reservar.'

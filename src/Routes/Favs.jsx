@@ -1,17 +1,51 @@
-import Card from "../Components/Card";
+import { useEffect, useState } from "react";
 import { useCharStates } from "../Context";
+import Card from "../Components/Card";
+import { fetchFavoritesByUserId } from "../api/eventApi";
 
 const Favs = () => {
-  const { state } = useCharStates();
+  const { state } = useCharStates(); // Contexto global
+  const [favorites, setFavorites] = useState([]); // Estado local para manejar los favoritos
+  const [loading, setLoading] = useState(true); // Estado para manejar la carga
+
+  const getUserFavorites = async (userId) => {
+    try {
+      setLoading(true); // Inicia la carga
+      const response = await fetchFavoritesByUserId(userId);
+      setFavorites(response.data);
+    } catch (error) {
+      console.error("Error al obtener los favoritos:", error);
+    } finally {
+      setLoading(false); // Finaliza la carga
+    }
+  };
+
+  useEffect(() => {
+    if (state?.user?.id) {
+      getUserFavorites(state.user.id);
+    }
+  }, [state?.user?.id]);
+
   return (
-    <>
-      <h1>Eventos destacados</h1>
-      <div className="card-grid">
-        {state.favs.map((item, index) => 
-          <Card key={index} id={item.id} username={item.username} name={item.name}/>
-          )}
-      </div>
-    </>
+    <div className='p-4'>
+      <h1 className='text-2xl font-bold text-primaryBlue mb-4'>
+        Tus Eventos Favoritos
+      </h1>
+      {loading ? (
+        <p>Cargando tus eventos favoritos...</p>
+      ) : favorites.length > 0 ? (
+        <div className='z-10 grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3'>
+          {favorites.map((favorite, index) => (
+            <Card
+              key={index}
+              event={favorite} // Aquí se pasa el favorito a la Card
+            />
+          ))}
+        </div>
+      ) : (
+        <p>No tienes eventos favoritos.</p>
+      )}
+    </div>
   );
 };
 

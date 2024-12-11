@@ -19,3 +19,33 @@ export const createReservation = (date, eventId, userId) =>
       userId,
     },
   });
+
+
+// Obtener favoritos por userId
+export const fetchFavoritesByUserId = (userId) => {
+  return axiosInstance.get(`/favorite`, {
+    params: {
+      userId,
+    },
+  });
+};
+
+// Crear un favorito con userId y eventId
+export const createFavorite = (userId, eventId) => {
+  return axiosInstance.post(`/favorite`, null, {
+    params: {
+      userId,
+      eventId,
+    },
+  });
+};
+
+// Obtener un favorito específico por userId y eventId
+// export const fetchFavorite = (userId, eventId) => {
+//   return axiosInstance.get(`/favorite`, {
+//     params: {
+//       userId,
+//       eventId,
+//     },
+//   });
+// };
