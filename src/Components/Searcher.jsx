@@ -6,6 +6,8 @@ import Select from "react-select";
 import makeAnimated from "react-select/animated";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import { es } from "date-fns/locale";
+
 
 import { useCharStates } from "../Context";
 import { useState } from "react";
@@ -148,6 +150,7 @@ const Searcher = () => {
               selectsRange={true}
               startDate={startDate}
               endDate={endDate}
+              locale={es}
               onChange={(update) =>
                 handleInputChange({ target: { name: "dates", value: update } })
               }
