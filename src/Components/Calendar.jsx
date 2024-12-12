@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import dayjs from "dayjs";
-import "dayjs/locale/es"; 
-
+import "dayjs/locale/es";
 
 dayjs.locale("es");
 const Calendar = ({ dates, onDateSelect, notDouble }) => {
@@ -73,7 +72,6 @@ const Calendar = ({ dates, onDateSelect, notDouble }) => {
     dayjs().add(i, "month").startOf("month")
   );
 
-
   // Obtiene el nombre del mes
   const getMonthName = (date) => date.format("MMMM YYYY");
 
@@ -106,7 +104,7 @@ const Calendar = ({ dates, onDateSelect, notDouble }) => {
     return (
       <div className='p-2'>
         <div className='grid grid-cols-7 gap-2 text-sm text-primaryBlue'>
-          {["S", "M", "T", "W", "T", "F", "S"].map((day, index) => (
+          {["D", "L", "M", "M", "J", "V", "S"].map((day, index) => (
             <div key={index} className='text-center'>
               {day}
             </div>
@@ -115,12 +113,12 @@ const Calendar = ({ dates, onDateSelect, notDouble }) => {
           {daysArray.map((day, index) => {
             const dayClass =
               day === null
-                ? "text-transparent"
+                ? "text-transparent "
                 : isAvailable(monthKey, day)
-                ? "bg-primaryBlue text-white cursor-pointer"
+                ? "bg-primaryBlue w-full text-white cursor-pointer"
                 : isFull(monthKey, day)
                 ? "bg-gray-500 text-gray-300"
-                : "text-gray-500";
+                : "text-gray-500 w-full";
 
             const selectedClass =
               selectedDate?.day === day && selectedDate?.month === monthKey
@@ -262,7 +260,7 @@ const Calendar = ({ dates, onDateSelect, notDouble }) => {
         </div>
       )}
 
-      <div className='px-4'>
+      <div className='md:px-4'>
         {/* Controles del mes */}
 
         {/* Contenedor de calendarios */}
