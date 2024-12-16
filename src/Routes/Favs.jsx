@@ -29,9 +29,15 @@ const Favs = () => {
   
 
   // Función para actualizar la lista de favoritos localmente
-  const handleFavoriteChange = (updatedFavorites) => {
-    setFavorites(updatedFavorites);
+  const handleFavoriteChange = (eventId, isFavorite) => {
+    setFavorites((prevFavorites) => {
+      if (isFavorite) {
+        return [...prevFavorites, { id: eventId }];
+      }
+      return prevFavorites.filter((fav) => fav.id !== eventId);
+    });
   };
+  
 
   return (
     <div className="p-4">
@@ -42,9 +48,9 @@ const Favs = () => {
         <p>Cargando tus eventos favoritos...</p>
       ) : favorites.length > 0 ? (
         <div className="z-10 grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
-          {favorites.map((favorite, index) => (
+          {favorites.map((favorite) => (
             <Card
-              key={index}
+              key={favorite.id}
               event={favorite} // Aquí se pasa el favorito a la Card
               onFavoriteChange={handleFavoriteChange} // Pasamos la función de actualización
             />
