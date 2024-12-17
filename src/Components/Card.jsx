@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { useScreenSize } from "../Hooks/useScreenSize";
 import { useCharStates } from "../Context";
 import { createFavorite, fetchFavoritesByUserId } from "../api/eventApi";
 import FavIcon from "../assets/1-Iconos/Home/favorite-card.svg";
@@ -9,9 +8,7 @@ import PlaceIcon from "../assets/1-Iconos/Home/place.svg";
 import GenreIcon from "../assets/1-Iconos/Home/genre.svg";
 
 const Card = ({ event, onFavoriteChange }) => {
-  const screenSize = useScreenSize();
   const { state, dispatch } = useCharStates();
-
   const [isFavorite, setIsFavorite] = useState(false);
   const [isErrorModalFavOpen, setIsErrorModalFavOpen] = useState(false);
 
@@ -59,7 +56,6 @@ const Card = ({ event, onFavoriteChange }) => {
           payload: { id: event.id },
         });
 
-        // Llamar al callback para actualizar la lista en Favs
         if (onFavoriteChange) {
           onFavoriteChange(event.id, newFavoriteStatus);
         }
@@ -72,24 +68,9 @@ const Card = ({ event, onFavoriteChange }) => {
     }
   };
 
-  // Modal de error
-  const ErrorModal = () => (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-      <div className="bg-white p-6 rounded-lg">
-        <h2 className="text-xl font-bold mb-4">Error</h2>
-        <p>Debe iniciar sesión para gestionar favoritos</p>
-        <button
-          onClick={() => setIsErrorModalFavOpen(false)}
-          className="mt-4 bg-secondaryYellow text-white px-4 py-2 rounded"
-        >
-          Cerrar
-        </button>
-      </div>
-    </div>
-  );
-
   return (
-    <div key={event.id} className="z-10 overflow-hidden">
+    <div key={event.id} className="relative z-10 overflow-hidden">
+      {/* Enlace a la página de detalle */}
       <Link className="relative" to={`/detail/${event.id}`} state={{ event }}>
         <div
           className={`w-full aspect-[5/3] flex items-center justify-center overflow-hidden cursor-pointer rounded-xl`}
@@ -102,6 +83,7 @@ const Card = ({ event, onFavoriteChange }) => {
         </div>
       </Link>
 
+      {/* Contenido */}
       <div className="my-3 flex flex-col gap-4 lg:mx-5">
         <div className="flex w-full justify-between">
           <h3 className="text-white font-semibold text-2xl">
@@ -134,7 +116,23 @@ const Card = ({ event, onFavoriteChange }) => {
         </div>
       </div>
 
-      {isErrorModalFavOpen && <ErrorModal />}
+      {/* Modal de error - aparece solo sobre la tarjeta */}
+      {isErrorModalFavOpen && (
+        <div className="absolute inset-0 flex items-center justify-center bg-black/70 z-50">
+          <div className="bg-white text-gray-800 p-6 rounded-lg shadow-lg text-center w-11/12 max-w-sm">
+            <h2 className="text-lg font-bold mb-2">Lo sentimos :(</h2>
+            <p className="mb-4">
+              Debes tener una sesión iniciada para poder agregar a favoritos.
+            </p>
+            <button
+              onClick={() => setIsErrorModalFavOpen(false)}
+              className="bg-secondaryYellow text-white px-4 py-2 rounded-md"
+            >
+              Cerrar
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
